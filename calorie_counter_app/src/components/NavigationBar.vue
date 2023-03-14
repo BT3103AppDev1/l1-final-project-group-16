@@ -6,10 +6,10 @@
     <ul>
         <li><router-link to="/HomePage">
           <img src="@/assets/images/HomePageElements/Home.png" class="logo"></router-link></li>
-        <li><router-link to="/Dashboard">Dashboard</router-link></li>
-        <li><router-link to="/Food Log">Food Log</router-link></li>
-        <li><router-link to="/Exercise Log">Exercise Log</router-link></li>
-        <li><router-link to="/Profile">Profile</router-link></li>
+        <li><router-link to="/DashboardPage">Dashboard</router-link></li>
+        <li><router-link to="/FoodLogPage">Food Log</router-link></li>
+        <li><router-link to="/ExerciseLogPage">Exercise Log</router-link></li>
+        <li><router-link to="/ProfilePage">Profile</router-link></li>
         <li @click="handleSignOut"><a>Sign Out</a></li>
     </ul>
   </div>
@@ -20,6 +20,7 @@ export default {
   methods: {
       handleSignOut() {
       // navigate to landing page
+      // history.go(-(history.length - 1));
       this.$router.push('/');
     },
   }
