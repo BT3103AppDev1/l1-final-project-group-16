@@ -9,6 +9,8 @@ import DashboardPage from '@/views/DashboardPage.vue'
 import FoodLogPage from '@/views/FoodLogPage.vue'
 import ExerciseLogPage from '@/views/ExerciseLogPage.vue'
 import ProfilePage from '@/views/ProfilePage.vue'
+import AddFoodPage from '@/views/AddFoodPage.vue'
+
 
 const routes = [
   {
@@ -50,6 +52,12 @@ const routes = [
     path: '/ProfilePage',
     name: 'ProfilePage',
     component: ProfilePage
+  },
+
+  {
+    path: '/AddFoodPage',
+    name: 'AddFoodPage',
+    component: AddFoodPage
   },
 
 ]

@@ -68,6 +68,7 @@ export default {
 
 .navigation-bar a:hover {
   text-decoration: underline;
+  color: red;
 }
 .logo {
   width: 30px;
