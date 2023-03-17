@@ -22,4 +22,10 @@ margin-top: 10px;
 body {
   background-color:rgb(235, 235, 202);
 }
+
+.error {
+  text-align: center;
+  font-size: 12px;
+  color: red
+}
 </style>
