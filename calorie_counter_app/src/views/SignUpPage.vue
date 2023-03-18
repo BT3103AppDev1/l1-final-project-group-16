@@ -31,9 +31,15 @@
 </template>
 
 <script>
-import app from "../firebase.js"
+import fireBaseApp from "../firebase.js"
+import db from "../firebase.js"
+import { doc, setDoc } from "firebase/firestore"; 
+
+
 import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
 const auth = getAuth();
+import { collection } from 'firebase/firestore'
+
 //   const errorMessage = ref();
 
 export default {
@@ -43,28 +49,44 @@ export default {
   },
   data() {
     return {
-      email:null, 
-      password: null
+      currUser: { 
+        email:null, 
+        password: null
+      }
+  
     }
   },
   methods: {
-      async register(){
+    async register(){
       createUserWithEmailAndPassword(getAuth(), this.email, this.password)
-          .then((userCred) => {
-              const user = userCred.user;
-              console.log(user);
-              alert("Register Success")
-              this.$router.push('/HomePage');
-            }).catch((error) => {
-              const errorCode = error.code;
-              const errorMessage = error.message;
-              console.log(errorCode, errorMessage);
-              alert(errorMessage);
+        .then(async (userCred) => {
+              await setDoc(doc(db, "cities", "LA"), {
+            name: "Los Angeles",
+            state: "CA",
+            country: "USA"
+          });const user = userCred.user;
       
-      });
-      }
+
+
+          console.log("uDATABASEFUCKid" +colRef);
+
+          alert("Register Success")
+          this.$router.push('/HomePage');
+    }).catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      // console.log(errorCode, errorMessage);
+      alert(errorMessage);
+    });
+  },
+  created() {
+    this.register();
   }
-};
+}}
+
+
+
+
 </script>
 
 <style>
