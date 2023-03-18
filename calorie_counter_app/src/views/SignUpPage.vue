@@ -3,7 +3,7 @@
     <br>
     <img src="@/assets/images/CommonElements/HappyPlatesLogo.png" alt="HP Logo" style="width: 500px; height: auto" >
     <div id="inputContainer">
-        <form id="myForm">
+        <form @submit.prevent="register" id="myForm">
             <div class="register">
               <h2>CREATE AN ACCOUNT</h2>
                 <label class="labels" for="userEmail">EMAIL</label>
@@ -22,7 +22,7 @@
                 <div v-show="error" class="error">{{ this.errorMsg }}</div>
                 <br>
                 <div class="save">
-                    <button id="registerButton" type="button" @click.prevent="register" >Register</button><br><br>
+                    <button id="registerButton" type="submit" >Register</button><br><br>
                 </div>
             </div>
         </form>
@@ -30,27 +30,42 @@
     </div>
 </template>
 
+<script>
+import { fireBaseApp } from "../firebase.js"
+import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
+const auth = getAuth();
+//   const errorMessage = ref();
 
-<script setup>
-import { ref } from 'vue';
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import { useRouter } from 'vue-router';
-const router = useRouter  ()
-const email = ref("");
-const password = ref("");
-const register = () => {
-  createUserWithEmailAndPassword(getAuth(), email.value, password.value).then((data) => {
-      console.log("Successfully Registered")
-      router.push('/HomePage');
-    })
-    .catch((error) => {
-      console.log(error.code);
-      alert(error.message)
-    });
-  
-}
+export default {
+  name: "Register", 
+  props: {
+    msg: String
+  },
+  data() {
+    return {
+      email:null, 
+      password: null
+    }
+  },
+  methods: {
+      register(){
+      fireBaseApp.auth().createUserWithEmailAndPassword( this.email, this.password)
+          .then((userCred) => {
+              const user = userCred.user;
+              console.log(user);
+              alert("Register Success")
+              this.$router.push('/HomePage');
+            }).catch((error) => {
+              const errorCode = error.code;
+              const errorMessage = error.message;
+              console.log(errorCode, errorMessage);
+              alert(errorMessage);
+      
+      });
+      }
+  }
+};
 </script>
-
 
 <style>
 #registerButton{
