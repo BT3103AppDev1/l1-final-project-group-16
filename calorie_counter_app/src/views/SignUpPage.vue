@@ -31,135 +31,26 @@
 </template>
 
 
-<script>
-import fireBaseApp from "../firebase.js"
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import db from "../firebase.js";
-
-export default {
-  name: "Register",
-  // components :{
-  //   email, 
-  //   password, 
-  //   userName,
-  // },
-  
-  data() {
-    return {
-      userName:"",
-      email: "",
-      error: null, 
-      errorMsg: ""
-    };
-  },
-
-  methods: {
-    async register() {
-      // console.log(this.password);
-      
-      if (
-        this.email !== "" &&
-        this.userName !== "" &&
-        this.password !== ""
-      ) {
-        this.error = false;
-        this.errorMsg = "";
-        const firebaseAuth = await firebase.auth();
-        console.log("hi");
-        // create user -firebase auth 
-        const createUser = await firebaseAuth.createUserWithEmailAndPassword(this.email, this.password);
-        const result = await createUser;
-        const dataBase = db.collection("User").doc(result.user.uid);
-        await dataBase.set({
-          email: this.email,
-          userName: this.userName
-        });
-        router.push('/HomePage');
-        return;
-      }
-      this.error = true;
-      this.errorMsg = "Please Fill Out All Fields";
-      return;
-    }
-  }
-}
-
-
-
-
-
-</script>
-
-
-<!-- 
-
-<script>
-import firebase from 'firebase/app'
-import 'firebase/auth'
-import 'firebase/firestore'
-
+<script setup>
 import { ref } from 'vue';
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { useRouter } from 'vue-router';
-import { collection, addDoc } from "firebase/firestore"
-export default {
-  name: 'SignUp',
-  data() {
-    return {
-      email:"",
-      password:""
-    }
-  },
-  created() {
-    this.register()
-  },
-  methods: {
-    async register () {
-      firebase.auth().createUserWithEmailAndPassword(email.value, password.value)
-      .then((user) => {
-        const userCol = collection(db, 'Users')
-        const userId = user.user.uid
+const router = useRouter  ()
+const email = ref("");
+const password = ref("");
+const register = () => {
+  createUserWithEmailAndPassword(getAuth(), email.value, password.value).then((data) => {
+      console.log("Successfully Registered")
+      router.push('/HomePage');
+    })
+    .catch((error) => {
+      console.log(error.code);
+      alert(error.message)
+    });
+  
+}
+</script>
 
-        // data to send 
-        const dataObj = {
-          userName: userName,
-          email: email
-        }
-
-        // create doc and return ref to it 
-        const docRef = await addDoc(userCol, dataObj)
-        console.log('Document created with ID: ', docRef.id)
-
-        })
-        .then(() => {
-          console.log('User Added To Firestore')
-          router.push('/HomePage');
-        })
-          .catch((error) => {
-          console.log(error.code);
-          alert(error.message)
-        })
-      }}
-    }
-
-    //     })
-    //   }
-    // }
-    // router = useRouter();
-    // email = ref("");
-    // password = ref("");
-    // const db = firebase.firestore();
-    // const register = () => {
-    //   createUserWithEmailAndPassword(getAuth(), email.value, password.value).then((data) => {
-    //       console.log("Successfully Registered")
-    //       router.push('/HomePage');
-    //       db.collection("Users").doc(firebase.auth().currentUser.uid).add({
-        
-    //     })
-    
-    
-
-</script> --> -->
 
 <style>
 #registerButton{
