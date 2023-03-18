@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import { fireBaseApp } from "../firebase.js"
+import app from "../firebase.js"
 import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
 const auth = getAuth();
 //   const errorMessage = ref();
@@ -48,8 +48,8 @@ export default {
     }
   },
   methods: {
-      register(){
-      fireBaseApp.auth().createUserWithEmailAndPassword( this.email, this.password)
+      async register(){
+      createUserWithEmailAndPassword(getAuth(), this.email, this.password)
           .then((userCred) => {
               const user = userCred.user;
               console.log(user);

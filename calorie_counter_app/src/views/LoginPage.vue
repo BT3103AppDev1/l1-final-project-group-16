@@ -29,7 +29,7 @@
   
   
   <script>
-  import fireBaseApp from "../firebase.js"
+  import app from "../firebase.js"
   import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
   const auth = getAuth();
 //   const errorMessage = ref();
