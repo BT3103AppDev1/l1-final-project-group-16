@@ -33,7 +33,7 @@
 <script>
 import fireBaseApp from "../firebase.js"
 import db from "../firebase.js"
-import { doc, setDoc } from "firebase/firestore"; 
+import { doc, setDoc, addDoc, getFirestore } from "firebase/firestore"; 
 
 
 import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
@@ -51,7 +51,7 @@ export default {
     return {
       currUser: { 
         email:null, 
-        password: null
+        userName: null
       }
   
     }
@@ -60,29 +60,32 @@ export default {
     async register(){
       createUserWithEmailAndPassword(getAuth(), this.email, this.password)
         .then(async (userCred) => {
-              await setDoc(doc(db, "cities", "LA"), {
-            name: "Los Angeles",
-            state: "CA",
-            country: "USA"
-          });const user = userCred.user;
-      
-
-
-          console.log("uDATABASEFUCKid" +colRef);
+              const user = userCred.user;
+              const userId = user.uid;
+              const newDocRef = doc(collection(getFirestore(), "Users"), user.email);
+              await setDoc(newDocRef, {
+                email: this.email,
+                userName: this.userName,
+                
+          });
+  
+          // console.log("uid" +userCred.user.uid);
 
           alert("Register Success")
           this.$router.push('/HomePage');
-    }).catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      // console.log(errorCode, errorMessage);
-      alert(errorMessage);
-    });
+        }).catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          // console.log(errorCode, errorMessage);
+          alert(errorMessage);
+        });
   },
   created() {
     this.register();
   }
-}}
+}
+
+}
 
 
 
