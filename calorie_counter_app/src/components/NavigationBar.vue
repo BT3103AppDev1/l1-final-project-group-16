@@ -14,6 +14,27 @@
     </ul>
   </div>
 </template>
+<!-- 
+<script setup>
+import { onMounted, ref } from 'vue';
+import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
+
+const loggedIn = ref(false);
+
+// Define Auth 
+let auth;
+onMounted(() => {
+  auth = getAuth();
+  onAuthStateChanged(auth, (user) => {
+    // if user is not null -> set to true 
+    if (user) {
+      loggedIn.value = true;
+    } else {
+      loggedIn.value = false;
+    }
+  });
+
+}); -->
 
 <script>
 export default {
@@ -26,6 +47,16 @@ export default {
   }
 };
 </script>
+
+
+// const handleSignOut = () => {
+//   // signOut(auth).then(() => {
+//     this.$router.push('/');
+//   // });
+// };
+
+
+<!-- </script> -->
 
 <style>
 
@@ -68,6 +99,7 @@ export default {
 
 .navigation-bar a:hover {
   text-decoration: underline;
+  color: red;
 }
 .logo {
   width: 30px;
