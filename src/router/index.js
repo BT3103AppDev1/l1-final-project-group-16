@@ -11,7 +11,7 @@ import FoodLogPage from '@/views/FoodLogPage.vue'
 import ExerciseLogPage from '@/views/ExerciseLogPage.vue'
 import ProfilePage from '@/views/ProfilePage.vue'
 import AddFoodPage from '@/views/AddFoodPage.vue'
-import CalendarPage from '@/views/CalendarPage.vue'
+
 
 const routes = [
   {
@@ -64,11 +64,6 @@ const routes = [
     name: 'AddFoodPage',
     component: AddFoodPage
   },
-  {
-    path: '/CalendarPage',
-    name: 'CalendarPage',
-    component: CalendarPage
-  }
 
 ]
 
