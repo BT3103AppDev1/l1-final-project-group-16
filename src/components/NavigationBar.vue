@@ -5,7 +5,7 @@
   <div class="navigation-bar">
     <ul>
         <li><router-link to="/HomePage">
-          <img src="@/assets/images/HomePageElements/Home.png" class="logo"></router-link></li>
+          <img src="@/assets/images/HomePageElements/Home.png" class="homeLogo"></router-link></li>
         <li><router-link to="/DashboardPage">Dashboard</router-link></li>
         <li><router-link to="/FoodLogPage">Food Log</router-link></li>
         <li><router-link to="/ExerciseLogPage">Exercise Log</router-link></li>
@@ -14,59 +14,17 @@
     </ul>
   </div>
 </template>
-<!-- 
-<script setup>
-import { onMounted, ref } from 'vue';
-import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
-
-const loggedIn = ref(false);
-
-// Define Auth 
-let auth;
-onMounted(() => {
-  auth = getAuth();
-  onAuthStateChanged(auth, (user) => {
-    // if user is not null -> set to true 
-    if (user) {
-      loggedIn.value = true;
-    } else {
-      loggedIn.value = false;
-    }
-  });
-
-}); -->
 
 <script>
 export default {
-  // created() {
-  //       console.log("hihihi");
-  //       const auth = getAuth();
-  //       onAuthStateChanged(auth, (user) => {
-  //         if (user) {
-  //           this.user = user;
-  //           console.log(this.currentUser.email);
-  //         }
-  //       });
-  //     }, 
   methods: {
       handleSignOut() {
-      // navigate to landing page
-      // history.go(-(history.length - 1));
+        
       this.$router.push('/');
     },
   }
 };
 </script>
-
-
-// const handleSignOut = () => {
-//   // signOut(auth).then(() => {
-//     this.$router.push('/');
-//   // });
-// };
-
-
-<!-- </script> -->
 
 <style>
 
@@ -111,7 +69,7 @@ export default {
   text-decoration: underline;
   color: red;
 }
-.logo {
+.homeLogo {
   width: 30px;
   height: 30px;
 }
