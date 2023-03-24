@@ -75,91 +75,91 @@
       </Tab>
     </TabNav>
     </div>
-  </template>
+</template>
   
-  <script>
-  import NavigationBar from "@/components/NavigationBar.vue"
-  import { doc, setDoc, addDoc, getFirestore, collection} from "firebase/firestore"; 
-  import { getAuth, onAuthStateChanged} from "firebase/auth";
-  import { onMounted } from 'vue';
-  import Tab from "@/components/Tab.vue";
-  import TabNav from "@/components/TabNav.vue";
+<script>
+import NavigationBar from "@/components/NavigationBar.vue"
+import { doc, setDoc, addDoc, getFirestore, collection} from "firebase/firestore"; 
+import { getAuth, onAuthStateChanged} from "firebase/auth";
+import { onMounted } from 'vue';
+import Tab from "@/components/Tab.vue";
+import TabNav from "@/components/TabNav.vue";
 
-  let currEmail=  "";
+let currEmail=  "";
 
-  export default {
-      name:"AddFoodPage" ,
-      data() {
-        return {
-          selected: "Quick Add",
-          foodName: "", 
-          mealType: null,
-          numServings: null,
-        };
-      },
-      components : {
-          NavigationBar,
-          Tab,
-          TabNav
-      },
+export default {
+    name:"AddFoodPage" ,
+    data() {
+      return {
+        selected: "Quick Add",
+        foodName: "", 
+        mealType: null,
+        numServings: null,
+      };
+    },
+    components : {
+        NavigationBar,
+        Tab,
+        TabNav
+    },
 
-      async mounted () {
-        const auth = getAuth();
-        onAuthStateChanged(auth, (user) => {
-          if (user) {
-            currEmail = user.email;
-          } 
-        });
-      },
+    async mounted () {
+      const auth = getAuth();
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          currEmail = user.email;
+        } 
+      });
+    },
 
-    methods: {
-      setSelected(tab)  {
-        this.selected = tab;
-      },
-      async saveFood(){
+  methods: {
+    setSelected(tab)  {
+      this.selected = tab;
+    },
+    async saveFood(){
 
-        const auth = getAuth();
-        const user =  auth.currentUser.email;
-        console.log("email", user);
-        console.log(currEmail);
+      const auth = getAuth();
+      const user =  auth.currentUser.email;
+      console.log("email", user);
+      console.log(currEmail);
 
 
-        let foodData = {
-          foodName: this.foodName.value,
-          mealType: this.mealType.value,
-          numServings: this.numServings.value,
-          numCalories: this.numCalories.value
+      let foodData = {
+        foodName: this.foodName.value,
+        mealType: this.mealType.value,
+        numServings: this.numServings.value,
+        numCalories: this.numCalories.value
 
-        };
-        const current = new Date();
-        const date = `${current.getDate()}-${current.getMonth()+1}-${current.getFullYear()}`;
-        // add the document to the current date based on bf/lunch/dinner
-        // add new date document 
-        console.log(date);
+      };
+      const current = new Date();
+      const date = `${current.getDate()}-${current.getMonth()+1}-${current.getFullYear()}`;
+      // add the document to the current date based on bf/lunch/dinner
+      // add new date document 
+      console.log(date);
 
-        const userRef = doc(collection(getFirestore(), "Users"), currEmail);
-        const datesRef = doc(collection(userRef, "Date"), date);
-        const foodLogRef = doc(collection(datesRef, "FoodLog"), this.mealType);
-        const mealLogRef = doc(collection(foodLogRef, this.mealType + "Meals"), this.foodName);
-        // "FoodLog", mealTypeDoc, mealTypeMeals, this.foodName);
-        await setDoc(mealLogRef, {
-          foodName: this.foodName, 
-          mealType: this.mealType, 
-          numServings: this.numServings,
-          numCalories: this.numCalories
-        });
-      },
-    created() {
-        const auth = getAuth();
-        onAuthStateChanged(auth, (user) => {
-          if (user) {
-            this.user = user;
-            console.log(this.currentUser.email);
-          }
-        });
-      }
+      const userRef = doc(collection(getFirestore(), "Users"), currEmail);
+      const datesRef = doc(collection(userRef, "Date"), date);
+      const foodLogRef = doc(collection(datesRef, "FoodLog"), this.mealType);
+      const mealLogRef = doc(collection(foodLogRef, this.mealType + "Meals"), this.foodName);
+      // "FoodLog", mealTypeDoc, mealTypeMeals, this.foodName);
+      await setDoc(mealLogRef, {
+        foodName: this.foodName, 
+        mealType: this.mealType, 
+        numServings: this.numServings,
+        numCalories: this.numCalories
+      });
+    },
+  created() {
+      const auth = getAuth();
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          this.user = user;
+          console.log(this.currentUser.email);
+        }
+      });
     }
   }
+}
 
 
 </script>
