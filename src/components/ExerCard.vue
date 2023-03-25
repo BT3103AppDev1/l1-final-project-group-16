@@ -48,7 +48,7 @@ export default {
     font-weight: bold;
 }
 
-.NumServings {
+.duration {
     display: flex;
     align-items: center;
     flex-basis: 12%;
@@ -56,7 +56,7 @@ export default {
     gap: 12px;
 
 }
-.card-right {
+.class-right {
     display:flex;
     justify-content: flex-end;
     align-items: flex-end;
