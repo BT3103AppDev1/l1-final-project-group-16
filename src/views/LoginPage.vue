@@ -25,10 +25,10 @@
           </form>
       </div>
       </div>
-  </template>
+</template>
   
   
-  <script>
+<script>
   import app from "../firebase.js"
   import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
   const auth = getAuth();
@@ -73,11 +73,11 @@
         }
     }
   };
-  </script>
+</script>
 
 
   
-  <style>
+<style>
   #signInBtn{
       display: block;
       margin: 0 auto;
@@ -120,7 +120,7 @@
   .signUpPage:hover {
       text-shadow: blue;
   }
-  </style><!-- <template>
+</style><!-- <template>
   <div>
     <br>
     <img src="@/assets/images/CommonElements/HappyPlatesWord.png" alt="HP Words" style="width: 400px; height: auto" >

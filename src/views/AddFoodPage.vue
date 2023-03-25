@@ -176,6 +176,8 @@
 
 </script>
 
+</script>
+
 <style scoped>
 #saveFood {
     cursor: pointer;

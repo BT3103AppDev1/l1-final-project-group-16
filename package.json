@@ -8,6 +8,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "bootstrap": "^5.2.3",
     "firebase": "^9.17.2",
     "firebase-app": "^0.0.1",
     "firebase-auth": "^0.1.2",

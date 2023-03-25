@@ -13,6 +13,7 @@ import ProfilePage from '@/views/ProfilePage.vue'
 import AddFoodPage from '@/views/AddFoodPage.vue'
 
 
+
 const routes = [
   {
     path: '/',
