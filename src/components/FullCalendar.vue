@@ -37,7 +37,8 @@ export default {
   methods: {
     handleDateClick(info) {
       const dateStr = info.dateStr;
-      console.log('Clicked on: ' + info.dateStr)
+      const dataDate = info.el.getAttribute('data-date');
+      console.log('Clicked on: ' + dataDate);
       this.$router.push({ name: 'HomePage', query: { date: dateStr } });
     }
   }

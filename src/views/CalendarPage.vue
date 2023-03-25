@@ -39,14 +39,19 @@
 .calendar-wrapper {
   display: flex;
   justify-content: center;
-  margin: 0 auto;
+  margin: 20px auto 0 auto; /* Add 20px margin to the top */
   width: 100%;
 }
 
 .calendar-container {
   width: 60%;
-  height: auto;
+  height: 50%;
   background-color: white;
-  font-family: Avenir, Helvetica, Arial, sans-serif;}
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+}
 
+.fc-daygrid-day-number, .fc-col-header-cell-cushion {
+    color: rgb(19, 3, 53);
+    text-decoration: none;
+}
 </style>
