@@ -1,4 +1,5 @@
 <template>
+  <div>
   <div class="firstcontainer">
     <br>
     <img src="@/assets/images/CommonElements/HappyPlatesWord.png" alt="HP Words" style="width: 350px; height: auto">
@@ -18,7 +19,8 @@
       </div>
   </div>
   <div class="thirdcontainer">
-
+    <img src="@/assets/images/LandingPageElements/LandingPageIcons.png" alt="LP Icons" style="width:auto; height: auto">
+  </div>
   </div>
   
 </template>
