@@ -1,13 +1,13 @@
 <template>
     <div class="card-wrapper">
-        <div class="ExerName">
-            <span>{{ exercise.ExerName }}</span>
+        <div class="exerName">
+            <span>{{ exercise.exerName }}</span>
         </div>
         <div class="duration">
-            <span>{{ exercise.duration }} Servings</span>
+            <span>{{ exercise.duration }} Duration</span>
         </div>
         <div class="class-right">
-            <span >{{ exercise.Calories }} Calories </span>
+            <span >{{ exercise.numCalories }} Calories </span>
         </div>
 </div>
 
@@ -25,36 +25,42 @@ export default {
 <style scoped > 
 
 .card-wrapper {
-    display: flex;
+    display: block;
     justify-content: center;
-    margin-bottom: 30px;
+    margin-bottom: 10px;
     color: black;
     border-radius: 50px;
-    background-color: rgb(151, 183, 133);
+    background-color: rgb(196, 247, 198);
     align-items: center;
+    margin-left: 10%;
+    margin-right: 10%;
+    box-shadow: 2px 2px 6px rgba(154, 244, 154, 0.3);
+
  
 }
 
-.FoodName {
+.exerName {
     display: flex;
     align-items: center;
     flex-basis: 12%;
-    gap: 16px;
-        
-   
-    }
+    flex-grow: 1;
+    margin-left: 20px;
+    font-weight: bold;
+}
 
 .NumServings {
     display: flex;
     align-items: center;
     flex-basis: 12%;
+    margin-left: 130px;
     gap: 12px;
 
 }
-.card-content {
+.card-right {
     display:flex;
-    justify-content: center;
-    align-items: center;
+    justify-content: flex-end;
+    align-items: flex-end;
+    margin-right: 30px;
 }
 
 
