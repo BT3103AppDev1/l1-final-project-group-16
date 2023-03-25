@@ -1,13 +1,13 @@
 <template>
     <div class="card-wrapper">
         <div class="ExerName">
-            <span>{{ card.ExerName }}</span>
+            <span>{{ exercise.ExerName }}</span>
         </div>
         <div class="duration">
-            <span>{{ card.duration }} Servings</span>
+            <span>{{ exercise.duration }} Servings</span>
         </div>
         <div class="class-right">
-            <span >{{ card.Calories }} Calories </span>
+            <span >{{ exercise.Calories }} Calories </span>
         </div>
 </div>
 
@@ -17,7 +17,7 @@
 <script>
 export default {
     name: "ExerCard",
-    props: ["card"],
+    props: ["exercise"],
 };
 
 </script>

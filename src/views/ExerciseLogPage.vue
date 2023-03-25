@@ -14,20 +14,20 @@
 
 <script>
 import NavigationBar from "@/components/NavigationBar.vue";
-import FoodCard from "@/components/FoodCard.vue";
-import AddFoodPage from "@/views/AddFoodPage.vue";
+import ExerCard from "@/components/ExerCard.vue";
+import AddExerPage from "@/views/AddExerPage.vue";
 import {getAuth, onAuthStateChanged} from "firebase/auth";
 import firebaseApp from "@/firebase.js";
 import { getFirestore, collection, getDoc, getDocs, query, where, doc} from 'firebase/firestore';
 let currEmail=  "";
 
 export default {
-    name:"FoodLogPage" ,
+    name:"ExerciseLog" ,
     data() {
       return {
-        foodName: null, 
-        mealType: null,
-        numServings: null,
+        ExerName: null, 
+        duration: null,
+        numCalories: null,
         exercises: [],
         exercise: {
           ExerName: null, 
