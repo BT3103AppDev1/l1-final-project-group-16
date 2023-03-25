@@ -24,6 +24,11 @@
         </select>
         <div></div>
 
+        <div>
+      <label class="labels" for="foodName">NUMBER OF CALORIES</label>
+      <input class="formfields" id="numCalories" placeholder="How many calories?" v-model="numCalories" />
+        </div>
+
         
         <!-- Save Button -->
         <button class="button" id="saveExer" type="submit" >Save</button><br><br>

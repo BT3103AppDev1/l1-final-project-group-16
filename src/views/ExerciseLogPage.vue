@@ -6,7 +6,7 @@
   </div>
   </div>
 
-  <ExerCard :food="food" v-for="(food, index) in foods" :key="index"/>
+  <ExerCard :exercise="exercise" v-for="(exercise, index) in exercises" :key="index"/>
 
   
 
@@ -28,22 +28,22 @@ export default {
         foodName: null, 
         mealType: null,
         numServings: null,
-        foods: [],
-        food: {
-          FoodName: null, 
-          numServings: null, 
+        exercises: [],
+        exercise: {
+          ExerName: null, 
+          duration: null, 
           numCalories: null, 
         }
       };
     },
     components : {
         NavigationBar,
-        FoodCard
+        ExerCard
     },
 
     created() {
-      this.foods = [];
-      this.retrieveFood();
+      this.exercises = [];
+      this.retrieveExercises();
     },
 
     methods: {
@@ -52,7 +52,7 @@ export default {
 
       },
 
-      async retrieveFood() {
+      async retrieveExercises() {
         const auth = getAuth();
 
         const currentUser = auth.currentUser;
@@ -66,14 +66,14 @@ export default {
         const today = `${current.getDate()}-${current.getMonth()+1}-${current.getFullYear()}`;
         // console.log(today);
         console.log(currEmail);
-        const mealsRef = collection(getFirestore(), "Meals");
+        const mealsRef = collection(getFirestore(), "Exercises");
         const q = query(mealsRef, where("email", "==", userEmail), where("date","==", today));
         const querySnapshot = await getDocs(q);
         querySnapshot.forEach((doc) => {
           // doc.data() is never undefined for query doc snapshots
           // console.log(doc.id, " => ", doc.data().foodName);
 
-          this.foods.push(doc.data());
+          this.exercises.push(doc.data());
 
         });
       }
