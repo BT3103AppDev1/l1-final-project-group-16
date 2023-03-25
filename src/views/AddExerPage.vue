@@ -110,6 +110,8 @@
                 duration: this.duration, 
                 numCalories: this.numCalories
         });
+        alert("Added Exercise Successfully")
+
 
         // const userRef = doc(collection(getFirestore(), "Users"), currEmail);
         // const datesRef = doc(collection(userRef, "Date"), date);

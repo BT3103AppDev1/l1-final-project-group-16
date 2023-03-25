@@ -146,7 +146,10 @@ export default {
               numServings: this.numServings,
               numCalories: this.numCalories
               
+              
         });
+      alert("Added Food Successfully")
+
       console.log(date);
       console.log("mealtype", this.mealType);
       const userRef = doc(collection(getFirestore(), "Users"), currEmail);

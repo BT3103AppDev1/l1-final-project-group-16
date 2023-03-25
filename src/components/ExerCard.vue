@@ -4,7 +4,7 @@
             <span>{{ exercise.exerName }}</span>
         </div>
         <div class="duration">
-            <span>{{ exercise.duration }} Duration</span>
+            <span>Duration: {{ exercise.duration }}</span>
         </div>
         <div class="class-right">
             <span >{{ exercise.numCalories }} Calories </span>
