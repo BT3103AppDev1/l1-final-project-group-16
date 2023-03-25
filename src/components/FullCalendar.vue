@@ -1,6 +1,15 @@
+<template>
+  <FullCalendar 
+    ref="calendar"
+    :options="calendarOptions"
+    @dateClick="handleDateClick"/>
+</template>
+
 <script>
-import FullCalendar from '@fullcalendar/vue3'
-import dayGridPlugin from '@fullcalendar/daygrid'
+import FullCalendar from '@fullcalendar/vue3';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import { Calendar } from '@fullcalendar/core';
+import interactionPlugin from '@fullcalendar/interaction';
 
 export default {
   components: {
@@ -9,12 +18,15 @@ export default {
   data: function() {
     return {
       calendarOptions: {
-        plugins: [dayGridPlugin],
+        plugins: [dayGridPlugin, interactionPlugin],
         initialView: 'dayGridMonth',
         weekends: true,
-        // events: [
-        //   { title: 'Meeting', start: new Date() }
-        // ]
+        headerToolbar: {
+          left: '',
+          center: 'title',
+          right: 'prev,next',
+        },
+        selectable: true,
       }
     }
   },
@@ -22,12 +34,12 @@ export default {
     this.calendar = new Calendar(this.$el, this.calendarOptions);
     this.calendar.render();
   },
-  beforeDestroy() {
-    this.calendar.destroy();
-  },
+  methods: {
+    handleDateClick(info) {
+      const dateStr = info.dateStr;
+      console.log('Clicked on: ' + info.dateStr)
+      this.$router.push({ name: 'HomePage', query: { date: dateStr } });
+    }
+  }
 }
 </script>
-
-<template>
-  <FullCalendar :options='calendarOptions' />
-</template>

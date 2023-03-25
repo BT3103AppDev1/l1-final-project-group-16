@@ -2,7 +2,7 @@
     <div>
       <NavigationBar/>
       <div class="calendar-wrapper">
-        <FullCalendar class="calendar-container" />
+        <FullCalendar class="calendar-container" :dateClick="handleDateClick"/>
       </div>
       <!-- <full-calendar :plugins="calendarPlugins" :initialView="'dayGridMonth'"/> -->
     </div>
@@ -20,6 +20,12 @@
     components: {
       NavigationBar,
       FullCalendar,
+    },
+    methods: {
+        handleDateClick(info) {
+        // info.date is the clicked date
+        this.$router.push({ path: "/HomePage" }); 
+        }
     },
     data() {
       return {
@@ -40,5 +46,7 @@
 .calendar-container {
   width: 60%;
   height: auto;
-}
+  background-color: white;
+  font-family: Avenir, Helvetica, Arial, sans-serif;}
+
 </style>
