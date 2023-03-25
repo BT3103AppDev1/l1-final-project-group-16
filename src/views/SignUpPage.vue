@@ -33,7 +33,7 @@
 <script>
 import fireBaseApp from "../firebase.js"
 import db from "../firebase.js"
-import { doc, setDoc, addDoc, getFirestore } from "firebase/firestore"; 
+import { doc, setDoc, addDoc, getFirestore} from "firebase/firestore"; 
 
 
 import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
@@ -53,7 +53,6 @@ export default {
         email:null, 
         userName: null
       }
-  
     }
   },
   methods: {
