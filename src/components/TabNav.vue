@@ -14,6 +14,7 @@
 </template>
 
 <script>
+// import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default {
     props: {
@@ -35,7 +36,8 @@ export default {
 
 </script>
 
-<style>
+<style scoped>
+
 
 .nav-tabs{
     justify-content: center;
@@ -51,4 +53,4 @@ export default {
 }
 
 
-</style>
+</style>>

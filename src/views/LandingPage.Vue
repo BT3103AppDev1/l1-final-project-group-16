@@ -1,8 +1,6 @@
 <template>
-  <div>
     <button v-on:click="goToLoginPage">Login</button>
-    <button v-on:click="goToSignUpPage">Sign Up</button>
-  </div>
+    <button v-on:click="goToSignUpPage">Sign Up</button>  
 </template>
 
 <script>
@@ -17,10 +15,4 @@ export default {
   },
 };
 </script>
-
-<style>
-
-</style>
-
-
 
