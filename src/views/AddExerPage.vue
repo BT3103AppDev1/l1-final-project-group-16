@@ -74,6 +74,7 @@
       setSelected(tab)  {
         this.selected = tab;
       },
+
       async saveExer(){
 
         const auth = getAuth();
@@ -88,23 +89,34 @@
           numCalories: this.numCalories.value
 
         };
+
         const current = new Date();
         const date = `${current.getDate()}-${current.getMonth()+1}-${current.getFullYear()}`;
         // add the document to the current date based on bf/lunch/dinner
         // add new date document 
         console.log(date);
 
-        const userRef = doc(collection(getFirestore(), "Users"), currEmail);
-        const datesRef = doc(collection(userRef, "Date"), date);
-        const exerLogRef = doc(collection(datesRef, "ExerciseLog"), this.mealType);
-        const mealLogRef = doc(collection(exerLogRef, this.mealType + "Meals"), this.exerName);
-        // "FoodLog", mealTypeDoc, mealTypeMeals, this.exerName);
-        await setDoc(mealLogRef, {
-          exerName: this.exerName, 
-          mealType: this.mealType, 
-          numServings: this.numServings,
-          numCalories: this.numCalories
+        // add to meal collections
+        const newDocRef = doc(collection(getFirestore(), "Exercises"));
+            await setDoc(newDocRef, {
+                email: currEmail,
+                date: date,
+                exerName: this.exerName, 
+                duration: this.duration, 
+                numCalories: this.numCalories
         });
+
+        // const userRef = doc(collection(getFirestore(), "Users"), currEmail);
+        // const datesRef = doc(collection(userRef, "Date"), date);
+        // const exerLogRef = doc(collection(datesRef, "ExerciseLog"), "Exercises");
+        // const exerRef = doc(collection(exerLogRef, this.mealType + "Meals"), this.exerName);
+        // // "FoodLog", mealTypeDoc, mealTypeMeals, this.exerName);
+        // await setDoc(mealLogRef, {
+        //   exerName: this.exerName, 
+        //   mealType: this.mealType, 
+        //   numServings: this.numServings,
+        //   numCalories: this.numCalories
+        // });
       },
     created() {
         const auth = getAuth();
