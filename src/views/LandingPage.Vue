@@ -1,7 +1,7 @@
 <template>
   <div class="firstcontainer">
     <br>
-    <img src="@/assets/images/CommonElements/HappyPlatesWord.png" alt="HP Words" style="width: 300px; height: auto">
+    <img src="@/assets/images/CommonElements/HappyPlatesWord.png" alt="HP Words" style="width: 350px; height: auto">
     <div class="toprightbuttons">
       <router-link to="/LoginPage" class="loginlink">Log In</router-link>
       <button v-on:click="goToSignUpPage" class="getstarted">Get Started</button>      
@@ -14,8 +14,11 @@
         <button v-on:click="goToSignUpPage" class="getstarted">Start for Free</button>  
       </div>
       <div class="pic">
-        <img src="@/assets/images/CommonElements/HappyPlatesLogo.png" alt="HP Logo" style="width: 400px; height: auto" >
+        <img src="@/assets/images/CommonElements/HappyPlatesLogo.png" alt="HP Logo" style="width: 350px; height: auto" >
       </div>
+  </div>
+  <div class="thirdcontainer">
+
   </div>
   
 </template>
@@ -57,7 +60,7 @@ methods: {
 }
 
 .secondcontainer {
-  margin-top: 70px;
+  margin-top: 50px;
   margin-left: 300px;
   display: flex;
   flex-wrap: wrap;
