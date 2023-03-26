@@ -12,6 +12,7 @@ import ExerciseLogPage from '@/views/ExerciseLogPage.vue'
 import ProfilePage from '@/views/ProfilePage.vue'
 import AddFoodPage from '@/views/AddFoodPage.vue'
 import AddExerPage from '@/views/AddExerPage.vue'
+import QuestionnairePage from '@/views/QuestionnairePage.vue'
 
 
 
@@ -66,6 +67,13 @@ const routes = [
     name: 'AddExerPage',
     component: AddExerPage
   },
+
+  {
+    path: '/QuestionnairePage',
+    name: 'QuestionnairePage',
+    component: QuestionnairePage
+  },
+
   {
     path: '/AddFoodPage',
     name: 'AddFoodPage',
