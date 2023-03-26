@@ -12,7 +12,7 @@
                   <input type="text" autocomplete="off" id = "userEmail" required= "" placeholder="Enter your email"> <br><br>
   
                   <label class="labels" for="ticker1">PASSWORD</label>
-                  <input type="password" id = "userPass" required= "" placeholder="Enter your password"> <br><br>
+                  <input type="password" id = "userPass" required= "" placeholder="Enter your password" @keyup.enter="verifyUser"> <br><br>
                    <div class="signUpPage">
                         <router-link to="/SignUpPage"> Don't have an account? Sign up now!</router-link>
                   </div>
