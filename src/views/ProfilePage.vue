@@ -116,7 +116,7 @@ export default {
   background-color: #e4dede; /* set the background color to grey */
   padding: 25px;
   border-radius: 30px;
-  width: 600px;
+  width: 40vw;
 }
 
 .activity {

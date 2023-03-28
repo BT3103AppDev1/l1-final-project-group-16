@@ -13,7 +13,7 @@ import ProfilePage from '@/views/ProfilePage.vue'
 import AddFoodPage from '@/views/AddFoodPage.vue'
 import AddExerPage from '@/views/AddExerPage.vue'
 import QuestionnairePage from '@/views/QuestionnairePage.vue'
-
+import EditProfilePage from '@/views/EditProfilePage.vue'
 
 
 const routes = [
@@ -80,7 +80,11 @@ const routes = [
     component: AddFoodPage
   },
 
-
+  {
+    path: '/EditProfilePage',
+    name: 'EditProfilePage',
+    component: EditProfilePage
+  }
 
 ]
 

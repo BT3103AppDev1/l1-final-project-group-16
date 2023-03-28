@@ -68,6 +68,7 @@ methods: {
   margin-left: 300px;
   display: flex;
   flex-wrap: wrap;
+  /* justify-content: center; */
 }
 .intro {
   margin-left: 50px;
