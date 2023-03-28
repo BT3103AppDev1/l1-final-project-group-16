@@ -95,12 +95,15 @@ router.beforeEach(async (to, from, next) => {
       if (user) {
         next();
       } else {
-        next("/LoginPage")
+        if (to.name == from.name) {
+          return
+        } else {
+          next("/LoginPage") 
+        }
       }
     })
   }
 })
-
 
 export default router
 

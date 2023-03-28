@@ -85,92 +85,120 @@
     </table>
     </div>
     </div>
-    </template>
+</template>
     
-    <script>
-    import NavigationBar from "@/components/NavigationBar.vue"
-    import fireBaseApp from "../firebase";
-    import { getAuth, onAuthStateChanged } from "@firebase/auth";
-    
-    export default {
-        data() {
-        return {
-          user: null, 
-          date: new Date().toLocaleDateString(),
-          breakfastCal: 0,
-          lunchCal: 0,
-          dinnerCal: 0,
-          snacksCal: 0,
-          caloriesBurnt: 0,
-          caloriesNet: 0
-        };
-        },
-        mounted() {
-            const auth = getAuth();
-            onAuthStateChanged(auth,(user) => {
-                if (user){
-                    this.user = user
-                }
-            })
-        },
-        name:"HomePage" ,
-        components : {
-            NavigationBar,
-        },
+<script>
+import NavigationBar from "@/components/NavigationBar.vue"
+import fireBaseApp from "../firebase";
+import { getAuth, onAuthStateChanged } from "@firebase/auth";
+import { getFirestore, collection, getDoc, getDocs, query, where, doc} from 'firebase/firestore';
+
+
+export default {
+  created() {
+    this.updateBreakfastCal();
+    },
+    data() {
+      return {
+        user: null, 
+        date: new Date().toLocaleDateString(),
+        breakfastCal: 0,
+        lunchCal: 0,
+        dinnerCal: 0,
+        snacksCal: 0,
+        caloriesBurnt: 0,
+        caloriesNet: 0,
+        }; 
     }
-    </script>
-    
-    <style>
-    
-    .homePageDate h1 {
-        font-size: 50px;
+    ,
+    methods: {
+      async updateBreakfastCal() {
+        const auth = getAuth();
+        onAuthStateChanged(auth, async (user) => {
+          if (user) {
+            this.useremail = user.email;
+            let x = this.date.split("/");
+            const queryDate = x[0] + "-" + x[1] + "-" + x[2];
+            const mealsCollection = collection(getFirestore(), "Meals");
+            console.log(this.useremail);
+            console.log(queryDate);
+            const breakfastQuery = query(
+              mealsCollection,
+              where("email", "==", this.useremail),
+              where("date", "==", queryDate),
+              where("mealType", "==", "Breakfast")
+            );
+            const querySnapshot = await getDocs(breakfastQuery);
+            var totalMealCalorie = 0;
+            querySnapshot.forEach((doc) => {
+              const docdata = doc.data();
+              const nCal = docdata.numCalories;
+              const nSer = docdata.numServings;
+              var totalCal = nCal * nSer;
+              totalMealCalorie += totalCal;
+            });
+            this.breakfastCal = totalMealCalorie;
+            }
+        });
       }
-    
-    .homePageDate{
-        text-align: center;
-    }
-    .calendar {
-      width: 160px;
-      height: 120px; 
-    }
-    
-    .homePageContainer3{
-        margin: auto;
-        width: 90%;
-        height: 400px;
-        background-color:white;
-        border-radius: 30px;
-        padding: 10px;
-    }
-    
-    .homepagetable1,
-    .homepagetable2,
-    .homepagetable3,
-    .homepagetable4 {
-      float: left;
-      width: 24.8%;
-      height: 100%;
-      /* border: 1px solid black; */
-    }
-    
-    .homepagetable1 table {
-      height: 100%; /* Set the height of the table to 100% */
-      width: 100%; /* Set the width of the table to 100% */
-    }
-    .homepagetable2 table {
-      height: 100%; /* Set the height of the table to 100% */
-      width: 100%; /* Set the width of the table to 100% */
-    }
-    .homepagetable3 table {
-      height: 100%; /* Set the height of the table to 100% */
-      width: 100%; /* Set the width of the table to 100% */
-    }
-    .homepagetable4 table {
-      height: 100%; /* Set the height of the table to 100% */
-      width: 100%; /* Set the width of the table to 100% */
-    }
-    
-    </style>
-    
-    
-    
+    },
+    name:"HomePage" ,
+    components : {
+        NavigationBar,
+    },
+}
+</script>
+
+<style>
+
+.homePageDate h1 {
+    font-size: 50px;
+  }
+
+.homePageDate{
+    text-align: center;
+}
+.calendar {
+  width: 160px;
+  height: 120px; 
+}
+
+.homePageContainer3{
+    margin: auto;
+    width: 90%;
+    height: 400px;
+    background-color:white;
+    border-radius: 30px;
+    padding: 10px;
+}
+
+.homepagetable1,
+.homepagetable2,
+.homepagetable3,
+.homepagetable4 {
+  float: left;
+  width: 24.8%;
+  height: 100%;
+  /* border: 1px solid black; */
+}
+
+.homepagetable1 table {
+  height: 100%; /* Set the height of the table to 100% */
+  width: 100%; /* Set the width of the table to 100% */
+}
+.homepagetable2 table {
+  height: 100%; /* Set the height of the table to 100% */
+  width: 100%; /* Set the width of the table to 100% */
+}
+.homepagetable3 table {
+  height: 100%; /* Set the height of the table to 100% */
+  width: 100%; /* Set the width of the table to 100% */
+}
+.homepagetable4 table {
+  height: 100%; /* Set the height of the table to 100% */
+  width: 100%; /* Set the width of the table to 100% */
+}
+
+</style>
+
+

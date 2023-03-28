@@ -38,9 +38,9 @@
         <button type="submit">SAVE</button>
       </form>
     </div>
-  </template>
+</template>
   
-  <script>
+<script>
   import fireBaseApp  from "../firebase.js"
   import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
   const auth = getAuth();
@@ -56,10 +56,10 @@
       submitForm(){}
     }
   }
-  </script>
+</script>
   
-  <style>
-  #header{
+<style scoped>
+#header{
     display:flex;
     justify-content: space-between;
     height: fit-content;
@@ -118,4 +118,4 @@
     box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
     border-radius: 2px;
   }
-  </style>
+</style>

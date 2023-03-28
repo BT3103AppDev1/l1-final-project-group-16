@@ -95,6 +95,7 @@ export default {
         foodName: "", 
         mealType: null,
         numServings: null,
+        numCalories: null
       };
     },
     components : {
@@ -131,8 +132,10 @@ export default {
         numCalories: this.numCalories.value
 
       };
-      const current = new Date();
-      const date = `${current.getDate()}-${current.getMonth()+1}-${current.getFullYear()}`;
+      //changes
+      const current = new Date().toLocaleDateString()
+      let x = current.split("/")
+      const date = x[0] + "-" + x[1] + "-" + x[2]
       // add the document to the current date based on bf/lunch/dinner
       // add new date document 
 
