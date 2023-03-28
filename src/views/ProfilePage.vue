@@ -57,7 +57,7 @@ export default {
 
 <style>
 .maincontainer {
-  margin-top: 250px;
+  margin-top: 10vh;
   display: flex;
   justify-content: center;
 }
@@ -73,7 +73,7 @@ export default {
 .picandbutton {
   display: inline-block;
   flex-direction: column;
-  margin-right: 50px;
+  margin-right: 5vh;
 }
 
 .editprofile {
@@ -82,7 +82,7 @@ export default {
   border: 2px solid black; 
   padding: 10px 50px; 
   color: black;
-  margin-top: 20px;
+  margin-top: 2vh;
 }
 
 .details {
@@ -95,7 +95,7 @@ export default {
   display: flex;
   flex-wrap: wrap;
   align-items: flex-start;
-  margin-bottom: 20px;
+  margin-bottom: 2vh;
 }
 
 .weight {
@@ -120,8 +120,8 @@ export default {
 }
 
 .activity {
-  margin-bottom: 25px;
-  margin-top: 25px;
+  margin-bottom: 2vh;
+  margin-top: 2vh;
 }
 
 .activity h4, .program h4 {
