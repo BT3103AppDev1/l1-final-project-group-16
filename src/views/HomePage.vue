@@ -12,9 +12,9 @@
         </div>
         <div class="childContainer1">
              <div class="homePageDate">
-                <h1 v-if="this.date === new Date().toLocaleDateString()">TODAY'S SUMMARY</h1>
+                <h1 v-if="this.todayDate === this.date">TODAY'S SUMMARY</h1>
                 <h1 v-else>{{ this.date }} SUMMARY</h1>
-            </div>
+            </div> 
         </div>
     </div>
     <div class="homePageContainer2">
@@ -88,6 +88,7 @@
 </template>
     
 <script>
+
 import NavigationBar from "@/components/NavigationBar.vue"
 import fireBaseApp from "../firebase";
 import { getAuth, onAuthStateChanged } from "@firebase/auth";
@@ -95,13 +96,23 @@ import { getFirestore, collection, getDoc, getDocs, query, where, doc} from 'fir
 
 
 export default {
+  mounted() {
+  },
   created() {
-    this.updateBreakfastCal();
+    if (this.$route.query.updatedDate) {
+      this.date = this.$route.query.updatedDate;
+      console.log(this.date)
+    }
+    this.updateMealCal('Breakfast',this.date);
+    this.updateMealCal('Lunch',this.date);
+    this.updateMealCal('Dinner',this.date);
+    this.updateMealCal('Snacks',this.date);
     },
     data() {
       return {
         user: null, 
-        date: new Date().toLocaleDateString(),
+        date: new Date().toLocaleDateString().replaceAll("/","-"),
+        todayDate: new Date().toLocaleDateString().replaceAll("/","-"), 
         breakfastCal: 0,
         lunchCal: 0,
         dinnerCal: 0,
@@ -112,23 +123,26 @@ export default {
     }
     ,
     methods: {
-      async updateBreakfastCal() {
+      async updateMealCal(mealType,date) {
+        console.log("UPDATED")
+        console.log(date)
         const auth = getAuth();
         onAuthStateChanged(auth, async (user) => {
           if (user) {
             this.useremail = user.email;
             let x = this.date.split("/");
+            if (x.length == 1) {
+              x = x[0].split("-")
+            }
             const queryDate = x[0] + "-" + x[1] + "-" + x[2];
             const mealsCollection = collection(getFirestore(), "Meals");
-            console.log(this.useremail);
-            console.log(queryDate);
-            const breakfastQuery = query(
+            const mealQuery = query(
               mealsCollection,
               where("email", "==", this.useremail),
               where("date", "==", queryDate),
-              where("mealType", "==", "Breakfast")
+              where("mealType", "==", mealType)
             );
-            const querySnapshot = await getDocs(breakfastQuery);
+            const querySnapshot = await getDocs(mealQuery);
             var totalMealCalorie = 0;
             querySnapshot.forEach((doc) => {
               const docdata = doc.data();
@@ -137,20 +151,27 @@ export default {
               var totalCal = nCal * nSer;
               totalMealCalorie += totalCal;
             });
-            this.breakfastCal = totalMealCalorie;
+            if (mealType === 'Breakfast') {
+              this.breakfastCal = totalMealCalorie;
+            } else if (mealType === 'Lunch') {
+              this.lunchCal = totalMealCalorie;
+            } else if (mealType === 'Dinner') {
+              this.dinnerCal = totalMealCalorie;
+            } else if (mealType === 'Snacks') {
+              this.snacksCal = totalMealCalorie;
+            }
             }
         });
       }
     },
     name:"HomePage" ,
     components : {
-        NavigationBar,
+        NavigationBar
     },
 }
 </script>
 
 <style>
-
 .homePageDate h1 {
     font-size: 50px;
   }

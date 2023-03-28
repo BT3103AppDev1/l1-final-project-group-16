@@ -13,6 +13,7 @@ import ExerciseLogPage from '@/views/ExerciseLogPage.vue'
 import ProfilePage from '@/views/ProfilePage.vue'
 import AddFoodPage from '@/views/AddFoodPage.vue'
 import AddExerPage from '@/views/AddExerPage.vue'
+import CalendarPage from '@/views/CalendarPage.vue'
 import { nextTick } from 'vue';
 
 
@@ -75,6 +76,11 @@ const routes = [
     name: 'AddFoodPage',
     component: AddFoodPage
   },
+  {
+    path: '/CalendarPage',
+    name: 'CalendarPage',
+    component: CalendarPage
+  },
 
 ]
 
@@ -83,27 +89,27 @@ const router = createRouter({
   routes
 })
 
-router.beforeEach(async (to, from, next) => {
-  // Landing Page -> Log in / SignUp -> Questionaire
-  // User Cannot access beyond login page
-  if (to.name == 'LandingPage' || to.name =='LoginPage' || to.name == 'SignUpPage' || to.name == "QuestionnairePage" ) {
-    next();
-  } else {
-    const auth = getAuth()
-    var isAuthenticated = false
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        next();
-      } else {
-        if (to.name == from.name) {
-          return
-        } else {
-          next("/LoginPage") 
-        }
-      }
-    })
-  }
-})
+// router.beforeEach(async (to, from, next) => {
+//   // Landing Page -> Log in / SignUp -> Questionaire
+//   // User Cannot access beyond login page
+//   if (to.name == 'LandingPage' || to.name =='LoginPage' || to.name == 'SignUpPage' || to.name == "QuestionnairePage" ) {
+//     next();
+//   } else {
+//     const auth = getAuth()
+//     var isAuthenticated = false
+//     onAuthStateChanged(auth, (user) => {
+//       if (user) {
+//         next();
+//       } else {
+//         if (to.name == from.name) {
+//           return
+//         } else {
+//           next("/LoginPage") 
+//         }
+//       }
+//     })
+//   }
+// })
 
 export default router
 

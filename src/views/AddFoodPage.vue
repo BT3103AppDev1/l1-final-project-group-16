@@ -133,9 +133,9 @@ export default {
 
       };
       //changes
-      const current = new Date().toLocaleDateString()
+      const current = new Date().toLocaleDateString();
       let x = current.split("/")
-      const date = x[0] + "-" + x[1] + "-" + x[2]
+      var date = x[0] + "-" + x[1] + "-" + x[2]
       // add the document to the current date based on bf/lunch/dinner
       // add new date document 
 
