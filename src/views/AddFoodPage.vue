@@ -131,8 +131,14 @@ export default {
         numCalories: this.numCalories.value
 
       };
-      const current = new Date();
-      const date = `${current.getDate()}-${current.getMonth()+1}-${current.getFullYear()}`;
+            const current = new Date();
+            const yyyy = current.getFullYear();
+            let mm = current.getMonth() + 1; // Months start at 0!
+            let dd = current.getDate();
+            if (dd < 10) dd = '0' + dd;
+            if (mm < 10) mm = '0' + mm;
+            const date = dd + '-' + mm + '-' + yyyy;
+      
       // add the document to the current date based on bf/lunch/dinner
       // add new date document 
 
