@@ -2,20 +2,42 @@
   <div>
     <NavigationBar/>
     <div class="save">
-      <button id="saveButton" type="button" v-on:click="addNewFood">Add New Food</button><br><br>
-  </div>
-  </div>
-  <!-- <div v-if="sampleFoodCard.length > 0">
-    <FoodCard :card="card" v-for="(card, index) in foods" :key="index"/>
-  </div> -->
-  <!-- <div v-else class="noFoodAdded">
-      <p>You have not added any food!</p>
-  </div> -->
-  <FoodCard :food="food" v-for="(food, index) in foods" :key="index"/>
+      <button id="saveButton" type="button" v-on:click="addNewFood" class="my-button">Add New Food</button><br><br>
+    </div>
 
-  
+    <meal-header :calories="totalCalories" meal="Total Intake"/>
+    <template v-if="totalCalories === 0">
+      <div class = "noteaten">You have not eaten today :(</div>
+    </template>
+
+    <meal-header :calories="breakfastCalories" meal="Breakfast"/>
+    <FoodCard :food="food" v-for="(food, index) in breakfastFoods" :key="index" :isEmpty="breakfastIsEmpty"/>
+    <template v-if="breakfastCalories === 0">
+      <div class = "noteaten">You have not eaten breakfast :(</div>
+    </template>
+
+    <meal-header :calories="lunchCalories" meal="Lunch"/>
+    <FoodCard :food="food" v-for="(food, index) in lunchFoods" :key="index"/>
+    <template v-if="lunchCalories === 0">
+      <div class = "noteaten">You have not eaten lunch :(</div>
+    </template>
+
+    <meal-header :calories="dinnerCalories" meal="Dinner"/>
+    <FoodCard :food="food" v-for="(food, index) in dinnerFoods" :key="index"/>
+    <template v-if="dinnerCalories === 0">
+      <div class = "noteaten">You have not eaten dinner :(</div>
+    </template>
+
+    <meal-header :calories="snacksCalories" meal="Snacks"/>
+    <FoodCard :food="food" v-for="(food, index) in snacksFoods" :key="index"/>
+    <template v-if="snacksCalories === 0">
+      <div class = "noteaten">You have not eaten any snacks :)</div>
+    </template>
+
+  </div>
 
 </template>
+
 
 <script>
 import NavigationBar from "@/components/NavigationBar.vue";
@@ -24,68 +46,204 @@ import AddFoodPage from "@/views/AddFoodPage.vue";
 import {getAuth, onAuthStateChanged} from "firebase/auth";
 import firebaseApp from "@/firebase.js";
 import { getFirestore, collection, getDoc, getDocs, query, where, doc} from 'firebase/firestore';
+import MealHeader from '@/components/MealHeader.vue';
 let currEmail=  "";
+
 
 export default {
     name:"FoodLogPage" ,
     data() {
       return {
-        foodName: null, 
-        mealType: null,
-        numServings: null,
-        foods: [],
-        food: {
-          FoodName: null, 
-          numServings: null, 
-          numCalories: null, 
-        }
+      foodData: [
+        {
+          foodName: "Pizza",
+          mealType: "Lunch",
+          numServings: 2,
+          numCalories: 800,
+        },
+        {
+          foodName: "Salad",
+          mealType: "Lunch",
+          numServings: 1,
+          numCalories: 200,
+        },
+        {
+          foodName: "Chicken",
+          mealType: "Dinner",
+          numServings: 2,
+          numCalories: 600,
+        },
+        {
+          foodName: "Ice Cream",
+          mealType: "Snacks",
+          numServings: 1,
+          numCalories: 300,
+        },
+      ],
       };
     },
+
+    computed: {
+
+    breakfastIsEmpty() {
+    return this.breakfastFoods.length === 0;
+  },
+  lunchIsEmpty() {
+    return this.lunchFoods.length === 0;
+  },
+  dinnerIsEmpty() {
+    return this.dinnerFoods.length === 0;
+  },
+  snacksIsEmpty() {
+    return this.snacksFoods.length === 0;
+  },
+
+    
+     totalCalories() {
+    let sum = 0;
+    for (let i = 0; i < this.foodData.length; i++) {
+      sum += this.foodData[i].numCalories * this.foodData[i].numServings;
+    }
+    return sum;
+  },
+
+    breakfastFoods() {
+      return this.foodData.filter((food) => food.mealType === "Breakfast");
+    },
+    breakfastCalories() {
+      return this.breakfastFoods.reduce(
+        (total, food) => total + food.numCalories * food.numServings,
+        0
+      );
+    },
+
+    lunchFoods() {
+      return this.foodData.filter((food) => food.mealType === "Lunch");
+    },
+    lunchCalories() {
+      return this.lunchFoods.reduce(
+        (total, food) => total + food.numCalories * food.numServings,
+        0
+      );
+    },
+
+    dinnerFoods() {
+      return this.foodData.filter((food) => food.mealType === "Dinner");
+    },
+    dinnerCalories() {
+      return this.dinnerFoods.reduce(
+        (total, food) => total + food.numCalories * food.numServings,
+        0
+      );
+    },
+
+    snacksFoods() {
+      return this.foodData.filter((food) => food.mealType === "Snacks");
+    },
+    snacksCalories() {
+      return this.snacksFoods.reduce(
+        (total, food) => total + food.numCalories * food.numServings,
+        0
+      );
+    },
+  },
+  
     components : {
         NavigationBar,
-        FoodCard
+        FoodCard,
+        MealHeader
     },
 
     created() {
-      this.foods = [];
+      this.foodData = [];
       this.retrieveFood();
     },
 
     methods: {
       addNewFood() {
         this.$router.push('/AddFoodPage');
-
       },
 
       async retrieveFood() {
         const auth = getAuth();
-
-        const currentUser = auth.currentUser;
-        if (!currentUser) {
-        // User not logged in
-          return;
-        }
-
-        const userEmail = currentUser.email;
-        const current = new Date();
-        const today = `${current.getDate()}-${current.getMonth()+1}-${current.getFullYear()}`;
-        // console.log(today);
-        console.log(currEmail);
-        const mealsRef = collection(getFirestore(), "Meals");
-        const q = query(mealsRef, where("email", "==", userEmail), where("date","==", today));
-        const querySnapshot = await getDocs(q);
-        querySnapshot.forEach((doc) => {
-          // doc.data() is never undefined for query doc snapshots
-          // console.log(doc.id, " => ", doc.data().foodName);
-
-          this.foods.push(doc.data());
-
-        });
-      }
-
+        let userEmail;
+        onAuthStateChanged(auth, async (user) => {
+          console.log("Auth state changed:", user);
+          if (user) {
+            userEmail = user.email;
+            console.log("Current user email:", userEmail);
+            const current = new Date();
+            const yyyy = current.getFullYear();
+            let mm = current.getMonth() + 1; // Months start at 0!
+            let dd = current.getDate();
+            if (dd < 10) dd = '0' + dd;
+            if (mm < 10) mm = '0' + mm;
+            const today = dd + '-' + mm + '-' + yyyy;
+            // console.log(today);
+            const mealsRef = collection(getFirestore(), "Meals");
+            console.log(mealsRef);
+            const q = query(mealsRef, where("email", "==", userEmail), where("date","==", today));
+            const querySnapshot = await getDocs(q);
+            querySnapshot.forEach((doc) => {
+              console.log(doc.id, " => ", doc.data());
+            });
+            const foodData = [];
         
-  
-   
+            querySnapshot.forEach((doc) => {
+              const food = {
+                foodName: doc.data().foodName,
+                mealType: doc.data().mealType,
+                numServings: doc.data().numServings,
+                numCalories: doc.data().numCalories
+              };
+              foodData.push(food);
+              console.log("pushed");
+            });
+            
+            this.foodData = foodData;
+          } else {
+            console.log("User not logged in");
+            return;
+          }
+        });
+          }
     }
 }
 </script>
+
+
+<style>
+
+.save {
+  display: flex;
+  justify-content: center;
+  height: 10vh;
+}
+
+.my-button {
+  background-color: greenyellow;
+  color: black;
+  font-size: 30px;
+  border-radius: 30px;
+  width: 280px;
+  height: 70px;
+  margin-top: 30px;
+  border:3px solid black;
+}
+
+.noteaten {
+  font-size: 30px;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+  color: black;
+  border-radius: 50px;
+  background-color: rgb(196, 247, 198);
+  align-items: center;
+  margin-left: 5%;
+  margin-right: 5%;
+  box-shadow: 2px 2px 6px rgba(154, 244, 154, 0.3);
+  height: 100px;
+}
+
+</style>
