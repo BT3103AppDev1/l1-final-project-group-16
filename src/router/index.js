@@ -13,7 +13,6 @@ import ExerciseLogPage from '@/views/ExerciseLogPage.vue'
 import ProfilePage from '@/views/ProfilePage.vue'
 import AddFoodPage from '@/views/AddFoodPage.vue'
 import AddExerPage from '@/views/AddExerPage.vue'
-import AddCustomFoodPage from '@/views/AddCustomFoodPage.vue'
 import { nextTick } from 'vue';
 
 
@@ -71,11 +70,7 @@ const routes = [
     component: QuestionnairePage
   },
 
-  {
-    path: '/AddCustomFoodPage',
-    name: 'AddCustomFoodPage',
-    component: AddCustomFoodPage
-  },
+
 
   {
     path: '/AddFoodPage',

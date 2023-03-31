@@ -54,32 +54,7 @@ export default {
     name:"FoodLogPage" ,
     data() {
       return {
-      foodData: [
-        {
-          foodName: "Pizza",
-          mealType: "Lunch",
-          numServings: 2,
-          numCalories: 800,
-        },
-        {
-          foodName: "Salad",
-          mealType: "Lunch",
-          numServings: 1,
-          numCalories: 200,
-        },
-        {
-          foodName: "Chicken",
-          mealType: "Dinner",
-          numServings: 2,
-          numCalories: 600,
-        },
-        {
-          foodName: "Ice Cream",
-          mealType: "Snacks",
-          numServings: 1,
-          numCalories: 300,
-        },
-      ],
+      foodData: [],
       };
     },
 
@@ -185,30 +160,20 @@ export default {
             const q = query(mealsRef, where("email", "==", userEmail), where("date","==", today));
             const querySnapshot = await getDocs(q);
             querySnapshot.forEach((doc) => {
-              console.log(doc.id, " => ", doc.data());
+              this.foodData.push(doc.data());
             });
-            const foodData = [];
-        
-            querySnapshot.forEach((doc) => {
-              const food = {
-                foodName: doc.data().foodName,
-                mealType: doc.data().mealType,
-                numServings: doc.data().numServings,
-                numCalories: doc.data().numCalories
-              };
-              foodData.push(food);
-              console.log("pushed");
-            });
-            
-            this.foodData = foodData;
-          } else {
-            console.log("User not logged in");
-            return;
+  
           }
         });
-          }
+      }
     }
-}
+  }
+
+        
+      
+    
+    
+
 </script>
 
 
