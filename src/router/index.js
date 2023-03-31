@@ -13,6 +13,7 @@ import ExerciseLogPage from '@/views/ExerciseLogPage.vue'
 import ProfilePage from '@/views/ProfilePage.vue'
 import AddFoodPage from '@/views/AddFoodPage.vue'
 import AddExerPage from '@/views/AddExerPage.vue'
+import AddCustomFoodPage from '@/views/AddCustomFoodPage.vue'
 import { nextTick } from 'vue';
 
 
@@ -71,10 +72,17 @@ const routes = [
   },
 
   {
+    path: '/AddCustomFoodPage',
+    name: 'AddCustomFoodPage',
+    component: AddCustomFoodPage
+  },
+
+  {
     path: '/AddFoodPage',
     name: 'AddFoodPage',
     component: AddFoodPage
   },
+
 
 ]
 
@@ -86,7 +94,7 @@ const router = createRouter({
 router.beforeEach(async (to, from, next) => {
   // Landing Page -> Log in / SignUp -> Questionaire
   // User Cannot access beyond login page
-  if (to.name == 'LandingPage' || to.name =='LoginPage' || to.name == 'SignUpPage' || to.name == "QuestionnairePage" ) {
+  if (to.name == 'LandingPage' || to.name == 'LoginPage' || to.name == 'SignUpPage' || to.name == "QuestionnairePage") {
     next();
   } else {
     const auth = getAuth()

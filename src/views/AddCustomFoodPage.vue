@@ -10,6 +10,7 @@
   <h1 class="quickaddtitle">Quick Add</h1>
 </div>
 <div class="centered">
+  
     <form @submit.prevent="saveFood" class="newFood"> 
       <!-- Quick Add Form -->
       <label class="labels" for="foodName">FOOD NAME</label>
@@ -50,16 +51,26 @@
     </Tab>
 
     <Tab :isSelected="selected === 'Custom Food'">
-      <div class="QuickAdd">
-  <img class="imagescustom" src="src/assets/images/customfood.png" width="70" height="70">
-  <h1 class="customfoodtitle"> Custom Food</h1>
-</div>
+      <div class="CustomFood">
+        
+      </div>
 <div class="centeredCustom">
 
-  <button class="addCustomFood" id="addCustomFood" type="submit" v-if="!showForm" v-on:click="addCustomFoodButton">Add Custom Food</button><br><br>
-  <!-- <CustomFoodForm v-if="showForm"></CustomFoodForm> -->
-  <CustomFoodForm v-if="showForm"/>
+  <form @submit.prevent="saveFood" class="newFood"> 
+        <!-- Quick Add Form -->
+        <label class="labels" for="foodName">FOOD NAME</label>
+        <input  class="formfields"  id="foodName" placeholder="Enter Custom Food Name " v-model="foodName" />
+     
+        
+        <div>
+        <label class="labels" for="foodName">NUMBER OF CALORIES</label>
+        <input class="formfields" id="numCalories" placeholder="Enter Calories Per Serving" v-model="numCalories" />
+      </div>
+        
+        <!-- Save Button -->
+        <button class="button" id="saveFood" type="submit" >Save Food</button><br><br>
 
+      </form>
   </div>
 
     </Tab>
@@ -74,27 +85,24 @@ import { getAuth, onAuthStateChanged} from "firebase/auth";
 import { onMounted } from 'vue';
 import Tab from "@/components/Tab.vue";
 import TabNav from "@/components/TabNav.vue";
-import CustomFoodForm from "@/components/CustomFoodForm.vue";
+
 
 let currEmail=  "";
 
 export default {
-    name:"AddFoodPage" ,
+    name:"AddCustomFoodPage" ,
     data() {
       return {
-        selected: "Quick Add",
+        selected: "Custom Food",
         foodName: "", 
         mealType: null,
         numServings: null,
-        numCalories: null, 
-        showForm: false,
       };
     },
     components : {
         NavigationBar,
         Tab,
-        TabNav,
-        CustomFoodForm
+        TabNav
     },
 
     async mounted () {
@@ -112,7 +120,7 @@ export default {
     },
 
     addCustomFoodButton() {
-      this.showForm = true;
+        this.$router.push('/AddCustomFoodPage');
     },
 
     async saveFood(){
@@ -136,7 +144,7 @@ export default {
       let dd = current.getDate();
       if (dd < 10) dd = '0' + dd;
       if (mm < 10) mm = '0' + mm;
-      const date = `${dd}-${mm}-${current.getFullYear()}`;
+      const date = dd + '-' + mm + '-' + yyyy;
       
       // add the document to the current date based on bf/lunch/dinner
       // add new date document 
@@ -170,6 +178,52 @@ export default {
       });
     },
 
+    async addCustomFood() {
+
+      const auth = getAuth();
+      const user =  auth.currentUser.email;
+      console.log("email", user);
+      console.log(currEmail);
+
+
+      let cutomFoodData = {
+        foodName: this.foodName.value,
+        mealType: this.mealType.value,
+        numServings: this.numServings.value,
+        numCalories: this.numCalories.value
+
+      };
+      const current = new Date();
+      const date = `${current.getDate()}-${current.getMonth()+1}-${current.getFullYear()}`;
+      // add the document to the current date based on bf/lunch/dinner
+      // add new date document 
+
+      // add to meal collections
+      const newDocRef = doc(collection(getFirestore(), "Meals"));
+            await setDoc(newDocRef, {
+              email: currEmail,
+              date: date,
+              foodName: this.foodName, 
+              mealType: this.mealType, 
+              numServings: this.numServings,
+              numCalories: this.numCalories
+              
+              
+        });
+      alert("Added Food Successfully")
+
+      console.log(date);
+      console.log("mealtype", this.mealType);
+      const userRef = doc(collection(getFirestore(), "Users"), currEmail);
+      const datesRef = doc(collection(userRef, "Date"), date);
+      const foodLogRef = doc(collection(datesRef, "FoodLog"), this.mealType);
+      const mealLogRef = doc(collection(foodLogRef, this.mealType + "Meals"), this.foodName);
+      // "FoodLog", mealTypeDoc, mealTypeMeals, this.foodName);
+      await setDoc(mealLogRef, {
+        foodName: this.foodName, 
+        numCalories: this.numCalories
+      });
+      
     },
   created() {
       const auth = getAuth();
@@ -181,6 +235,7 @@ export default {
       });
     }
   }
+}
 
 
 </script>

@@ -1,6 +1,8 @@
 <template>
     <div style="width: 30%">
         <ul class="nav nav-tabs">
+            <!-- <img class="images" src="src/assets/images/back.png" width="35" height="35" @click="goBack">
+            <i class="fas fa-arrow-left"></i> -->
             <li v-for="tab in tabs" :key="tab" class="nav-item">
                 <a class="nav-link" :class="{ active: tab === selected }" @click="setTab(tab)">
                     {{ tab }}
@@ -30,6 +32,10 @@ export default {
     methods: {
         setTab(tab) {
             this.$emit('selected', tab);
+        }, 
+
+        goBack() {
+            this.$router.go(-1);
         }
     }
 }
@@ -49,6 +55,12 @@ export default {
 }
 
 .nav-tabs:hover{
+
+}
+
+.images {
+    margin-left: -50px;
+    margin-right: 50px;
 
 }
 
