@@ -6,7 +6,8 @@
         <div class="card-right">
 
         <div class="icons">
-            <img class="icon" src="src/assets/images/threedots.png" width="30" height="30">
+            <img  @click="showEditButtons=true" class="icon" src="src/assets/images/threedots.png" width="30" height="30">
+            <Edit v-if="showEditButtons == true"/>
             <img class="icon" src="src/assets/images/add.png" width="30" height="30">
      
         </div>
@@ -15,22 +16,24 @@
 
         </div>
 
-
-      
-
-
-
-
-
     </div>
 
 
 </template> 
 
 <script>
+import Edit from "@/components/Edit.vue";
 export default {
     name: "CustomFoodCard",
     props: ["customFood"],
+    components: {
+        Edit
+    }, 
+    data() {
+        return {
+            showEditButtons: false
+        }
+    }
 };
 
 </script>
