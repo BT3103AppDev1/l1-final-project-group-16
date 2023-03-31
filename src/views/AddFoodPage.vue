@@ -61,6 +61,7 @@
   <CustomFoodForm v-if="showForm"/>
 
   </div>
+  <CustomFoodCard :customFood="food" v-for="(food, index) in customFoodData" :key="index"/>
 
     </Tab>
   </TabNav>
@@ -69,12 +70,14 @@
 
 <script>
 import NavigationBar from "@/components/NavigationBar.vue"
-import { doc, setDoc, addDoc, getFirestore, collection} from "firebase/firestore"; 
+import { doc, setDoc, addDoc, getFirestore, collection, query, where, getDocs} from "firebase/firestore"; 
 import { getAuth, onAuthStateChanged} from "firebase/auth";
 import { onMounted } from 'vue';
 import Tab from "@/components/Tab.vue";
 import TabNav from "@/components/TabNav.vue";
 import CustomFoodForm from "@/components/CustomFoodForm.vue";
+import CustomFoodCard from "@/components/CustomFoodCard.vue";
+
 
 let currEmail=  "";
 
@@ -88,13 +91,15 @@ export default {
         numServings: null,
         numCalories: null, 
         showForm: false,
+        customFoodData: []
       };
     },
     components : {
         NavigationBar,
         Tab,
         TabNav,
-        CustomFoodForm
+        CustomFoodForm,
+        CustomFoodCard
     },
 
     async mounted () {
@@ -156,29 +161,42 @@ export default {
       alert("Added Food Successfully")
 
       console.log(date);
-      console.log("mealtype", this.mealType);
-      const userRef = doc(collection(getFirestore(), "Users"), currEmail);
-      const datesRef = doc(collection(userRef, "Date"), date);
-      const foodLogRef = doc(collection(datesRef, "FoodLog"), this.mealType);
-      const mealLogRef = doc(collection(foodLogRef, this.mealType + "Meals"), this.foodName);
-      // "FoodLog", mealTypeDoc, mealTypeMeals, this.foodName);
-      await setDoc(mealLogRef, {
-        foodName: this.foodName, 
-        mealType: this.mealType, 
-        numServings: this.numServings,
-        numCalories: this.numCalories
-      });
+    
     },
+
+    async retrieveCustomFood() {
+        const auth = getAuth();
+        let userEmail;
+        onAuthStateChanged(auth, async (user) => {
+          console.log("Auth state changed:", user);
+          if (user) {
+            userEmail = user.email;
+            console.log("Current user email:", userEmail);
+            const current = new Date();
+            const yyyy = current.getFullYear();
+            let mm = current.getMonth() + 1; // Months start at 0!
+            let dd = current.getDate();
+            if (dd < 10) dd = '0' + dd;
+            if (mm < 10) mm = '0' + mm;
+            const today = dd + '-' + mm + '-' + yyyy;
+            // console.log(today);
+            const mealsRef = collection(getFirestore(), "CustomFood");
+            console.log(mealsRef);
+            const q = query(mealsRef, where("email", "==", userEmail), where("date","==", today));
+            const querySnapshot = await getDocs(q);
+            querySnapshot.forEach((doc) => {
+              this.foodData.push(doc.data());
+            });
+  
+          }
+        });
+      }
 
     },
   created() {
-      const auth = getAuth();
-      onAuthStateChanged(auth, (user) => {
-        if (user) {
-          this.user = user;
-          console.log(this.currentUser.email);
-        }
-      });
+      this.foodData = [];
+      this.retrieveCustomFood();
+    
     }
   }
 

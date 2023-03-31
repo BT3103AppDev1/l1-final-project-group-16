@@ -1,5 +1,5 @@
 <template>
-    <div style="width: 30%">
+    <div style="width: 90%">
         <ul class="nav nav-tabs">
             <!-- <img class="images" src="src/assets/images/back.png" width="35" height="35" @click="goBack">
             <i class="fas fa-arrow-left"></i> -->

@@ -5,12 +5,7 @@
       <button id="saveButton" type="button" v-on:click="addNewFood" class="my-button">Add New Food</button><br><br>
     </div>
 
-    <meal-header :calories="totalCalories" meal="Total Intake"/>
-    <template v-if="totalCalories === 0">
-      <div class = "noteaten">You have not eaten today :(</div>
-    </template>
-
-    <meal-header :calories="breakfastCalories" meal="Breakfast"/>
+    <meal-header :calories="breakfastCalories" meal="Breakfast" mealSrc="mealSource"/>
     <FoodCard :food="food" v-for="(food, index) in breakfastFoods" :key="index" :isEmpty="breakfastIsEmpty"/>
     <template v-if="breakfastCalories === 0">
       <div class = "noteaten">You have not eaten breakfast :(</div>

@@ -1,13 +1,11 @@
 <template>
     <div class="card-wrapper">
         <div class="FoodName">
-            <span>{{ food.foodName }}</span>
+            <span>{{ customFood.foodName }}</span>
         </div>
-        <div class="NumServings">
-            <span>{{ food.numServings }} Servings</span>
-        </div>
+     
         <div class="card-right">
-            <span >{{ food.numCalories }} Calories </span>
+            <span >{{ customFood.numCalories }} Calories </span>
         </div>
 </div>
 
@@ -16,8 +14,8 @@
 
 <script>
 export default {
-    name: "FoodCard",
-    props: ["food"],
+    name: "CustomFoodCard",
+    props: ["customFood"],
 };
 
 </script>
@@ -45,14 +43,6 @@ export default {
   margin-left: 50px;
   font-weight: bold;
 }
-
-.NumServings {
-  display: flex;
-  align-items: center;
-  margin-left: 40px;
-  font-size: 15px;
-}
-
 .card-right {
   font-size: 20px;
   display: flex;
