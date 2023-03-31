@@ -5,7 +5,7 @@
       <button id="saveButton" type="button" v-on:click="addNewFood" class="my-button">Add New Food</button><br><br>
     </div>
 
-    <meal-header :calories="breakfastCalories" meal="Breakfast" mealSrc="mealSource"/>
+    <meal-header :calories="breakfastCalories" meal="Breakfast" />
     <FoodCard :food="food" v-for="(food, index) in breakfastFoods" :key="index" :isEmpty="breakfastIsEmpty"/>
     <template v-if="breakfastCalories === 0">
       <div class = "noteaten">You have not eaten breakfast :(</div>
@@ -187,12 +187,12 @@ export default {
   border-radius: 30px;
   width: 280px;
   height: 70px;
-  margin-top: 30px;
+  margin-top: 20px;
   border:3px solid black;
 }
 
 .noteaten {
-  font-size: 30px;
+  font-size: 20px;
   display: flex;
   justify-content: center;
   margin-bottom: 10px;
@@ -202,8 +202,10 @@ export default {
   align-items: center;
   margin-left: 5%;
   margin-right: 5%;
-  box-shadow: 2px 2px 6px rgba(154, 244, 154, 0.3);
+  box-shadow: 2px 2px 6px rgba(53, 61, 53, 0.3);
   height: 100px;
+  font-style: italic;
+
 }
 
 </style>

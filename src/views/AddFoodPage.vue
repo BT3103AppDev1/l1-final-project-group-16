@@ -59,8 +59,12 @@
   <button class="addCustomFood" id="addCustomFood" type="submit" v-if="!showForm" v-on:click="addCustomFoodButton">Add Custom Food</button><br><br>
   <!-- <CustomFoodForm v-if="showForm"></CustomFoodForm> -->
   <CustomFoodForm v-if="showForm"/>
-
   </div>
+  <p class="noCustomFood" v-if="haveCustomFood==false && showForm==false"> You currently do not have any custom food :( </p>
+  <div class="meal-header" v-if="haveCustomFood==true">
+    <p> Your Custom Foods</p>
+  </div>
+
   <CustomFoodCard :customFood="food" v-for="(food, index) in customFoodData" :key="index"/>
 
     </Tab>
@@ -77,6 +81,7 @@ import Tab from "@/components/Tab.vue";
 import TabNav from "@/components/TabNav.vue";
 import CustomFoodForm from "@/components/CustomFoodForm.vue";
 import CustomFoodCard from "@/components/CustomFoodCard.vue";
+import MealHeader from '@/components/MealHeader.vue';
 
 
 let currEmail=  "";
@@ -91,6 +96,7 @@ export default {
         numServings: null,
         numCalories: null, 
         showForm: false,
+        haveCustomFood: false,
         customFoodData: []
       };
     },
@@ -99,7 +105,8 @@ export default {
         Tab,
         TabNav,
         CustomFoodForm,
-        CustomFoodCard
+        CustomFoodCard, 
+        MealHeader
     },
 
     async mounted () {
@@ -185,18 +192,23 @@ export default {
             const q = query(mealsRef, where("email", "==", userEmail), where("date","==", today));
             const querySnapshot = await getDocs(q);
             querySnapshot.forEach((doc) => {
-              this.foodData.push(doc.data());
+              this.customFoodData.push(doc.data());
             });
+
+            // if more than 0, the change this to true 
+            if (this.customFoodData.length > 0) {
+              this.haveCustomFood = true;
+            }
   
           }
         });
+
       }
 
     },
   created() {
       this.foodData = [];
       this.retrieveCustomFood();
-    
     }
   }
 
@@ -229,7 +241,7 @@ export default {
   background-color: rgb(86, 239, 86);
   margin-bottom:20px;
   margin-left: 20px;
-
+  border: 2px solid black;
 }
 
 .labels {
@@ -322,5 +334,36 @@ display: flex;
 flex-direction: row;
 padding-top: 30px;
 
+}
+
+.noCustomFood{
+  display: flex;
+  justify-content: center;
+  font-size: 20px;
+  font-style: italic;
+  align-items: center;
+  text-align: center;
+  height: 50vh;
+
+  
+
+}
+
+.meal-header {
+  background-color: rgb(135, 187, 255);
+  font-size: 25px;
+  max-width: 95%;
+  margin: 0 auto;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  margin-bottom: 25px;
+  box-shadow: 2px px 6px rgba(121, 124, 126, 0.3);
+  margin-top: 10px;
+
+}
+
+.images {
+  margin: 0 5px;
 }
 </style>

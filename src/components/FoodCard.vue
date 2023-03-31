@@ -28,7 +28,7 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
   color: black;
   border-radius: 50px;
   background-color: rgb(196, 247, 198);

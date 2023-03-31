@@ -50,10 +50,12 @@ export default {
   align-items: center;
   display: flex;
   margin-bottom: 25px;
-  
+  box-shadow: 2px px 6px rgba(121, 124, 126, 0.3);
+  margin-top: 10px;
+
 }
 
 .images {
-  margin: 0 20px;
+  margin: 0 5px;
 }
 </style>
