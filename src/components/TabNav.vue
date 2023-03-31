@@ -1,5 +1,5 @@
 <template>
-    <div style="width: 80%">
+    <div style="width: 80%" >
         <ul class="nav nav-tabs">
             <!-- <img class="images" src="src/assets/images/back.png" width="35" height="35" @click="goBack">
             <i class="fas fa-arrow-left"></i> -->
@@ -54,9 +54,7 @@ export default {
     background-color: inherit;
 }
 
-.nav-tabs:hover{
 
-}
 
 .images {
     margin-left: -50px;

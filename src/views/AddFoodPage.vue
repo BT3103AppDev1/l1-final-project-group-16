@@ -61,11 +61,11 @@
   <CustomFoodForm v-if="showForm"/>
   </div>
   <p class="noCustomFood" v-if="haveCustomFood==false && showForm==false"> You currently do not have any custom food :( </p>
-  <div class="meal-header" v-if="haveCustomFood==true">
+  <div class="meal-header" v-if="haveCustomFood==true && showForm==false">
     <p> Your Custom Foods</p>
   </div>
 
-  <CustomFoodCard :customFood="food" v-for="(food, index) in customFoodData" :key="index"/>
+  <CustomFoodCard  v-if="showForm == false" :customFood="food" v-for="(food, index) in customFoodData" :key="index"/>
 
     </Tab>
   </TabNav>

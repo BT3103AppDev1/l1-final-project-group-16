@@ -35,7 +35,7 @@ export default {
   margin-left: 5%;
   margin-right: 5%;
   box-shadow: 2px 2px 6px rgba(154, 244, 154, 0.3);
-  height: 100px;
+  height: 120px;
 }
 
 .FoodName {
