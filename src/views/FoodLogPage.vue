@@ -1,12 +1,12 @@
 <template>
   <div>
     <NavigationBar/>
-    <button>
+  
+    <div class="save">
+      <button>
        <img class="plusimage" src="src/assets/images/add.png" width="200" height="3" id="saveButton" 
        type="button" v-on:click="addNewFood">Add New Food</button>
       <br><br>
-    <div class="save">
-     
     </div>
 
     <meal-header :calories="breakfastCalories" meal="Breakfast" />
@@ -191,9 +191,8 @@ export default {
   border-radius: 30px;
   width: 10vh;
   height: 10vh;
-  margin-top: 20px;
+  margin-top: -10px;
   justify-content: center;
-  display: flex;
   align-items: center;
 }
 
