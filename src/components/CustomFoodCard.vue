@@ -7,7 +7,7 @@
 
         <div class="icons">
             <img  @click="showEditButtons=true" class="icon" src="src/assets/images/threedots.png" width="30" height="30">
-            <Edit v-if="showEditButtons == true"/>
+            <Edit class="editButtons" v-if="showEditButtons == true"/>
             <img class="icon" src="src/assets/images/add.png" width="30" height="30">
      
         </div>
@@ -71,10 +71,11 @@ export default {
 }
 
 .icons{
+    position: fixed;
     display: flex;
     justify-items: flex-end;
     margin-top: -45px;
-    margin-right: -125px;
+    margin-right: -15px;
     margin-bottom: 20px;
 
 }
@@ -82,6 +83,12 @@ export default {
 .icon{
     margin-right: 10px;
     margin-left: 10px;
+}
+
+.editButtons {
+    position: fixed;
+    margin-top: -150px;
+    margin-left:-70px;
 }
 
 
