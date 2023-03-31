@@ -1,8 +1,12 @@
 <template>
   <div>
     <NavigationBar/>
+    <button>
+       <img class="plusimage" src="src/assets/images/add.png" width="200" height="3" id="saveButton" 
+       type="button" v-on:click="addNewFood">Add New Food</button>
+      <br><br>
     <div class="save">
-      <button id="saveButton" type="button" v-on:click="addNewFood" class="my-button">Add New Food</button><br><br>
+     
     </div>
 
     <meal-header :calories="breakfastCalories" meal="Breakfast" />
@@ -180,16 +184,19 @@ export default {
   height: 10vh;
 }
 
-.my-button {
+.plusimage {
   background-color: greenyellow;
   color: black;
   font-size: 30px;
   border-radius: 30px;
-  width: 280px;
-  height: 70px;
+  width: 10vh;
+  height: 10vh;
   margin-top: 20px;
-  border:3px solid black;
+  justify-content: center;
+  display: flex;
+  align-items: center;
 }
+
 
 .noteaten {
   font-size: 20px;
