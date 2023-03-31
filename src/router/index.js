@@ -89,23 +89,23 @@ const router = createRouter({
   routes
 })
 
-router.beforeEach(async (to, from, next) => {
-  // Landing Page -> Log in / SignUp -> Questionaire
-  // User Cannot access beyond login page
-  if (to.name == 'LandingPage' || to.name =='LoginPage' || to.name == 'SignUpPage' || to.name == "QuestionnairePage" ) {
-    next();
-  } else {
-    const auth = getAuth()
-    var isAuthenticated = false
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        next();
-      } else {
-        next("/LoginPage")
-      }
-    })
-  }
-})
+// router.beforeEach(async (to, from, next) => {
+//   // Landing Page -> Log in / SignUp -> Questionaire
+//   // User Cannot access beyond login page
+//   if (to.name == 'LandingPage' || to.name =='LoginPage' || to.name == 'SignUpPage' || to.name == "QuestionnairePage" ) {
+//     next();
+//   } else {
+//     const auth = getAuth()
+//     var isAuthenticated = false
+//     onAuthStateChanged(auth, (user) => {
+//       if (user) {
+//         next();
+//       } else {
+//         next("/LoginPage")
+//       }
+//     })
+//   }
+// })
 
 
 export default router
