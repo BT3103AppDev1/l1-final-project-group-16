@@ -55,7 +55,10 @@
   <h1>Custom Food</h1>
 </div>
 <div class="centered">
-    <form @submit.prevent="saveFood" class="newFood"> 
+
+  <button class="addCustomFood" id="addCustomFood" type="submit"  v-on:click="addCustomFood">Add Custom Food</button><br><br>
+
+    <form @submit.prevent="addCustomFood" class="newFood"> 
       <!-- Quick Add Form -->
       <label class="labels" for="foodName">FOOD NAME</label>
       <input  class="formfields"  id="foodName" placeholder="Enter Custom Food Name " v-model="foodName" />
@@ -116,6 +119,10 @@ export default {
     setSelected(tab)  {
       this.selected = tab;
     },
+
+    addCustomFood() {
+        this.$router.push('/AddCustomFoodPage');
+    },
     async saveFood(){
 
       const auth = getAuth();
@@ -164,6 +171,56 @@ export default {
         numCalories: this.numCalories
       });
     },
+
+    async addCustomFood() {
+
+      const auth = getAuth();
+      const user =  auth.currentUser.email;
+      console.log("email", user);
+      console.log(currEmail);
+
+
+      let cutomFoodData = {
+        foodName: this.foodName.value,
+        mealType: this.mealType.value,
+        numServings: this.numServings.value,
+        numCalories: this.numCalories.value
+
+      };
+      const current = new Date();
+      const date = `${current.getDate()}-${current.getMonth()+1}-${current.getFullYear()}`;
+      // add the document to the current date based on bf/lunch/dinner
+      // add new date document 
+
+      // add to meal collections
+      const newDocRef = doc(collection(getFirestore(), "Meals"));
+            await setDoc(newDocRef, {
+              email: currEmail,
+              date: date,
+              foodName: this.foodName, 
+              mealType: this.mealType, 
+              numServings: this.numServings,
+              numCalories: this.numCalories
+              
+              
+        });
+      alert("Added Food Successfully")
+
+      console.log(date);
+      console.log("mealtype", this.mealType);
+      const userRef = doc(collection(getFirestore(), "Users"), currEmail);
+      const datesRef = doc(collection(userRef, "Date"), date);
+      const foodLogRef = doc(collection(datesRef, "FoodLog"), this.mealType);
+      const mealLogRef = doc(collection(foodLogRef, this.mealType + "Meals"), this.foodName);
+      // "FoodLog", mealTypeDoc, mealTypeMeals, this.foodName);
+      await setDoc(mealLogRef, {
+        foodName: this.foodName, 
+        mealType: this.mealType, 
+        numServings: this.numServings,
+        numCalories: this.numCalories
+      });
+      
+    },
   created() {
       const auth = getAuth();
       onAuthStateChanged(auth, (user) => {
@@ -191,6 +248,21 @@ export default {
   color: black;
   background-color: green;
   transition-duration: 0.42s;
+  justify-content: center;
+  margin-left:50px ;
+}
+
+#addCustomFood {
+  cursor: pointer;
+  margin-top: 20px;
+  padding-top: 20px;
+  padding: 16px 20px;
+  border-radius: 20px;
+  border:none;
+  background-color: rgb(86, 239, 86);
+  margin-bottom:20px;
+  margin-left: 20px;
+
 }
 
 .labels {
@@ -216,10 +288,11 @@ input:hover {
 
 h1 {
 margin-top: 30px;
+padding-top: 70px;
 }
-.button{
-transition-duration: 0.2s;
-}
+
+
+
 
 #saveFood:hover {
 background-color: red;
@@ -250,16 +323,15 @@ margin-bottom: 30px;
 }
 
 .imagescustom{
-margin-top: 10px;
+margin-top: 80px;
 margin-right: 12px;
 justify-content: center;
-margin-bottom: 30px;
 
 }
 
-.newFood {
+/* .newFood {
 margin-top: 100px;
-}
+} */
 
 #food {
 justify-content: center;
