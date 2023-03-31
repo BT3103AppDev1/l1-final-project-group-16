@@ -10,7 +10,7 @@
     </div>
 
     <p class="exercise-header">Exercise - {{ cal }} calories</p>
-    <ExerCard :food="food" v-for="(food, index) in breakfastFoods" :key="index" :isEmpty="breakfastIsEmpty"/>
+    <ExerCard :exercise="exercise" v-for="(exercise, index) in exerciseData" :key="index"/>
 
 
 
@@ -22,7 +22,7 @@
 <script>
 import NavigationBar from "@/components/NavigationBar.vue";
 import ExerCard from "@/components/ExerCard.vue";
-import AddFoodPage from "@/views/AddFoodPage.vue";
+import AddExerPage from "@/views/AddExerPage.vue";
 import {getAuth, onAuthStateChanged} from "firebase/auth";
 import firebaseApp from "@/firebase.js";
 import { getFirestore, collection, getDoc, getDocs, query, where, doc} from 'firebase/firestore';
@@ -35,6 +35,9 @@ export default {
     data() {
       return {
       exerciseData: [],
+      exerName: null, 
+      numCalories: null, 
+      duration: 0,
       cal: 0
       };
     },
@@ -45,8 +48,8 @@ export default {
     },
 
     created() {
-      this.foodData = [];
-      this.retrieveFood();
+      this.exerciseData = [];
+      this.retrieveExer();
     },
 
     methods: {
@@ -54,7 +57,7 @@ export default {
         this.$router.push('/AddExerPage');
       },
 
-      async retrieveFood() {
+      async retrieveExer() {
         const auth = getAuth();
         let userEmail;
         onAuthStateChanged(auth, async (user) => {
@@ -70,12 +73,12 @@ export default {
             if (mm < 10) mm = '0' + mm;
             const today = dd + '-' + mm + '-' + yyyy;
             // console.log(today);
-            const mealsRef = collection(getFirestore(), "Meals");
-            console.log(mealsRef);
-            const q = query(mealsRef, where("email", "==", userEmail), where("date","==", today));
+            const exerRef = collection(getFirestore(), "Exercises");
+            console.log(exerRef);
+            const q = query(exerRef, where("email", "==", userEmail), where("date","==", today));
             const querySnapshot = await getDocs(q);
             querySnapshot.forEach((doc) => {
-              this.foodData.push(doc.data());
+              this.exerciseData.push(doc.data());
             });
   
           }

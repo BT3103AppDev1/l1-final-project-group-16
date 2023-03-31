@@ -44,14 +44,14 @@
 
   <button class="addCustomExer" id="addCustomExer" type="submit" v-if="!showForm" v-on:click="addCustomExerButton">Add Custom Exercise</button><br><br>
   <!-- <CustomFoodForm v-if="showForm"></CustomFoodForm> -->
-  <CustomFoodForm v-if="showForm"/>
+  <CustomExerForm v-if="showForm"/>
   </div>
-  <p class="noCustomExer" v-if="haveCustomFood==false && showForm==false"> You currently do not have any custom exercises :( </p>
-  <div class="meal-header" v-if="haveCustomFood==true && showForm==false">
-    <p> Your Custom Foods</p>
+  <p class="noCustomExer" v-if="haveCustomExer==false && showForm==false"> You currently do not have any custom exercises :( </p>
+  <div class="meal-header" v-if="haveCustomExer==true && showForm==false">
+    <p> Your Custom Exercises</p>
   </div>
 
-  <CustomFoodCard  v-if="showForm == false" :customFood="food" v-for="(food, index) in customExerData" :key="index"/>
+  <CustomExerCard  v-if="showForm == false" :customExer="exer" v-for="(exer, index) in customExerData" :key="index"/>
 
     </Tab>
   </TabNav>
@@ -65,15 +65,15 @@ import { getAuth, onAuthStateChanged} from "firebase/auth";
 import { onMounted } from 'vue';
 import Tab from "@/components/Tab.vue";
 import TabNav from "@/components/TabNav.vue";
-import CustomFoodForm from "@/components/CustomFoodForm.vue";
-import CustomFoodCard from "@/components/CustomFoodCard.vue";
+import CustomExerForm from "@/components/CustomExerForm.vue";
+import CustomExerCard from "@/components/CustomExerCard.vue";
 import MealHeader from '@/components/MealHeader.vue';
 
 
 let currEmail=  "";
 
 export default {
-    name:"AddFoodPage" ,
+    name:"AddExerPage" ,
     data() {
       return {
         selected: "Add Exercise",
@@ -82,7 +82,7 @@ export default {
         duration: null,
         numCalories: null, 
         showForm: false,
-        haveCustomFood: false,
+        haveCustomExer: false,
         customExerData: []
       };
     },
@@ -90,8 +90,8 @@ export default {
         NavigationBar,
         Tab,
         TabNav,
-        CustomFoodForm,
-        CustomFoodCard, 
+        CustomExerForm,
+        CustomExerCard, 
         MealHeader
     },
 
@@ -139,7 +139,7 @@ export default {
       // add new date document 
 
       // add to meal collections
-      const newDocRef = doc(collection(getFirestore(), "Meals"));
+      const newDocRef = doc(collection(getFirestore(), "Exercises"));
             await setDoc(newDocRef, {
               email: currEmail,
               date: date,
@@ -180,7 +180,7 @@ export default {
 
             // if more than 0, the change this to true 
             if (this.customExerData.length > 0) {
-              this.haveCustomFood = true;
+              this.haveCustomExer = true;
             }
   
           }
