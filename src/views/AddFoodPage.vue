@@ -7,7 +7,7 @@
     <Tab :isSelected="selected === 'Quick Add'">
   <div class="QuickAdd">
   <img class="images" src="src/assets/images/forkspoon.png" width="130" height="120">
-  <h1>Quick Add</h1>
+  <h1 class="quickaddtitle">Quick Add</h1>
 </div>
 <div class="centered">
     <form @submit.prevent="saveFood" class="newFood"> 
@@ -52,25 +52,20 @@
     <Tab :isSelected="selected === 'Custom Food'">
       <div class="QuickAdd">
   <img class="imagescustom" src="src/assets/images/customfood.png" width="70" height="70">
-  <h1>Custom Food</h1>
+  <h1 class="customfoodtitle"> Custom Food</h1>
 </div>
-<div class="centered">
-    <form @submit.prevent="saveFood" class="newFood"> 
-      <!-- Quick Add Form -->
-      <label class="labels" for="foodName">FOOD NAME</label>
-      <input  class="formfields"  id="foodName" placeholder="Enter Custom Food Name " v-model="foodName" />
-   
-      
-      <div>
-      <label class="labels" for="foodName">NUMBER OF CALORIES</label>
-      <input class="formfields" id="numCalories" placeholder="Enter Calories Per Serving" v-model="numCalories" />
-    </div>
-      
-      <!-- Save Button -->
-      <button class="button" id="saveFood" type="submit" >Save Food</button><br><br>
+<div class="centeredCustom">
 
-    </form>
+  <button class="addCustomFood" id="addCustomFood" type="submit" v-if="!showForm" v-on:click="addCustomFoodButton">Add Custom Food</button><br><br>
+  <!-- <CustomFoodForm v-if="showForm"></CustomFoodForm> -->
+  <CustomFoodForm v-if="showForm"/>
   </div>
+  <p class="noCustomFood" v-if="haveCustomFood==false && showForm==false"> You currently do not have any custom food :( </p>
+  <div class="meal-header" v-if="haveCustomFood==true && showForm==false">
+    <p> Your Custom Foods</p>
+  </div>
+
+  <CustomFoodCard  v-if="showForm == false" :customFood="food" v-for="(food, index) in customFoodData" :key="index"/>
 
     </Tab>
   </TabNav>
@@ -79,11 +74,15 @@
 
 <script>
 import NavigationBar from "@/components/NavigationBar.vue"
-import { doc, setDoc, addDoc, getFirestore, collection} from "firebase/firestore"; 
+import { doc, setDoc, addDoc, getFirestore, collection, query, where, getDocs} from "firebase/firestore"; 
 import { getAuth, onAuthStateChanged} from "firebase/auth";
 import { onMounted } from 'vue';
 import Tab from "@/components/Tab.vue";
 import TabNav from "@/components/TabNav.vue";
+import CustomFoodForm from "@/components/CustomFoodForm.vue";
+import CustomFoodCard from "@/components/CustomFoodCard.vue";
+import MealHeader from '@/components/MealHeader.vue';
+
 
 let currEmail=  "";
 
@@ -95,12 +94,19 @@ export default {
         foodName: "", 
         mealType: null,
         numServings: null,
+        numCalories: null, 
+        showForm: false,
+        haveCustomFood: false,
+        customFoodData: []
       };
     },
     components : {
         NavigationBar,
         Tab,
-        TabNav
+        TabNav,
+        CustomFoodForm,
+        CustomFoodCard, 
+        MealHeader
     },
 
     async mounted () {
@@ -116,6 +122,11 @@ export default {
     setSelected(tab)  {
       this.selected = tab;
     },
+
+    addCustomFoodButton() {
+      this.showForm = true;
+    },
+
     async saveFood(){
 
       const auth = getAuth();
@@ -137,7 +148,7 @@ export default {
       let dd = current.getDate();
       if (dd < 10) dd = '0' + dd;
       if (mm < 10) mm = '0' + mm;
-      const date = dd + '-' + mm + '-' + yyyy;
+      const date = `${dd}-${mm}-${current.getFullYear()}`;
       
       // add the document to the current date based on bf/lunch/dinner
       // add new date document 
@@ -157,30 +168,49 @@ export default {
       alert("Added Food Successfully")
 
       console.log(date);
-      console.log("mealtype", this.mealType);
-      const userRef = doc(collection(getFirestore(), "Users"), currEmail);
-      const datesRef = doc(collection(userRef, "Date"), date);
-      const foodLogRef = doc(collection(datesRef, "FoodLog"), this.mealType);
-      const mealLogRef = doc(collection(foodLogRef, this.mealType + "Meals"), this.foodName);
-      // "FoodLog", mealTypeDoc, mealTypeMeals, this.foodName);
-      await setDoc(mealLogRef, {
-        foodName: this.foodName, 
-        mealType: this.mealType, 
-        numServings: this.numServings,
-        numCalories: this.numCalories
-      });
+    
+    },
+
+    async retrieveCustomFood() {
+        const auth = getAuth();
+        let userEmail;
+        onAuthStateChanged(auth, async (user) => {
+          console.log("Auth state changed:", user);
+          if (user) {
+            userEmail = user.email;
+            console.log("Current user email:", userEmail);
+            const current = new Date();
+            const yyyy = current.getFullYear();
+            let mm = current.getMonth() + 1; // Months start at 0!
+            let dd = current.getDate();
+            if (dd < 10) dd = '0' + dd;
+            if (mm < 10) mm = '0' + mm;
+            const today = dd + '-' + mm + '-' + yyyy;
+            // console.log(today);
+            const mealsRef = collection(getFirestore(), "CustomFood");
+            console.log(mealsRef);
+            const q = query(mealsRef, where("email", "==", userEmail));
+            const querySnapshot = await getDocs(q);
+            querySnapshot.forEach((doc) => {
+              this.customFoodData.push(doc.data());
+            });
+
+            // if more than 0, the change this to true 
+            if (this.customFoodData.length > 0) {
+              this.haveCustomFood = true;
+            }
+  
+          }
+        });
+
+      }
+
     },
   created() {
-      const auth = getAuth();
-      onAuthStateChanged(auth, (user) => {
-        if (user) {
-          this.user = user;
-          console.log(this.currentUser.email);
-        }
-      });
+      this.foodData = [];
+      this.retrieveCustomFood();
     }
   }
-}
 
 
 </script>
@@ -197,6 +227,21 @@ export default {
   color: black;
   background-color: green;
   transition-duration: 0.42s;
+  justify-content: center;
+  margin-left:50px ;
+}
+
+#addCustomFood {
+  cursor: pointer;
+  margin-top: 20px;
+  padding-top: 20px;
+  padding: 16px 20px;
+  border-radius: 20px;
+  border:none;
+  background-color: rgb(86, 239, 86);
+  margin-bottom:20px;
+  margin-left: 20px;
+  border: 2px solid black;
 }
 
 .labels {
@@ -206,6 +251,11 @@ margin-top: 20px;
 display: block;
 
 
+}
+
+.centeredCustom {
+  justify-content: center;
+  display: flex;
 }
 
 .formfields {
@@ -221,11 +271,12 @@ input:hover {
 }
 
 h1 {
-margin-top: 30px;
+margin-top: 60px;
+padding-top: 70px;
 }
-.button{
-transition-duration: 0.2s;
-}
+
+
+
 
 #saveFood:hover {
 background-color: red;
@@ -236,36 +287,46 @@ background-color: red;
 position: fixed;
 top: 25%;
 left: 50%;
-margin-top: -50px;
+margin-top: 10px;
 margin-left: -100px;
 
 }
+.quickaddtitle {
+  margin-top: -30px;
+}
+
+.customfoodtitle {
+  margin-top: -30px;
+}
+
+
 
 .QuickAdd{
 display: flex;
-font-size: 20px;
+font-size: 20;
 justify-content: center;
 margin-top: 0px;
 }
 
 .images {
-padding-top: 2px;
+padding-top: 20px;
 justify-content: center;
 margin-bottom: 30px;
 
 }
+
+
 
 .imagescustom{
-margin-top: 10px;
+margin-top: 30px;
 margin-right: 12px;
 justify-content: center;
-margin-bottom: 30px;
 
 }
 
-.newFood {
+/* .newFood {
 margin-top: 100px;
-}
+} */
 
 #food {
 justify-content: center;
@@ -273,5 +334,36 @@ display: flex;
 flex-direction: row;
 padding-top: 30px;
 
+}
+
+.noCustomFood{
+  display: flex;
+  justify-content: center;
+  font-size: 20px;
+  font-style: italic;
+  align-items: center;
+  text-align: center;
+  height: 50vh;
+
+  
+
+}
+
+.meal-header {
+  background-color: rgb(135, 187, 255);
+  font-size: 25px;
+  max-width: 95%;
+  margin: 0 auto;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  margin-bottom: 25px;
+  box-shadow: 2px px 6px rgba(121, 124, 126, 0.3);
+  margin-top: 10px;
+
+}
+
+.images {
+  margin: 0 5px;
 }
 </style>

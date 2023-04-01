@@ -4,7 +4,7 @@
             <span>{{ exercise.exerName }}</span>
         </div>
         <div class="duration">
-            <span>Duration: {{ exercise.duration }}</span>
+            <span>Duration: {{ exercise.duration }} hrs</span>
         </div>
         <div class="class-right">
             <span >{{ exercise.numCalories }} Calories </span>
@@ -24,44 +24,46 @@ export default {
 
 <style scoped > 
 
-.card-wrapper {
-    display: block;
-    justify-content: center;
-    margin-bottom: 10px;
-    color: black;
-    border-radius: 50px;
-    background-color: rgb(196, 247, 198);
-    align-items: center;
-    margin-left: 10%;
-    margin-right: 10%;
-    box-shadow: 2px 2px 6px rgba(154, 244, 154, 0.3);
 
- 
+.card-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  color: black;
+  border-radius: 50px;
+  background-color: rgb(196, 247, 198);
+  margin-left: 5%;
+  margin-right: 5%;
+  box-shadow: 2px 2px 6px rgba(154, 244, 154, 0.3);
+  height: 120px;
 }
 
 .exerName {
-    display: flex;
-    align-items: center;
-    flex-basis: 12%;
-    flex-grow: 1;
-    margin-left: 20px;
-    font-weight: bold;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  margin-left: 50px;
+  font-weight: bold;
 }
 
 .duration {
-    display: flex;
-    align-items: center;
-    flex-basis: 12%;
-    margin-left: 130px;
-    gap: 12px;
+  display: flex;
+  align-items: center;
+  margin-left: 40px;
+  font-size: 15px;
+}
 
-}
 .class-right {
-    display:flex;
-    justify-content: flex-end;
-    align-items: flex-end;
-    margin-right: 30px;
+  font-size: 20px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-left: auto;
+  margin-right: 60px;
 }
+
+
 
 
 

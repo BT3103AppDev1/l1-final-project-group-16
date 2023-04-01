@@ -72,41 +72,21 @@ const routes = [
     component: QuestionnairePage
   },
 
+
+
   {
     path: '/AddFoodPage',
     name: 'AddFoodPage',
     component: AddFoodPage
   },
-  {
-    path: '/CalendarPage',
-    name: 'CalendarPage',
-    component: CalendarPage
-  }
+
+
 ]
 
 const router = createRouter({
   history: createWebHistory(),
   routes
 })
-
-// router.beforeEach(async (to, from, next) => {
-//   // Landing Page -> Log in / SignUp -> Questionaire
-//   // User Cannot access beyond login page
-//   if (to.name == 'LandingPage' || to.name =='LoginPage' || to.name == 'SignUpPage' || to.name == "QuestionnairePage" ) {
-//     next();
-//   } else {
-//     const auth = getAuth()
-//     var isAuthenticated = false
-//     onAuthStateChanged(auth, (user) => {
-//       if (user) {
-//         next();
-//       } else {
-//         next("/LoginPage")
-//       }
-//     })
-//   }
-// })
-
 
 export default router
 
