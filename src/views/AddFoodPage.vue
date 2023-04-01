@@ -12,9 +12,14 @@
 <div class="centered">
     <form @submit.prevent="saveFood" class="newFood"> 
       <!-- Quick Add Form -->
-      <label class="labels" for="foodName">FOOD NAME</label>
-      <input  class="formfields"  id="foodName" placeholder="What did you eat" v-model="foodName" />
-      
+      <!-- <input  class="formfields"  id="foodName" placeholder="What did you eat" v-model="foodName" /> -->
+       
+      <label class="labels" for="foodName">FOOD NAME: {{ foodName }}</label>
+      <select class="formfields" for="foodName" id="foodName" v-model="foodName" @change="getCalories">
+      <option v-for="foodName in foodNames" :value="foodName">{{ foodName }}</option>
+      </select>
+    <p>{{ numCalories }}</p>
+
       <label class="labels" for="foodName">MEAL TYPE: {{ mealType }}</label>
       <select class="formfields"  v-model="mealType">
         <option>Breakfast</option>
@@ -37,10 +42,7 @@
         <option>9</option>
         <option>10</option>
       </select>
-      <div>
-      <label class="labels" for="foodName">NUMBER OF CALORIES</label>
-      <input class="formfields" id="numCalories" placeholder="How many calories?" v-model="numCalories" />
-    </div>
+
       
       <!-- Save Button -->
       <button class="button" id="saveFood" type="submit" >Save</button><br><br>
@@ -94,10 +96,11 @@ export default {
         foodName: "", 
         mealType: null,
         numServings: null,
-        numCalories: null, 
+        numCalories: 0, 
         showForm: false,
         haveCustomFood: false,
-        customFoodData: []
+        customFoodData: [],
+        foodNames: [],
       };
     },
     components : {
@@ -116,9 +119,35 @@ export default {
           currEmail = user.email;
         } 
       });
+
+      // get the foodnames 
+      const foodRef = collection(getFirestore(), "Food");
+      const q = query(foodRef);
+      const querySnapshot = await getDocs(q);
+
+      querySnapshot.forEach((doc) => {
+        this.foodNames.push(doc.data().Food);
+      });
+      
+
+
     },
 
+
+
   methods: {
+     async getCalories() {
+      const foodRef = collection(getFirestore(), "Food")
+      console.log("Hi")
+      const q = query(foodRef, where("Food", "==", this.foodName));
+      const querySnapshot = await getDocs(q);
+      querySnapshot.forEach((doc) => {
+        this.numCalories = doc.data().Calories
+      });
+
+
+    },
+
     setSelected(tab)  {
       this.selected = tab;
     },
@@ -209,6 +238,7 @@ export default {
   created() {
       this.foodData = [];
       this.retrieveCustomFood();
+
     }
   }
 
@@ -294,7 +324,7 @@ background-color: red;
 position: fixed;
 top: 25%;
 left: 50%;
-margin-top: 10px;
+margin-top:8vh;
 margin-left: -100px;
 
 }
