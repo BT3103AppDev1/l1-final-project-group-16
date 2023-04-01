@@ -199,6 +199,7 @@ button{
   display:flexbox;
   font-weight:600;
   font-size: 22px;
+  color: black;
 }
 
 .save {

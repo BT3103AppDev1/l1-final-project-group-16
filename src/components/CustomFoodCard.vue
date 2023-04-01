@@ -8,7 +8,7 @@
         <div class="icons">
             <img  @click="showEditButtons=true" class="icon" src="src/assets/images/threedots.png" width="30" height="30">
             <Edit class="editButtons" v-if="showEditButtons == true"/>
-            <img class="icon" src="src/assets/images/add.png" width="30" height="30">
+            <img class="icon" src="src/assets/images/greenadd.png" width="30" height="30">
      
         </div>
 

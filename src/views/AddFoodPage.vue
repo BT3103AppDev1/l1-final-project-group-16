@@ -216,6 +216,13 @@ export default {
 </script>
 
 <style scoped>
+
+button {
+  border: 2px solid black;
+  border-radius: 50px;
+  color: black;
+  font-weight: 400;
+}
 #saveFood {
   cursor: pointer;
   margin-top: 20px;
