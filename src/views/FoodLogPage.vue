@@ -1,16 +1,20 @@
 <template>
   <div>
     <NavigationBar/>
+  
+   
     <div class="save">
-      <button id="saveButton" type="button" v-on:click="addNewFood" class="my-button">Add New Food</button><br><br>
+      <button class="addButton"  v-on:click="addNewFood">
+        <div class="button-content">
+        <img class="plusimage" src="src/assets/images/greenadd.png"  id="saveButton" >
+        <span class="button-text"> Add New Food</span>
+        </div>
+        </button>
+          
+      <br><br>
     </div>
 
-    <meal-header :calories="totalCalories" meal="Total Intake"/>
-    <template v-if="totalCalories === 0">
-      <div class = "noteaten">You have not eaten today :(</div>
-    </template>
-
-    <meal-header :calories="breakfastCalories" meal="Breakfast"/>
+    <meal-header :calories="breakfastCalories" meal="Breakfast" />
     <FoodCard :food="food" v-for="(food, index) in breakfastFoods" :key="index" :isEmpty="breakfastIsEmpty"/>
     <template v-if="breakfastCalories === 0">
       <div class = "noteaten">You have not eaten breakfast :(</div>
@@ -54,32 +58,7 @@ export default {
     name:"FoodLogPage" ,
     data() {
       return {
-      foodData: [
-        {
-          foodName: "Pizza",
-          mealType: "Lunch",
-          numServings: 2,
-          numCalories: 800,
-        },
-        {
-          foodName: "Salad",
-          mealType: "Lunch",
-          numServings: 1,
-          numCalories: 200,
-        },
-        {
-          foodName: "Chicken",
-          mealType: "Dinner",
-          numServings: 2,
-          numCalories: 600,
-        },
-        {
-          foodName: "Ice Cream",
-          mealType: "Snacks",
-          numServings: 1,
-          numCalories: 300,
-        },
-      ],
+      foodData: [],
       };
     },
 
@@ -185,34 +164,42 @@ export default {
             const q = query(mealsRef, where("email", "==", userEmail), where("date","==", today));
             const querySnapshot = await getDocs(q);
             querySnapshot.forEach((doc) => {
-              console.log(doc.id, " => ", doc.data());
+              this.foodData.push(doc.data());
             });
-            const foodData = [];
-        
-            querySnapshot.forEach((doc) => {
-              const food = {
-                foodName: doc.data().foodName,
-                mealType: doc.data().mealType,
-                numServings: doc.data().numServings,
-                numCalories: doc.data().numCalories
-              };
-              foodData.push(food);
-              console.log("pushed");
-            });
-            
-            this.foodData = foodData;
-          } else {
-            console.log("User not logged in");
-            return;
+  
           }
         });
-          }
+      }
     }
-}
+  }
+
+        
+      
+    
+    
+
 </script>
 
 
-<style>
+
+<style scoped>
+button{
+  margin-top: 20px;
+  border: 2px solid black;
+  border-radius: 50px;
+}
+.button-content { 
+  margin-top: 8px;
+  display: block;
+}
+
+.button-text{
+  margin-left: 4px;
+  justify-content: center;
+  display:flexbox;
+  font-weight:600;
+  font-size: 22px;
+}
 
 .save {
   display: flex;
@@ -220,19 +207,25 @@ export default {
   height: 10vh;
 }
 
-.my-button {
+.plusimage {
   background-color: greenyellow;
   color: black;
   font-size: 30px;
   border-radius: 30px;
-  width: 280px;
-  height: 70px;
-  margin-top: 30px;
-  border:3px solid black;
+  width: 6vh;
+  height: 6vh;
+  margin-top: -13px;
+  justify-content: center;
+  align-items: center;
+  display: flexbox;
+  margin-right: 5px;
+
 }
 
+
+
 .noteaten {
-  font-size: 30px;
+  font-size: 20px;
   display: flex;
   justify-content: center;
   margin-bottom: 10px;
@@ -242,8 +235,10 @@ export default {
   align-items: center;
   margin-left: 5%;
   margin-right: 5%;
-  box-shadow: 2px 2px 6px rgba(154, 244, 154, 0.3);
+  box-shadow: 2px 2px 6px rgba(53, 61, 53, 0.3);
   height: 100px;
+  font-style: italic;
+
 }
 
 </style>
