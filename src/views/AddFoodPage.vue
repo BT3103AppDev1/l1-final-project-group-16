@@ -189,7 +189,7 @@ export default {
             // console.log(today);
             const mealsRef = collection(getFirestore(), "CustomFood");
             console.log(mealsRef);
-            const q = query(mealsRef, where("email", "==", userEmail), where("date","==", today));
+            const q = query(mealsRef, where("email", "==", userEmail));
             const querySnapshot = await getDocs(q);
             querySnapshot.forEach((doc) => {
               this.customFoodData.push(doc.data());

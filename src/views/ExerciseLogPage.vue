@@ -3,9 +3,13 @@
     <NavigationBar/>
   
     <div class="save">
-      <button>
-       <img class="plusimage" src="src/assets/images/add.png" width="200" height="3" id="saveButton" 
-       type="button" v-on:click="addNewExer">Add New Exercise</button>
+      <button class="addButton"  v-on:click="addNewExer">
+        <div class="button-content">
+        <img class="plusimage" src="src/assets/images/greenadd.png"  id="saveButton" >
+        <span class="button-text"> Add New Exercise</span>
+        </div>
+        </button>
+          
       <br><br>
     </div>
 
@@ -115,7 +119,22 @@ export default {
 </script>
 
 
-<style>
+<style scoped>
+button{
+  margin-top: 20px;
+}
+.button-content { 
+  margin-top: 8px;
+  display: block;
+}
+
+.button-text{
+  margin-left: 4px;
+  justify-content: center;
+  display:flexbox;
+  font-weight:600;
+  font-size: 22px;
+}
 
 .save {
   display: flex;
@@ -128,11 +147,14 @@ export default {
   color: black;
   font-size: 30px;
   border-radius: 30px;
-  width: 10vh;
-  height: 10vh;
+  width: 6vh;
+  height: 6vh;
   margin-top: -10px;
   justify-content: center;
   align-items: center;
+  display: flexbox;
+  margin-right: 5px;
+
 }
 
 
