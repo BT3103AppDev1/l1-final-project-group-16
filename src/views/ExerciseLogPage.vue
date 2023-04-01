@@ -122,6 +122,8 @@ export default {
 <style scoped>
 button{
   margin-top: 20px;
+  border: 2px solid black;
+  border-radius: 50px;
 }
 .button-content { 
   margin-top: 8px;
@@ -149,7 +151,7 @@ button{
   border-radius: 30px;
   width: 6vh;
   height: 6vh;
-  margin-top: -10px;
+  margin-top: -13px;
   justify-content: center;
   align-items: center;
   display: flexbox;

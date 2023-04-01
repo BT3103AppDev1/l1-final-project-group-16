@@ -2,10 +2,15 @@
   <div>
     <NavigationBar/>
   
+   
     <div class="save">
-      <button>
-       <img class="plusimage" src="src/assets/images/add.png" width="200" height="3" id="saveButton" 
-       type="button" v-on:click="addNewFood">Add New Food</button>
+      <button class="addButton"  v-on:click="addNewFood">
+        <div class="button-content">
+        <img class="plusimage" src="src/assets/images/greenadd.png"  id="saveButton" >
+        <span class="button-text"> Add New Food</span>
+        </div>
+        </button>
+          
       <br><br>
     </div>
 
@@ -176,7 +181,25 @@ export default {
 </script>
 
 
-<style>
+
+<style scoped>
+button{
+  margin-top: 20px;
+  border: 2px solid black;
+  border-radius: 50px;
+}
+.button-content { 
+  margin-top: 8px;
+  display: block;
+}
+
+.button-text{
+  margin-left: 4px;
+  justify-content: center;
+  display:flexbox;
+  font-weight:600;
+  font-size: 22px;
+}
 
 .save {
   display: flex;
@@ -189,12 +212,16 @@ export default {
   color: black;
   font-size: 30px;
   border-radius: 30px;
-  width: 10vh;
-  height: 10vh;
-  margin-top: -10px;
+  width: 6vh;
+  height: 6vh;
+  margin-top: -13px;
   justify-content: center;
   align-items: center;
+  display: flexbox;
+  margin-right: 5px;
+
 }
+
 
 
 .noteaten {
