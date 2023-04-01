@@ -128,8 +128,10 @@ export default {
       console.log("Net calories intake:", netCalorie);
       const targetGoal = values[5]
       const progressValue = Math.ceil(netCalorie/targetGoal * 100)
-      console.log("Progress %:", progressValue)
-      this.myProgress = progressValue;
+      if (progressValue >= 0){
+        this.myProgress = progressValue;
+        console.log("Progress %:", progressValue)
+      }
       if (new Date().toLocaleDateString().replaceAll("/","-") != this.date) {
         console.log("PAST DATE")
         this.flag = false
