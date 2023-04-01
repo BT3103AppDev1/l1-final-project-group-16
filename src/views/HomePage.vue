@@ -83,7 +83,7 @@
       </div>
       <tr>
         <td>
-          <ProgressBar v-bind:prog-val="myProgress" :key="keyValue"/>
+          <ProgressBar v-bind:prog-val="myProgress" v-bind:col-flag="flag" :key="keyValue"/>
         </td>
       </tr>
   </table>
@@ -130,6 +130,10 @@ export default {
       const progressValue = Math.ceil(netCalorie/targetGoal * 100)
       console.log("Progress %:", progressValue)
       this.myProgress = progressValue;
+      if (new Date().toLocaleDateString().replaceAll("/","-") != this.date) {
+        console.log("PAST DATE")
+        this.flag = false
+      }
       this.keyValue += 1
     })
     .catch((error) => {
@@ -148,6 +152,7 @@ export default {
       caloriesBurnt: 0,
       caloriesNet: 0,
       myProgress: 0,
+      flag : true,
       keyValue: 1
       }; 
   }
