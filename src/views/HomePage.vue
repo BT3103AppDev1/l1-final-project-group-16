@@ -54,31 +54,33 @@
   
   <div class="homepagetable2">  
     <table id = "displayCalorieBurntTable">
-      <tr>
-        <th>Calories Burnt</th>
-      </tr>
-      <tr>
-        <td>{{ this.caloriesBurnt }} CAL</td>
-      </tr>
+      <div class = calorieBurntIcon>
+        <img src="@/assets/images/HomePageElements/Calories.png" style="width: 100px; height: auto">
+        <h2 style="font-weight: bold; font-size: 35px;"> Calories Burnt </h2>
+      </div>
+      <br><br><br><br><br>
+      <h2>{{ this.caloriesBurnt }} CAL</h2>
   </table>
   </div>
   
   <div class="homepagetable3">
     <table id = "displayNetCalorieTable">
-      <tr>
-        <th>Net Calorie intake</th>
-      </tr>
-      <tr>
-        <td>{{ this.caloriesNet }} CAL</td>
-      </tr>
+      <div class = netCalorieIcon>
+        <img src="@/assets/images/HomePageElements/Streaks.png" style="width: 100px; height: auto">
+        <h2 style="color:#FF5712;font-weight: bold; font-size: 35px;"> Net Calorie Intake </h2>
+      </div>
+      <br><br><br><br><br>
+      <h2>{{ this.caloriesNet }} CAL</h2>
   </table>
   </div>
   
   <div class="homepagetable4">
     <table id = "displayGoalTable">
-      <tr>
-        <th>GOAL</th>
-      </tr>
+      <br>
+      <div class = "goalIcon">
+        <img src="@/assets/images/HomePageElements/Target.png" style="width: 100px; height: auto">
+        <h2 style="color:#FF5712;font-weight: bold; font-size: 35px;"> Goal </h2>
+      </div>
       <tr>
         <td>
           <ProgressBar v-bind:prog-val="myProgress" :key="keyValue"/>
@@ -279,6 +281,12 @@ export default {
 </script>
 
 <style scoped>
+.goalIcon {
+ display: grid;
+ align-items: center; 
+ justify-content: center;
+ grid-template-columns: 0fr 0fr 0fr;
+}
 
 .homePageDate h1 {
   font-size: 50px;
@@ -314,6 +322,7 @@ height: 100%;
 .homepagetable1 table {
 height: 100%; /* Set the height of the table to 100% */
 width: 100%; /* Set the width of the table to 100% */
+font-size: 20px;
 }
 .homepagetable2 table {
 height: 100%; /* Set the height of the table to 100% */

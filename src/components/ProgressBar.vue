@@ -19,7 +19,6 @@
       };
     },
     created() {
-      console.log(this.progVal)
       this.progressEndValue = this.progVal;
     },
     mounted() {
