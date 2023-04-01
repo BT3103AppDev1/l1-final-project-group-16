@@ -1,19 +1,27 @@
 <template>
   <div class="container" style="display: flex; justify-content: center;">
       <div class="circular-progress" ref="progress">
-        <div class="value-container">{{ progressValue }}%</div>
+        <div class="value-container"> {{progressEndValue}}%</div>
       </div>
     </div>
   </template>
   
   <script>
+
   export default {
+    name: "ProgressBar",
+    props: ["progVal","colFlag"],
     data() {
       return {
-        progressValue: 0,
-        progressEndValue: 90,
-        speed: 4,
+        progressValue: -1,
+        progressEndValue: 0,
+        speed: 15,
+        flag: true
       };
+    },
+    created() {
+      this.flag = this.colFlag
+      this.progressEndValue = this.progVal;
     },
     mounted() {
       this.progress();
@@ -22,14 +30,20 @@
       progress() {
         const progressBar = this.$refs.progress;
         const valueContainer = progressBar.querySelector(".value-container");
-  
         const progress = setInterval(() => {
           this.progressValue++;
           valueContainer.textContent = `${this.progressValue}%`;
-          progressBar.style.background = `conic-gradient(
+          if (this.flag) {
+            progressBar.style.background = `conic-gradient(
             #4d5bf9 ${this.progressValue * 3.6}deg,
             #cadcff ${this.progressValue * 3.6}deg
-          )`;
+            )`;
+          } else {
+            progressBar.style.background = `conic-gradient(
+            #4B4C4D ${this.progressValue * 3.6}deg,
+            #cadcff ${this.progressValue * 3.6}deg
+            )`;
+          }
           if (this.progressValue == this.progressEndValue) {
             clearInterval(progress);
           }
