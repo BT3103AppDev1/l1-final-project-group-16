@@ -38,7 +38,7 @@ export default {
       exerName: null, 
       numCalories: null, 
       duration: 0,
-      cal: 0
+      cal: 0,
       };
     },
   
@@ -56,6 +56,15 @@ export default {
       addNewExer() {
         this.$router.push('/AddExerPage');
       },
+
+    // totalCalories() {
+    //   let sum = 0;
+    //   for (let i = 0; i < this.exerciseData.length; i++) {
+    //     sum += this.exerciseData[i].numCalories * this.exerciseData[i].duration;
+    //   }
+    //   this.cal = sum;
+    //   console.log(this.exerciseData[0].date);
+    // },
 
       async retrieveExer() {
         const auth = getAuth();
@@ -82,6 +91,17 @@ export default {
             });
   
           }
+          // get the total calories
+          let total = 0;
+          length = this.exerciseData.length;
+          for (let i = 0; i < length; i++) {
+            let cal = this.exerciseData[i].numCalories
+            let dur = this.exerciseData[i].duration
+            total += cal * dur;
+          }
+          this.cal = total;
+
+
         });
       }
     }

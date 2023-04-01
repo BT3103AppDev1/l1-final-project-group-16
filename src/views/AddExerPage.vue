@@ -15,17 +15,17 @@
       <label class="labels" for="exerName">EXERCISE NAME</label>
       <input  class="formfields"  id="exerName" placeholder="What did you do?" v-model="exerName" />
 
-      <label class="labels" for="duration">DURATION: {{ duration }}</label>
+      <label class="labels" for="duration">DURATION (in hrs): {{ duration }}</label>
       <select class="formfields"  v-model="duration">
-        <option>0.5 hrs</option>
-        <option>1 hr</option>
-        <option>1.5 hrs</option>
-        <option>2 hrs</option>
+        <option>0.5</option>
+        <option>1</option>
+        <option>1.5</option>
+        <option>2</option>
       </select>
 
       <div>
       <label class="labels" for="exerName">NUMBER OF CALORIES</label>
-      <input class="formfields" id="numCalories" placeholder="How many calories?" v-model="numCalories" />
+      <input class="formfields" id="numCalories" placeholder="How many calories per hour?" v-model="numCalories" />
     </div>
       
       <!-- Save Button -->

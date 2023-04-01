@@ -4,7 +4,7 @@
             <span>{{ exercise.exerName }}</span>
         </div>
         <div class="duration">
-            <span>Duration: {{ exercise.duration }}</span>
+            <span>Duration: {{ exercise.duration }} hrs</span>
         </div>
         <div class="class-right">
             <span >{{ exercise.numCalories }} Calories </span>
@@ -54,13 +54,13 @@ export default {
   font-size: 15px;
 }
 
-.card-right {
+.class-right {
   font-size: 20px;
   display: flex;
   justify-content: flex-end;
   align-items: center;
   margin-left: auto;
-  margin-right: 70px;
+  margin-right: 60px;
 }
 
 
