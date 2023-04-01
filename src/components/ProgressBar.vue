@@ -1,28 +1,37 @@
 <template>
   <div class="container" style="display: flex; justify-content: center;">
       <div class="circular-progress" ref="progress">
-        <div class="value-container">{{ progressValue }}%</div>
+        <div class="value-container"> {{progressEndValue}}%</div>
       </div>
     </div>
   </template>
   
   <script>
+
   export default {
+    name: "ProgressBar",
+    props: ["progVal"],
     data() {
       return {
         progressValue: -1,
-        progressEndValue: 92,
-        speed: 4,
+        progressEndValue: 0,
+        speed: 15,
       };
+    },
+    created() {
+      console.log(this.progVal)
+      this.progressEndValue = this.progVal;
     },
     mounted() {
       this.progress();
     },
     methods: {
+      handleSelected(value) {
+        console.log(value);
+      },
       progress() {
         const progressBar = this.$refs.progress;
         const valueContainer = progressBar.querySelector(".value-container");
-  
         const progress = setInterval(() => {
           this.progressValue++;
           valueContainer.textContent = `${this.progressValue}%`;

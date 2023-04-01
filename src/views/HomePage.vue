@@ -81,7 +81,7 @@
       </tr>
       <tr>
         <td>
-          <ProgressBar />
+          <ProgressBar v-bind:prog-val="myProgress" :key="keyValue"/>
         </td>
       </tr>
   </table>
@@ -100,61 +100,39 @@ import { getFirestore, collection, getDoc, getDocs, query, where, doc} from 'fir
 
 
 export default {
-mounted() {
-},
-created() {
-  if (this.$route.query.updatedDate) {
-    this.date = this.$route.query.updatedDate;
-    console.log(this.date)
-  }
+  mounted() {
+
+  },
+  created() {
+    if (this.$route.query.updatedDate) {
+      this.date = this.$route.query.updatedDate;
+      console.log(this.date)
+    }
   const breakfastCalPromise = this.updateMealCal('Breakfast');
   const lunchCalPromise = this.updateMealCal('Lunch');
   const dinnerCalPromise = this.updateMealCal('Dinner');
   const snacksCalPromise = this.updateMealCal('Snacks');
   const calBurntPromise = this.updateCalBurnt();
-  Promise.all([breakfastCalPromise, lunchCalPromise, dinnerCalPromise, snacksCalPromise, calBurntPromise])
+  const calorieGoal = this.calorieGoal();
+  Promise.all([breakfastCalPromise, lunchCalPromise, dinnerCalPromise, snacksCalPromise, calBurntPromise, calorieGoal])
     .then((values) => {
       const netCalorie = values[0] + values[1] + values[2] + values[3] - values[4];
+      this.caloriesNet = netCalorie;
       console.log("Total calories for Breakfast:", values[0]);
       console.log("Total calories for Lunch:", values[1]);
       console.log("Total calories for Dinner:", values[2]);
       console.log("Total calories for Snacks:", values[3]);
       console.log("Total calories burnt:", values[4]);
-      this.caloriesNet = netCalorie
+      console.log("Net calories intake:", netCalorie);
+      const targetGoal = values[5]
+      const progressValue = Math.ceil(netCalorie/targetGoal * 100)
+      console.log("Progress %:", progressValue)
+      this.myProgress = progressValue;
+      this.keyValue += 1
     })
     .catch((error) => {
-      console.error("Error updating meal and burn calories:", error);
+      console.error("Error updating calories:", error);
     });
-
-  // this.updateMealCal('Breakfast').then((totalCalories) => {
-  // console.log("Total calories for Breakfast:", totalCalories);
-  // }).catch((error) => {
-  //   console.error("Error updating meal calories:", error);
-  // });
-
-  // this.updateMealCal('Lunch').then((totalCalories) => {
-  // console.log("Total calories for Lunch:", totalCalories);
-  // }).catch((error) => {
-  //   console.error("Error updating meal calories:", error);
-  // });
-
-  // this.updateMealCal('Dinner').then((totalCalories) => {
-  // console.log("Total calories for Dinner:", totalCalories);
-  // }).catch((error) => {
-  //   console.error("Error updating meal calories:", error);
-  // });
-
-  // this.updateMealCal('Snacks').then((totalCalories) => {
-  // console.log("Total calories for Snacks:", totalCalories);
-  // }).catch((error) => {
-  //   console.error("Error updating meal calories:", error);
-  // });
-
-  // this.updateCalBurnt().then((totalCalories) => {
-  //   console.log("Total calories burnt:", totalCalories);
-  // }).catch((error) => {
-  //   console.error("Error updating calories:", error);
-  // });
   },
   data() {
     return {
@@ -167,10 +145,27 @@ created() {
       snacksCal: 0,
       caloriesBurnt: 0,
       caloriesNet: 0,
+      myProgress: 0,
+      keyValue: 1
       }; 
   }
   ,
   methods: {
+    async calorieGoal() {
+      return new Promise(async (resole, reject) => {
+        const auth = getAuth();
+        onAuthStateChanged(auth, async (user) => {
+          if (user) {
+            // steps to retrieve from questionnaire
+            resole(1800);
+          } else {
+            reject("User not authenticated.");
+          }
+        }
+        )
+      })
+    },
+
     async updateCalBurnt() {
       return new Promise(async (resolve, reject) => {
         var totalCalorieBurnt = 0;
@@ -283,8 +278,7 @@ created() {
 }
 </script>
 
-<style>
-
+<style scoped>
 
 .homePageDate h1 {
   font-size: 50px;
@@ -332,30 +326,6 @@ width: 100%; /* Set the width of the table to 100% */
 .homepagetable4 table {
 height: 100%; /* Set the height of the table to 100% */
 width: 100%; /* Set the width of the table to 100% */
-}
-
-
-.circular-progress {
-position: relative;
-height: 150px;
-width: 150px;
-border-radius: 50%;
-display: grid;
-place-items: center;
-}
-.circular-progress:before {
-content: "";
-position: absolute;
-height: 84%;
-width: 84%;
-background-color: #000000;
-border-radius: 50%;
-}
-.value-container {
-position: relative;
-font-family: "Poppins", sans-serif;
-font-size: 50px;
-color: #231c3d;
 }
 
 </style>
