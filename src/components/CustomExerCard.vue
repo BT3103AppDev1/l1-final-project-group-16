@@ -8,7 +8,7 @@
         <div class="icons">
             <img  @click="showEditButtons=true" class="icon" src="src/assets/images/threedots.png" width="30" height="30">
             <Edit class="editButtons" v-if="showEditButtons == true"/>
-            <img class="icon" src="src/assets/images/greenadd.png" width="30" height="30">
+            <img @click="quickAddForm" class="icon" src="src/assets/images/greenadd.png" width="30" height="30">
 
      
         </div>
@@ -34,6 +34,14 @@ export default {
         return {
             showEditButtons: false
         }
+    }, 
+
+    methods: {
+        quickAddForm() {
+            this.$router.push('/HomePage');
+        }
+
+
     }
 };
 
