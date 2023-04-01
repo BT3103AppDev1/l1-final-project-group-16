@@ -10,8 +10,8 @@
   export default {
     data() {
       return {
-        progressValue: 0,
-        progressEndValue: 90,
+        progressValue: -1,
+        progressEndValue: 92,
         speed: 4,
       };
     },
