@@ -45,6 +45,11 @@ const routes = [
     component: DashboardPage
   },
   {
+    path: '/CalendarPage',
+    name: 'CalendarPage',
+    component: CalendarPage
+  },
+  {
     path: '/FoodLogPage',
     name: 'FoodLog',
     component: FoodLogPage
@@ -71,8 +76,6 @@ const routes = [
     name: 'QuestionnairePage',
     component: QuestionnairePage
   },
-
-
 
   {
     path: '/AddFoodPage',
