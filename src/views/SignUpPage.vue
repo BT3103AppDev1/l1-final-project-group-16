@@ -1,7 +1,7 @@
 <template>
   <div>
     <div id="header">
-      <router-link to="/HomePage"> <img src="@/assets/images/HomePageElements/Home.png" alt="Home" style="width:42px;height:42px;"></router-link>
+      <router-link to="/LandingPage"> <img src="@/assets/images/HomePageElements/Home.png" alt="Home" style="width:42px;height:42px;"></router-link>
       <h1 id="title">CREATE AN ACCOUNT</h1>
       <img src="@/assets/images/CommonElements/HappyPlatesLogo.png" alt="Logo" style="width:250px; height: auto;float: right;">
     </div>
@@ -10,32 +10,34 @@
         <form @submit.prevent="register" id="myForm">
             <div class="register">
                 <label class="labels" for="userName">USERNAME <span style="color: red;">*</span></label>
-                <input type="userName" id = "userName" placeholder="Enter your username" v-model="userName" required> <br><br>
+                <input type="userName" id = "userName" placeholder="Enter your username" v-model="username" required> <br>
 
                 <label class="labels" for="userEmail">EMAIL <span style="color: red;">*</span></label>
-                <input type="email" autocomplete="off" id = "userEmail"  placeholder="Enter your email" v-model="email" required> <br><br>
+                <input type="email" autocomplete="off" id = "userEmail"  placeholder="Enter your email" v-model="email" required> <br>
 
                 <label class="labels" for="userPass">PASSWORD <span style="color: red;">*</span></label>
-                <input type="password" id = "userPass" placeholder="Enter your password" v-model="password" required> <br><br>
+                <input type="password" id = "userPass" placeholder="Enter your password" v-model="password" required> <br>
 
                 <label class="labels" for="dob">DATE OF BIRTH <span style="color: red;">*</span></label>
-                <input type="date" id="dob" placeholder="DD/MM/YYYY" v-model="dob" required><br><br>
+                <input type="date" id="dob" placeholder="DD/MM/YYYY" v-model="dob" required><br>
 
                 <label class="labels" for="gender">GENDER <span style="color: red;">*</span></label>
                 <select id="gender" name="gender" v-model="gender" required>
-                  <option value="male">Male</option>
-                  <option value="female">Female</option>
-                  <option value="other">Other</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                  <option value="Other">Other</option>
                 </select>
 
+                 <br>
                  <div class="LoginPage">
                    <p>Already have an account? <router-link to="/LoginPage">Sign in</router-link></p>
                 </div>
-                <div v-show="error" class="error">{{ this.errorMsg }}</div>
-                <br>
+
                 <div class="save">
-                    <button id="registerButton" type="submit" ><router-link to="/QuestionnairePage">REGISTER</router-link></button><br><br>
+                    <button id="registerButton" type="submit" >REGISTER</button><br>
                 </div>
+                <p v-if="error" class="error" style="font-size: medium">{{ this.error }}</p>
+
             </div>
         </form>
     </div>
@@ -44,37 +46,61 @@
 
 <script>
 import fireBaseApp from "../firebase.js"
-import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { doc, setDoc, addDoc, getFirestore} from "firebase/firestore";
+import { collection } from 'firebase/firestore'
+
 const auth = getAuth();
 //   const errorMessage = ref();
 
 export default {
-  name: "Register", 
+  name: "SignUp",
   props: {
     msg: String
   },
   data() {
     return {
-      email:this.email,
-      password: this.password,
-      username:this.username,
-      dob:this.dob,
-      gender:this.gender
+      email:null,
+      password: null,
+      username:null,
+      dob:null,
+      gender:null,
+      error:''
     }
   },
   methods: {
-      register(){
-      fireBaseApp.auth().createUserWithEmailAndPassword( this.email, this.password)
-          .then((userCred) => {
-              const user = userCred.user;
-              console.log(user);
-              alert("Register Success")
-              this.$router.push('/QuestionnairePage');
-            }).catch((error) => {
+      async register(){
+      createUserWithEmailAndPassword(auth, this.email, this.password)
+          .then(async (userCred) => {
+            const user = userCred.user;
+            console.log(user);
+            //const userId = user.uid;
+            const newDocRef = doc(collection(getFirestore(), "Users"), user.email);
+            await setDoc(newDocRef, {
+              email: this.email,
+              userName: this.username,
+              dob:this.dob,
+              gender:this.gender
+
+            });
+            alert("Your HappyPlates account has registered successful!")
+
+            this.$router.push({
+              name: 'QuestionnairePage',
+              query: {
+                email: this.email
+              }
+            })
+            //this.$router.push('/QuestionnairePage');
+          }).catch(error => {
+              if (error.code === 'auth/email-already-in-use') {
+                this.error = 'Email already registered.'
+              } else {
+                this.error = error.message
+              }
               const errorCode = error.code;
-              const errorMessage = error.message;
-              console.log(errorCode, errorMessage);
-              alert(errorMessage);
+              console.log(errorCode, error);
+              alert(error);
       
       });
       }
