@@ -1,6 +1,6 @@
 <template>
     <div id="header">
-      <router-link to="/LandingPage"> <img src="@/assets/images/HomePageElements/Home.png" alt="Home" style="width:42px;height:42px;"></router-link>
+      <router-link to="/"> <img src="@/assets/images/HomePageElements/Home.png" alt="Home" style="width:42px;height:42px;"></router-link>
       <div id="title">
         <h1>QUESTIONNAIRE</h1>
         <p id="reminder"><i>Questions marked with <span style="color: red;">*</span> are compulsory</i></p>
@@ -89,7 +89,8 @@
             });
 
         alert("Save successfully!")
-        this.$router.push('/LandingPage');
+
+        this.$router.push('/LoginPage');
         }
     }
   }
