@@ -100,7 +100,6 @@ import fireBaseApp from "../firebase";
 import { getAuth, onAuthStateChanged } from "@firebase/auth";
 import { getFirestore, collection, getDoc, getDocs, query, where, doc} from 'firebase/firestore';
 
-
 export default {
   mounted() {
 
@@ -126,6 +125,7 @@ export default {
       console.log("Total calories for Snacks:", values[3]);
       console.log("Total calories burnt:", values[4]);
       console.log("Net calories intake:", netCalorie);
+      console.log("Target Goal Calorie:", values[5]);
       const targetGoal = values[5]
       const progressValue = Math.ceil(netCalorie/targetGoal * 100)
       if (progressValue >= 0){
@@ -166,7 +166,15 @@ export default {
         onAuthStateChanged(auth, async (user) => {
           if (user) {
             // steps to retrieve from questionnaire
-            resole(1800);
+            const userCollection = collection(getFirestore(), "Users");
+            const goalQuery = query(
+              userCollection,
+              where("email", "==", this.useremail),
+            );
+            const querySnapshot = await getDocs(goalQuery);
+            const userDocument = (querySnapshot.docs)[0]
+            const goalIntake = userDocument.data().dailyIntakeGoal
+            resole(goalIntake);
           } else {
             reject("User not authenticated.");
           }
@@ -181,6 +189,7 @@ export default {
         const auth = getAuth();
         onAuthStateChanged(auth, async (user) => {
           if (user) {
+            this.useremail = user.email;
             const queryDate = this.date
             const exercisesCollection = collection(getFirestore(), "Exercises");
             const exerciseQuery = query(
