@@ -10,30 +10,30 @@
     </div>
   
     <div class="details">
-      <span class="username" style="font-size: 28px; font-weight: 500;">fishfanbloop</span>
+      <span class="username" style="font-size: 28px; font-weight: 500;">{{ this.username }}</span>
         <div class="heightweight">
           <div class="hwdeets">
             <span class="height">
               <span class="heightnum" style="font-size: 20px; font-weight: 800;">Height</span>
-              <span style="font-size: 20px; font-weight: 700; color:  grey;">165cm</span>
+              <span style="font-size: 20px; font-weight: 700; color:  grey;">{{ this.height }} cm</span>
             </span>
             <span class="weight">
               <span class="weightnum" style="font-size: 20px; font-weight: 800;">Weight</span>
-              <span style="font-size: 20px; font-weight: 700; color:  grey;">50kg</span>
+              <span style="font-size: 20px; font-weight: 700; color:  grey;">{{ this.weight }} kg</span>
             </span>
           </div>
         </div>
         <div class="activity">
           <h4 style="font-size: 20px; font-weight: 800;">Daily Intake Goal</h4>
-          <h4 style="font-size: 20px; font-weight: 700; color:  grey;">2000 Calories</h4>
+          <h4 style="font-size: 20px; font-weight: 700; color:  grey;">{{ this.calories}} Calories</h4>
           <h4 style="font-size: 20px; font-weight: 800;">Activity Level</h4>
-          <h4 style="font-size: 20px; font-weight: 700; color:  grey;">Moderate</h4>
+          <h4 style="font-size: 20px; font-weight: 700; color:  grey;">{{ this.activity }}</h4>
         </div>
         <div class="program">
           <h4 style="font-size: 20px; font-weight: 800;">Program</h4>
-          <h4 style="font-size: 20px; font-weight: 700; color:  grey;">Gradual Weight Loss</h4>
+          <h4 style="font-size: 20px; font-weight: 700; color:  grey;">{{ this.program }}</h4>
           <h4 style="font-size: 20px; font-weight: 800;">Start Date</h4>
-          <h4 style="font-size: 20px; font-weight: 700; color: grey;"> 20 Jul 2022</h4>
+          <h4 style="font-size: 20px; font-weight: 700; color: grey;">{{ this.startdate }}</h4>
         </div>
     </div>
   </div>
@@ -41,13 +41,59 @@
 
 <script>
 import NavigationBar from "@/components/NavigationBar.vue"
+import { getAuth, onAuthStateChanged } from "@firebase/auth";
+import { getFirestore, collection, getDoc, getDocs, query, where, doc} from 'firebase/firestore';
 
 export default {
     name:"ProfilePage" ,
     components : {
         NavigationBar,
     },
+    data() {
+      return {
+        username: "",
+        height:0,
+        weight:0,
+        calories: 0,
+        activity: "xxx",
+        program: "xxx",
+        startdate: "xx"
+      }
+    },
+    created() {
+      this.renderProfile();
+    },
     methods : {
+      async renderProfile() {
+      return new Promise(async (resole, reject) => {
+        const auth = getAuth();
+        onAuthStateChanged(auth, async (user) => {
+          if (user) {
+            this.useremail = user.email;
+            // steps to retrieve from questionnaire
+            const userCollection = collection(getFirestore(), "Users");
+            const profileQuery = query(
+              userCollection,
+              where("email", "==", this.useremail),
+            );
+            const querySnapshot = await getDocs(profileQuery);
+            const userDocument = (querySnapshot.docs)[0]
+            this.username = userDocument.data().userName;
+            this.height = userDocument.data().height;
+            this.weight = userDocument.data().weight;
+            this.calories = userDocument.data().dailyIntakeGoal;
+            this.activity = userDocument.data().exercise;
+            this.program = userDocument.data().goal;
+            this.startdate = userDocument.data().startDate;
+            //userDocument.data().dailyIntakeGoal
+            resolve(0);
+          } else {
+            reject("User not authenticated.");
+          }
+        }
+        )
+      })
+    },
       goToEditProfilePage() {
         this.$router.push("/EditProfilePage");
       }

@@ -60,6 +60,7 @@
         exercise:null,
         goal:null,
         dailyIntakeGoal:0,
+        startDate: new Date().toLocaleDateString().replaceAll("/","-")
       }
     },
     computed: {
@@ -79,7 +80,8 @@
           weight:this.weight,
           exercise:this.exercise,
           goal:this.goal,
-          dailyIntakeGoal:this.dailyIntakeGoal
+          dailyIntakeGoal:this.dailyIntakeGoal,
+          startDate: this.startDate
         })
             .then(() => {
               console.log('Document updated successfully');
