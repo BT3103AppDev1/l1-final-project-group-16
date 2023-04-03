@@ -189,6 +189,7 @@ export default {
         const auth = getAuth();
         onAuthStateChanged(auth, async (user) => {
           if (user) {
+            this.useremail = user.email;
             const queryDate = this.date
             const exercisesCollection = collection(getFirestore(), "Exercises");
             const exerciseQuery = query(

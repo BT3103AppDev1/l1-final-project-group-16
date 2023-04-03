@@ -26,6 +26,7 @@
 <script>
 import NavigationBar from "@/components/NavigationBar.vue"
 import { getAuth, onAuthStateChanged } from "@firebase/auth";
+import { getFirestore, collection, getDoc, getDocs, query, where, doc} from 'firebase/firestore';
 
 export default {
     name:"DashboardPage" ,
@@ -38,54 +39,102 @@ export default {
       }
     },
     async mounted() {
-      const auth = getAuth()
-      onAuthStateChanged(auth, (user) => {
-      if (user) {
-        this.user = user
-      }})
+      
     },
     methods: {
       displayWeeklyCharts() {
       }
       
       ,
+      async displayPopularFoods() {
+        return new Promise(async (resole, reject) => {
+        const auth = getAuth();
+        onAuthStateChanged(auth, async (user) => {
+          if (user) {
+            this.user = user
+            this.useremail = user.email;
 
-      displayPopularFoods() {
-        let divStreaks = document.getElementById("streaksDiv")
-        divStreaks.innerHTML =""
-        // display a table
-        divStreaks.style.paddingTop = "40px"
-        let table = document.createElement("table")
-        table.setAttribute("id", "table")
-        table.setAttribute("class", "auto-index")
-        table.setAttribute("style", "border-collapse: collapse; width: 90%; height: auto")
+            let divStreaks = document.getElementById("streaksDiv")
+            divStreaks.innerHTML =""
 
-        // add header row
-        let headerRow = table.insertRow()
-        let headers = ["Food", "Meals/Calories","Frequency"]
-        for (let i = 0; i < headers.length; i++) {
-            let headerCell = headerRow.insertCell(i)
-            headerCell.innerHTML = headers[i]
-            headerCell.setAttribute("style", "background-color: #4CAF50; color: white; font-weight: bold; padding: 10px; text-align: center; border: 1px solid #ddd;")
-        }
-        // add sample data rows
-        let dataRows = [        ["Pizza", "2/1500", "5"],
-            ["Burger", "1/800", "4"],
-            ["Salad", "1/500", "3"],
-            ["Fried Rice", "2/1200", "2"],
-            ["Sushi", "3/1000", "1"]
-        ]
-        for (let i = 0; i < dataRows.length; i++) {
-            let row = table.insertRow()
-            for (let j = 0; j < dataRows[i].length; j++) {
-                let cell = row.insertCell(j)
-                cell.innerHTML = dataRows[i][j]
-                cell.setAttribute("style", "padding: 10px; text-align: center; border: 1px solid #ddd;")
+            let monthName = new Date().toLocaleString('en-us',{month: 'long'})
+            alert("Popular Meals in " + monthName)
+            // display a table
+            divStreaks.style.paddingTop = "40px"
+            let table = document.createElement("table")
+            table.setAttribute("id", "table")
+            table.setAttribute("class", "auto-index")
+            table.setAttribute("style", "border-collapse: collapse; width: 90%; height: auto")
+
+            // add header row
+            let headerRow = table.insertRow()
+            let headers = ["Food", "Calories/Serving","Frequency/Month"]
+            for (let i = 0; i < headers.length; i++) {
+                let headerCell = headerRow.insertCell(i)
+                headerCell.innerHTML = headers[i]
+                headerCell.setAttribute("style", "background-color: #4CAF50; color: white; font-weight: bold; padding: 10px; text-align: center; border: 1px solid #ddd;")
             }
-        }
-        // append table to HTML element
-        divStreaks.appendChild(table)
-      },
+
+            // get data for this month
+            let today = new Date();
+            let year = today.getFullYear();
+            let month = today.getMonth() + 1;
+            let daysInMonth = new Date(year, month, 0).getDate();
+            var queryDates = []
+            for (let day = 1; day <= daysInMonth; day++) {
+              let formattedDate = `${day.toString().padStart(2, '0')}-${month.toString().padStart(2, '0')}-${year}`;
+              queryDates.push(formattedDate)
+            }
+
+            const mealsCollection = collection(getFirestore(), "Meals");
+            const mealQuery = query(
+              mealsCollection,
+              where("email", "==", this.useremail),
+            );
+            const querySnapshot = await getDocs(mealQuery);
+            let calorieMap = {}
+            let foodMap = {}; // counts
+            querySnapshot.forEach((doc) => {
+              const docdata = doc.data();
+              if (queryDates.includes(docdata.date)){
+                const foodName = docdata.foodName;
+                const calorieCount = docdata.numCalories
+                if (foodMap.hasOwnProperty(foodName)) {
+                  foodMap[foodName]++;
+                } else {
+                  foodMap[foodName] = 1;
+                }
+                if (calorieMap.hasOwnProperty(foodName)) {
+                } else {
+                  calorieMap[foodName] = calorieCount
+                }
+              }
+            });
+            const sortedFoods = Object.fromEntries(
+              Object.entries(foodMap).sort((a, b) => b[1] - a[1])
+            );
+            const topFoods = Object.entries(sortedFoods).slice(0, 4).map(([food, freq,]) => ({ food, freq }));
+            for (let i = 0; i < topFoods.length; i++) {
+              topFoods[i].calorie = calorieMap[topFoods[i]["food"]];
+            }
+            const dataRows = topFoods.map(item => [item.food, item.calorie, item.freq]);
+            console.log(dataRows)
+            for (let i = 0; i < dataRows.length; i++) {
+                let row = table.insertRow()
+                for (let j = 0; j < dataRows[i].length; j++) {
+                    let cell = row.insertCell(j)
+                    cell.innerHTML = dataRows[i][j]
+                    cell.setAttribute("style", "padding: 10px; text-align: center; border: 1px solid #ddd;")
+                }
+            }
+            // append table to HTML element
+            divStreaks.appendChild(table)
+          } else {
+            reject("User not authenticated.");
+          }
+        })
+      })
+    },
   }
 }
 </script>
