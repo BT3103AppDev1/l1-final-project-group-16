@@ -27,7 +27,6 @@
 import NavigationBar from "@/components/NavigationBar.vue"
 import { getAuth, onAuthStateChanged } from "@firebase/auth";
 import { getFirestore, collection, getDoc, getDocs, query, where, doc} from 'firebase/firestore';
-
 export default {
     name:"DashboardPage" ,
     components : {
@@ -42,24 +41,118 @@ export default {
       
     },
     methods: {
-      displayWeeklyCharts() {
-        const today = new Date();
-        const pastDays = [];
-        for (let i = 0; i < 7; i++) {
-          const pastDate = new Date(today);
-          pastDate.setDate(today.getDate() - i);
-          pastDays.push(pastDate);
-        }
-        
-        const formattedDates = pastDays.map(date => {
-          const day = ("0" + date.getDate()).slice(-2);
-          const month = ("0" + (date.getMonth() + 1)).slice(-2);
-          const year = date.getFullYear();
-          return `${day}-${month}-${year}`;
-        });
-        formattedDates.reverse();
-        console.log(formattedDates);
-      } ,
+      async displayWeeklyCharts() {
+        const auth = getAuth();
+        onAuthStateChanged(auth, async (user) => {
+          if (user) {
+            this.user = user
+            this.useremail = user.email;
+            let divStreaks = document.getElementById("streaksDiv")
+            divStreaks.innerHTML =""  
+            const canvas = document.createElement("canvas");
+            canvas.setAttribute("id", "myChartCanvas");
+            divStreaks.appendChild(canvas);
+            const divWidth = divStreaks.offsetWidth;
+            const divHeight = divStreaks.offsetHeight;
+            canvas.width = divWidth;
+            canvas.height = divHeight;  
+
+            const today = new Date();
+            const pastDays = [];
+
+            for (let i = 0; i < 7; i++) {
+              const pastDate = new Date(today);
+              pastDate.setDate(today.getDate() - i);
+              pastDays.push(pastDate);
+            }
+            var formattedDates = pastDays.map(date => {
+              const day = ("0" + date.getDate()).slice(-2);
+              const month = ("0" + (date.getMonth() + 1)).slice(-2);
+              const year = date.getFullYear();
+              return `${day}-${month}-${year}`;
+            });
+            formattedDates.reverse();
+            let xValues = formattedDates
+            console.log(formattedDates)
+
+            const userCollection = collection(getFirestore(), "Users");
+            const goalQuery = query(
+              userCollection,
+              where("email", "==", this.useremail),
+            );
+            const querySnapshot = await getDocs(goalQuery);
+            const userDocument = (querySnapshot.docs)[0]
+            const goalIntake = userDocument.data().dailyIntakeGoal
+            const goalCalorie = [];
+
+            for (let i = 0; i < formattedDates.length; i++) {
+              goalCalorie.push(goalIntake);
+            }
+
+            let dayData = []
+            for (let x = 0; x < formattedDates.length; x++){
+              let queryDate = formattedDates[x]
+              const mealsCollection = collection(getFirestore(), "Meals");
+              const mealQuery = query(
+                mealsCollection,
+                where("email", "==", this.useremail),
+                where("date", "==", queryDate),
+              );
+              const querySnapshotMeals = await getDocs(mealQuery);
+              var totalMealCalorie = 0;
+              querySnapshotMeals.forEach((doc) => {
+                const docdata = doc.data();
+                const nCal = docdata.numCalories;
+                const nSer = docdata.numServings;
+                var totalCal = nCal * nSer;
+                totalMealCalorie += totalCal;
+              })
+
+              const exercisesCollection= collection(getFirestore(), "Exercises");
+              const exerciseQuery = query(
+                exercisesCollection,
+                where("email", "==", this.useremail),
+                where("date", "==", queryDate),
+              );
+              const querySnapshotExercise = await getDocs(exerciseQuery);
+              var totalCalBurnt = 0;
+              querySnapshotExercise.forEach((doc) => {
+                const docdata = doc.data();
+                const nCal = docdata.numCalories;
+                const nHr = docdata.duration;
+                var totalCal = nHr * nCal;
+                totalCalBurnt += totalCal;
+              })
+              console.log(queryDate)
+              console.log("Calorie intake: ", totalMealCalorie)
+              console.log("Calorie burnt: ",totalCalBurnt)
+              const netCalorie = totalMealCalorie - totalCalBurnt
+              console.log("Net Calorie: ",netCalorie)
+              dayData.push(netCalorie)
+            }
+            console.log(dayData)
+
+            const myChart = new Chart("myChartCanvas", {
+              type: "line",
+              data: {
+                labels: xValues,
+                datasets: [{
+                  label:"Net Calorie Intake",
+                  data: dayData,
+                  borderColor: "red",
+                  fill: false
+                },{
+                  label:"Calorie Goal",
+                  data: goalCalorie,
+                  borderColor: "green",
+                  fill: false
+                }]
+              },
+              options: {},
+            });
+          }
+        })
+      },
       async displayPopularFoods() {
         return new Promise(async (resole, reject) => {
         const auth = getAuth();
