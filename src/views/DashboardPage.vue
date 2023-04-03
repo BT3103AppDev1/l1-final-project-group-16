@@ -43,9 +43,23 @@ export default {
     },
     methods: {
       displayWeeklyCharts() {
-      }
-      
-      ,
+        const today = new Date();
+        const pastDays = [];
+        for (let i = 0; i < 7; i++) {
+          const pastDate = new Date(today);
+          pastDate.setDate(today.getDate() - i);
+          pastDays.push(pastDate);
+        }
+        
+        const formattedDates = pastDays.map(date => {
+          const day = ("0" + date.getDate()).slice(-2);
+          const month = ("0" + (date.getMonth() + 1)).slice(-2);
+          const year = date.getFullYear();
+          return `${day}-${month}-${year}`;
+        });
+        formattedDates.reverse();
+        console.log(formattedDates);
+      } ,
       async displayPopularFoods() {
         return new Promise(async (resole, reject) => {
         const auth = getAuth();
