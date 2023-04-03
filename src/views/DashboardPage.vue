@@ -9,16 +9,14 @@
       <h2 style="color:black;font-weight: bold; font-size: 55px;"> Dashboard </h2>
     </div>
   </div>
-
   <div class = "dashBoardButtons">
-    <button class="weekly-button"> Weekly Charts</button>
-    <!-- <button class="weekly-button"> Future Charts</button> -->
-    <button class="popular-meals-button"> Popular Meals </button>
+    <button class="weekly-button" @click="displayWeeklyCharts()">Weekly Charts</button>
+    <button class="popular-meals-button" @click="displayPopularFoods()"> Popular Meals </button>
   </div>
   <br>
 
   <div class="dashBoardContainer">
-    <div class = streaksLogin style="padding-top: 90px;"  v-if="streaks >= 0">
+    <div class = streaksLogin style="padding-top: 90px;"  v-if="streaks >= 0" id="streaksDiv">
       <img src="@/assets/images/HomePageElements/Streaks.png" style="width: 250px; height: auto">
       <h2 style="font-weight: bold; font-size: 65px; padding-right: 90px;"> {{this.streaks}} DAY STREAK </h2>
     </div>
@@ -27,6 +25,7 @@
 
 <script>
 import NavigationBar from "@/components/NavigationBar.vue"
+import { getAuth, onAuthStateChanged } from "@firebase/auth";
 
 export default {
     name:"DashboardPage" ,
@@ -37,7 +36,57 @@ export default {
       return {
         streaks:0
       }
-    }
+    },
+    async mounted() {
+      const auth = getAuth()
+      onAuthStateChanged(auth, (user) => {
+      if (user) {
+        this.user = user
+      }})
+    },
+    methods: {
+      displayWeeklyCharts() {
+      }
+      
+      ,
+
+      displayPopularFoods() {
+        let divStreaks = document.getElementById("streaksDiv")
+        divStreaks.innerHTML =""
+        // display a table
+        divStreaks.style.paddingTop = "40px"
+        let table = document.createElement("table")
+        table.setAttribute("id", "table")
+        table.setAttribute("class", "auto-index")
+        table.setAttribute("style", "border-collapse: collapse; width: 90%; height: auto")
+
+        // add header row
+        let headerRow = table.insertRow()
+        let headers = ["Food", "Meals/Calories","Frequency"]
+        for (let i = 0; i < headers.length; i++) {
+            let headerCell = headerRow.insertCell(i)
+            headerCell.innerHTML = headers[i]
+            headerCell.setAttribute("style", "background-color: #4CAF50; color: white; font-weight: bold; padding: 10px; text-align: center; border: 1px solid #ddd;")
+        }
+        // add sample data rows
+        let dataRows = [        ["Pizza", "2/1500", "5"],
+            ["Burger", "1/800", "4"],
+            ["Salad", "1/500", "3"],
+            ["Fried Rice", "2/1200", "2"],
+            ["Sushi", "3/1000", "1"]
+        ]
+        for (let i = 0; i < dataRows.length; i++) {
+            let row = table.insertRow()
+            for (let j = 0; j < dataRows[i].length; j++) {
+                let cell = row.insertCell(j)
+                cell.innerHTML = dataRows[i][j]
+                cell.setAttribute("style", "padding: 10px; text-align: center; border: 1px solid #ddd;")
+            }
+        }
+        // append table to HTML element
+        divStreaks.appendChild(table)
+      },
+  }
 }
 </script>
 
