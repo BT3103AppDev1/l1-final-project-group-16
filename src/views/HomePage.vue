@@ -100,7 +100,6 @@ import fireBaseApp from "../firebase";
 import { getAuth, onAuthStateChanged } from "@firebase/auth";
 import { getFirestore, collection, getDoc, getDocs, query, where, doc} from 'firebase/firestore';
 
-
 export default {
   mounted() {
 

@@ -1,18 +1,18 @@
 <template>
     <div>
       <br>
-      <img src="@/assets/images/CommonElements/HappyPlatesWord.png" alt="HP Words" style="width: 400px; height: auto" >
-      <br><br><br>
-      <img src="@/assets/images/CommonElements/HappyPlatesLogo.png" alt="HP Logo" style="width: 500px; height: auto" >
+      <img src="@/assets/images/CommonElements/HappyPlatesWord.png" alt="HP Words" style="width: 300px; height: auto" >
+      <br>
+      <img src="@/assets/images/CommonElements/HappyPlatesLogo.png" alt="HP Logo" style="width: 400px; height: auto" >
       <h3>Sign in to continue</h3>
       <div id="inputContainer">
           <form id="myForm">
               <div class="formLi">
                   <label class="labels" for="userEmail">EMAIL</label>
-                  <input type="text" autocomplete="off" id = "userEmail" required= "" placeholder="Enter your email"> <br><br>
+                  <input type="text" autocomplete="off" id = "userEmail" required= "" placeholder="Enter your email"> <br>
   
                   <label class="labels" for="ticker1">PASSWORD</label>
-                  <input type="password" id = "userPass" required= "" placeholder="Enter your password" @keyup.enter="verifyUser"> <br><br>
+                  <input type="password" id = "userPass" required= "" placeholder="Enter your password" @keyup.enter="verifyUser"> <br>
                    <div class="signUpPage">
                         <router-link to="/SignUpPage"> Don't have an account? Sign up now!</router-link>
                   </div>
