@@ -1,6 +1,6 @@
 <template>
     <div id="header">
-      <router-link to="/HomePage"> <img src="@/assets/images/HomePageElements/Home.png" alt="Home" style="width:42px;height:42px;"></router-link>
+      <router-link to="/"> <img src="@/assets/images/HomePageElements/Home.png" alt="Home" style="width:42px;height:42px;"></router-link>
       <div id="title">
         <h1>QUESTIONNAIRE</h1>
         <p id="reminder"><i>Questions marked with <span style="color: red;">*</span> are compulsory</i></p>
@@ -19,17 +19,17 @@
   
         <label for="exercise">How much exercise do you get per week? <span style="color: red;">*</span></label>
         <select id="exercise" name="exercise" v-model="exercise" required>
-          <option value="lessThan2">Less than 2 hrs</option>
-          <option value="2to5">2 - 5 hrs</option>
-          <option value="5to10">5 - 10 hrs</option>
-          <option value="moreThan10">More than 10 hrs</option>
+          <option value="Less than 2 hrs">Less than 2 hrs</option>
+          <option value="2-5 hrs">2 - 5 hrs</option>
+          <option value="5-10 hrs">5 - 10 hrs</option>
+          <option value="More than 10 hrs">More than 10 hrs</option>
         </select><br><br>
   
         <label for="goal">What is your goal? <span style="color: red;">*</span></label>
         <select id="goal" name="goal" v-model="goal" required>
-          <option value="slowLoss">Slow Weight Loss</option>
-          <option value="graduallyLoss">Gradually Weight Loss</option>
-          <option value="rapidLoss">Rapid Weight Loss</option>
+          <option value="Slow Weight Loss">Slow Weight Loss</option>
+          <option value="Gradually Weight Loss">Gradually Weight Loss</option>
+          <option value="Rapid Weight Loss">Rapid Weight Loss</option>
         </select><br><br>
   
         <label for="dailyIntakeGoal">What is your daily calorie intake goal? </label>
@@ -41,21 +41,59 @@
   </template>
   
   <script>
-  import fireBaseApp  from "../firebase.js"
-  import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
-  const auth = getAuth();
+  import fireBaseApp from "../firebase.js";
+  import {getAuth } from "firebase/auth";
+  import { doc, updateDoc, getFirestore} from "firebase/firestore";
+  import { collection } from 'firebase/firestore'
+
+  //const auth = getAuth();
   
   export default {
     name: "QuestionnairePage.vue",
+    props: {
+      msg: String
+    },
     data() {
       return {
-        message: 'Questionnaire Page'
+        height:null,
+        weight: null,
+        exercise:null,
+        goal:null,
+        dailyIntakeGoal:0,
+      }
+    },
+    computed: {
+      email() {
+        return this.$route.query.email || ''
       }
     },
     methods:{
-      submitForm(){}
+      async submitForm(){
+        //const userCollection = db.collection('Users');
+        const email = this.email;
+        console.log(email);
+        const userCollection = doc(collection(getFirestore(), "Users"), email);
+
+        await updateDoc(userCollection, {
+          height:this.height,
+          weight:this.weight,
+          exercise:this.exercise,
+          goal:this.goal,
+          dailyIntakeGoal:this.dailyIntakeGoal
+        })
+            .then(() => {
+              console.log('Document updated successfully');
+            })
+            .catch((error) => {
+              console.error('Error updating document: ', error);
+            });
+
+        alert("Save successfully!")
+        this.$router.push('/LoginPage');
+        }
     }
   }
+
   </script>
   
   <style scoped>
