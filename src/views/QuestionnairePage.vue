@@ -89,6 +89,7 @@
             });
 
         alert("Save successfully!")
+
         this.$router.push('/LoginPage');
         }
     }
