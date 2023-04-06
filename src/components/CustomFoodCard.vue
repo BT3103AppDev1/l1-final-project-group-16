@@ -82,12 +82,11 @@ export default {
 }
 
 .icons{
-    position: fixed;
     display: flex;
     justify-items: flex-end;
     margin-top: -45px;
-    margin-right: -15px;
     margin-bottom: 20px;
+    margin-right: -15vh;
 
 }
 
@@ -97,10 +96,9 @@ export default {
 }
 
 .editButtons {
-    position: fixed;
     margin-top: -150px;
     margin-left:-70px;
+    position: absolute;
 }
-
 
 </style>

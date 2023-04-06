@@ -1,5 +1,7 @@
 <template>
     <div class="card-wrapper">
+
+ 
         <div class="FoodName">
             <span>{{ food.foodName }}</span>
         </div>
@@ -11,6 +13,11 @@
         </div>
         <div class="card-right">
             <span >{{ food.numCalories }} Calories / Serving </span>
+            <div class="icons">
+            <img  @click="showEditButtons=true" class="icon" src="src/assets/images/threedots.png" width="30" height="30">
+            <Edit class="editButtons" v-if="showEditButtons == true"/>
+     
+        </div>
         </div>
 </div>
 
@@ -18,12 +25,23 @@
 </template> 
 
 <script>
+import Edit from "@/components/Edit.vue";
+
 export default {
     name: "FoodCard",
     props: ["food"],
+    components: {
+        Edit
+    }, 
+    data() {
+        return {
+            showEditButtons: false
+        }
+    },
 };
 
 </script>
+
 
 <style scoped > 
 
@@ -63,6 +81,26 @@ export default {
   align-items: center;
   margin-left: auto;
   margin-right: 70px;
+}
+
+.icons{
+    display: flex;
+    justify-items: flex-end;
+    margin-top: -45px;
+    margin-right: -15px;
+    margin-bottom: 20px;
+
+}
+
+.editButtons {
+    margin-top: -150px;
+    margin-left:-70px;
+    position: absolute;
+}
+
+.icon{
+    margin-right: 10px;
+    margin-left: 10px;
 }
 
 

@@ -17,14 +17,14 @@
       <select class="formfields" for="foodName" id="foodName" v-model="foodName" >
       <option v-for="food in foodNames" :value="food">{{ food.foodName }}</option>
       </select> -->
-      <label class="labels" for="exerName">EXERCISE NAME: {{ exerName.exerName }}   </label>
+      <label class="exerNameLabels" for="exerName">EXERCISE NAME: {{ exerName.exerName }}   </label>
 
       <select class="formfields" for="exerName" id="exerName" v-model="exerName" >
         <option v-for="exer in exerNames" :value="exer">{{ exer.exerName }}</option>
       </select>
       <br>
 
-      <div v-if="exerName">
+      <div class="numCaloriesDiv" v-if="exerName">
         <p> NUMBER OF CALORIES / HR: {{ (exerName.numCalories * this.weight).toFixed(1) }} Calories</p>
       </div>
       <div v-else>
@@ -302,7 +302,7 @@ background-color: red;
   position: fixed;
   top: 25%;
   left: 50%;
-  margin-top:4vh;
+  margin-top:10vh;
   margin-left: -100px;
 }
 
@@ -315,6 +315,12 @@ background-color: red;
   margin-top: -30px;
 }
 
+.exerNameLabels, .numCaloriesDiv, .durationLabel {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  padding-right: 20vh;
+}
 
 
 .QuickAdd{
@@ -359,13 +365,6 @@ padding-top: 30px;
   
 
 }
-
-.durationLabel{
-  display: flex;
-  justify-content: center;
-  margin-right: 6vh;
-}
-
 .meal-header {
   background-color: rgb(135, 187, 255);
   font-size: 25px;
@@ -379,7 +378,6 @@ padding-top: 30px;
   margin-top: 10px;
 
 }
-
 .images {
   margin: 0 5px;
 }

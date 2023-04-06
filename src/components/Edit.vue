@@ -21,8 +21,8 @@ export default {
     background-color: white;
     margin-bottom:150px;
     border: 2px solid grey;
-    height: 15vh;
-    width: 15vh;
+    height: 17vh;
+    width: 17vh;
     justify-content: center;
     display: flex;
 }
@@ -33,18 +33,22 @@ button{
     align-items: center;
     text-align: center;
     border-radius:40px;
-    width: 13vh;
+    width: 15vh;
     border: 1px solid black;
     
 }
 
 .edit{
     background-color: green;
+    justify-content: center;
+    display: flex;
 }
 
 
 .delete{
     background-color: red;
+    display: flex;
+    text-align: center;
 }
 
 
