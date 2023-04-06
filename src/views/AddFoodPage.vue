@@ -14,11 +14,15 @@
       <!-- Quick Add Form -->
       <!-- <input  class="formfields"  id="foodName" placeholder="What did you eat" v-model="foodName" /> -->
        
-      <label class="labels" for="foodName">FOOD NAME: {{ foodName }}</label>
-      <select class="formfields" for="foodName" id="foodName" v-model="foodName" @change="getCalories">
-      <option v-for="foodName in foodNames" :value="foodName">{{ foodName }}</option>
+      <label class="labels" for="foodName">FOOD NAME: {{ foodName.foodName }}</label>
+      <select class="formfields" for="foodName" id="foodName" v-model="foodName" >
+      <option v-for="food in foodNames" :value="food">{{ food.foodName }}</option>
       </select>
-    <p>{{ numCalories }}</p>
+      <br>
+      <div v-if="foodName" >
+        <p> NUMBER OF CALORIES: {{ foodName.numCalories }} </p>
+      </div>
+      <div v-else>NUMBER OF CALORIES: 0 (Please Select Food)</div>
 
       <label class="labels" for="foodName">MEAL TYPE: {{ mealType }}</label>
       <select class="formfields"  v-model="mealType">
@@ -84,6 +88,8 @@ import TabNav from "@/components/TabNav.vue";
 import CustomFoodForm from "@/components/CustomFoodForm.vue";
 import CustomFoodCard from "@/components/CustomFoodCard.vue";
 import MealHeader from '@/components/MealHeader.vue';
+import axios from 'axios';
+import Papa from 'papaparse';
 
 
 let currEmail=  "";
@@ -111,7 +117,6 @@ export default {
         CustomFoodCard, 
         MealHeader
     },
-
     async mounted () {
       const auth = getAuth();
       onAuthStateChanged(auth, (user) => {
@@ -121,13 +126,13 @@ export default {
       });
 
       // get the foodnames 
-      const foodRef = collection(getFirestore(), "Food");
-      const q = query(foodRef);
-      const querySnapshot = await getDocs(q);
+      // const foodRef = collection(getFirestore(), "Food");
+      // const q = query(foodRef);
+      // const querySnapshot = await getDocs(q);
 
-      querySnapshot.forEach((doc) => {
-        this.foodNames.push(doc.data().Food);
-      });
+      // querySnapshot.forEach((doc) => {
+      //   this.foodNames.push(doc.data().Food);
+      // });
       
 
 
@@ -136,18 +141,7 @@ export default {
 
 
   methods: {
-     async getCalories() {
-      const foodRef = collection(getFirestore(), "Food")
-      console.log("Hi")
-      const q = query(foodRef, where("Food", "==", this.foodName));
-      const querySnapshot = await getDocs(q);
-      querySnapshot.forEach((doc) => {
-        this.numCalories = doc.data().Calories
-      });
-
-
-    },
-
+    
     setSelected(tab)  {
       this.selected = tab;
     },
@@ -165,10 +159,10 @@ export default {
 
 
       let foodData = {
-        foodName: this.foodName.value,
+        foodName: this.foodName.foodName,
         mealType: this.mealType.value,
         numServings: this.numServings.value,
-        numCalories: this.numCalories.value
+        numCalories: this.foodName.numCalories
 
       };
       const current = new Date();
@@ -187,10 +181,10 @@ export default {
             await setDoc(newDocRef, {
               email: currEmail,
               date: date,
-              foodName: this.foodName, 
+              foodName: this.foodName.foodName, 
               mealType: this.mealType, 
               numServings: this.numServings,
-              numCalories: this.numCalories
+              numCalories: this.foodName.numCalories
               
               
         });
@@ -238,6 +232,26 @@ export default {
   created() {
       this.foodData = [];
       this.retrieveCustomFood();
+      console.log("paparse");
+      axios.get('/src/inputData/food.csv').then(response => {
+        let parsedData = Papa.parse(response.data, {
+          header: true, 
+          dynamicTyping: true, 
+          skipEmptyLines: true,
+        });
+
+        let foodNames = parsedData.data.map(food => {
+          return {
+            foodName: food.Food,
+            numCalories: food.Calories,
+          };
+        });
+        this.foodNames = foodNames;
+      }).catch(error => {
+        console.log(error);
+      });
+
+
 
     }
   }
@@ -265,7 +279,6 @@ button {
   background-color: green;
   transition-duration: 0.42s;
   justify-content: center;
-  margin-left:50px ;
 }
 
 #addCustomFood {
