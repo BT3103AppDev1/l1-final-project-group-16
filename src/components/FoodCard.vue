@@ -3,8 +3,11 @@
         <div class="FoodName">
             <span>{{ food.foodName }}</span>
         </div>
-        <div class="NumServings">
+        <div class="NumServings" v-if="food.numServings > 1">
             <span>{{ food.numServings }} Servings</span>
+        </div>
+        <div class="NumServings" v-else>
+          <span>{{ food.numServings }} Serving</span>
         </div>
         <div class="card-right">
             <span >{{ food.numCalories }} Calories / Serving </span>
