@@ -22,7 +22,9 @@
       <div v-if="foodName" >
         <p> NUMBER OF CALORIES: {{ foodName.numCalories }} </p>
       </div>
-      <div v-else>NUMBER OF CALORIES: 0 (Please Select Food)</div>
+      <div v-else>
+        <p>NUMBER OF CALORIES: 0 </p>
+      </div>
 
       <label class="labels" for="foodName">MEAL TYPE: {{ mealType }}</label>
       <select class="formfields"  v-model="mealType">
