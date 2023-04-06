@@ -140,9 +140,7 @@
         this.selected = tab;
       },
 
-      toFoodLog() {
-        this.$router.push('/FoodLogPage');
-      },
+
   
       addCustomFoodButton() {
         this.showForm = true;
@@ -187,6 +185,9 @@
         alert("Added Food Successfully")
   
         console.log(date);
+        this.$router.push('/FoodLogPage');
+
+
       
       },
   

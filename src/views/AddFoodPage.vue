@@ -182,6 +182,8 @@ export default {
       alert("Added Food Successfully")
 
       console.log(date);
+      this.$router.push('/FoodLogPage');
+
     
     },
 
