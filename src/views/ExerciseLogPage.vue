@@ -13,7 +13,7 @@
       <br><br>
     </div>
 
-    <p class="exercise-header">Exercise - {{ cal }} calories</p>
+    <p class="exercise-header">Exercise - {{ cal.toFixed(1) }} calories</p>
     <ExerCard :exercise="exercise" v-for="(exercise, index) in exerciseData" :key="index"/>
 
 
@@ -70,6 +70,7 @@ export default {
     //   console.log(this.exerciseData[0].date);
     // },
 
+
       async retrieveExer() {
         const auth = getAuth();
         let userEmail;
@@ -85,6 +86,8 @@ export default {
             if (dd < 10) dd = '0' + dd;
             if (mm < 10) mm = '0' + mm;
             const today = dd + '-' + mm + '-' + yyyy;
+
+          
             // console.log(today);
             const exerRef = collection(getFirestore(), "Exercises");
             console.log(exerRef);
@@ -93,22 +96,30 @@ export default {
             querySnapshot.forEach((doc) => {
               this.exerciseData.push(doc.data());
             });
-  
+
+       
+
+
           }
+  
+          
           // get the total calories
           let total = 0;
           length = this.exerciseData.length;
           for (let i = 0; i < length; i++) {
-            let cal = this.exerciseData[i].numCalories
-            let dur = this.exerciseData[i].duration
+            let cal = this.exerciseData[i].numCalories ;
+            let dur = this.exerciseData[i].duration;
             total += cal * dur;
           }
           this.cal = total;
-
+        
 
         });
-      }
-    }
+      },
+
+
+
+  }
   }
 
         

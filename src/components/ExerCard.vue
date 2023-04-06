@@ -7,7 +7,7 @@
             <span>Duration: {{ exercise.duration }} hrs</span>
         </div>
         <div class="class-right">
-            <span >{{ exercise.numCalories }} Calories </span>
+            <span >{{ exercise.numCalories }} Calories / hr </span>
         </div>
 </div>
 
@@ -16,15 +16,15 @@
 
 <script>
 export default {
+  
     name: "ExerCard",
     props: ["exercise"],
 };
 
 </script>
 
+
 <style scoped > 
-
-
 .card-wrapper {
   display: flex;
   justify-content: space-between;
