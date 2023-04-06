@@ -3,7 +3,7 @@
     <NavigationBar/>
   </div>
   <div id="exer">
-  <TabNav :tabs="['Add Exercise', 'Custom Exercise']" :selected="selected" @selected="setSelected">
+  <TabNav :tabs="['Add Exercise']" :selected="selected" @selected="setSelected">
     <Tab :isSelected="selected === 'Add Exercise'">
   <div class="QuickAdd">
   <img class="images" src="src/assets/images/exer.png" width="100" height="120">
@@ -35,25 +35,7 @@
   </div>
     </Tab>
 
-    <Tab :isSelected="selected === 'Custom Exercise'">
-      <div class="AddExer">
-  <img class="imagescustom" src="src/assets/images/customfood.png" width="70" height="70">
-  <h1 class="customexertitle"> Custom Exercise</h1>
-</div>
-<div class="centeredCustom">
 
-  <button class="addCustomExer" id="addCustomExer" type="submit" v-if="!showForm" v-on:click="addCustomExerButton">Add Custom Exercise</button><br><br>
-  <!-- <CustomFoodForm v-if="showForm"></CustomFoodForm> -->
-  <CustomExerForm v-if="showForm"/>
-  </div>
-  <p class="noCustomExer" v-if="haveCustomExer==false && showForm==false"> You currently do not have any custom exercises :( </p>
-  <div class="meal-header" v-if="haveCustomExer==true && showForm==false">
-    <p> Your Custom Exercises</p>
-  </div>
-
-  <CustomExerCard  v-if="showForm == false" :customExer="exer" v-for="(exer, index) in customExerData" :key="index"/>
-
-    </Tab>
   </TabNav>
   </div>
 </template>
@@ -65,8 +47,6 @@ import { getAuth, onAuthStateChanged} from "firebase/auth";
 import { onMounted } from 'vue';
 import Tab from "@/components/Tab.vue";
 import TabNav from "@/components/TabNav.vue";
-import CustomExerForm from "@/components/CustomExerForm.vue";
-import CustomExerCard from "@/components/CustomExerCard.vue";
 import MealHeader from '@/components/MealHeader.vue';
 
 
@@ -90,8 +70,6 @@ export default {
         NavigationBar,
         Tab,
         TabNav,
-        CustomExerForm,
-        CustomExerCard, 
         MealHeader
     },
 
