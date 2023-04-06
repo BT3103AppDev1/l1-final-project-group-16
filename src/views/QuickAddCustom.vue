@@ -7,10 +7,17 @@
     <div id="food">
     <TabNav :tabs="['Quick Add', 'Custom Food']" :selected="selected" @selected="setSelected">
       <Tab :isSelected="selected === 'Quick Add'">
-
+        <div class="QuickAdd">
+  <img class="images" src="src/assets/images/forkspoon.png" width="130" height="120">
+  <h1 class="quickaddtitle">Quick Add</h1>
+  </div>
   <div class="centered">
       <form @submit.prevent="saveFood" class="newFood"> 
         <!-- Quick Add Form -->
+        <br>
+        <br>
+
+
         <div>
         <p class="foodTitleCals">{{ $route.query.foodName }} - {{ $route.query.numCalories }} Calories</p>
     </div>
@@ -309,7 +316,7 @@
   position: fixed;
   top: 25%;
   left: 50%;
-  margin-top: 10px;
+  margin-top: -5vh;
   margin-left: -100px;
   
   }

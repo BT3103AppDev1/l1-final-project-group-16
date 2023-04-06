@@ -328,7 +328,7 @@ background-color: red;
 position: fixed;
 top: 25%;
 left: 50%;
-margin-top:8vh;
+margin-top:4vh;
 margin-left: -100px;
 
 }

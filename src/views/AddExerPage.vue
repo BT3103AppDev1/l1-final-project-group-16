@@ -30,7 +30,7 @@
       <div v-else>
         NUMBER OF CALORIES / HR: 0
       </div>
-
+      <br>
       <label class="durationLabel" for="duration">DURATION (in hrs): {{ duration }}</label>
       <select class="formfields"  v-model="duration">
         <option>0.5</option>
@@ -229,7 +229,7 @@ export default {
 
 
   }
-  }
+}
 
 
 </script>
@@ -299,12 +299,13 @@ background-color: red;
 
 
 .centered {
-position: fixed;
-top: 25%;
-left: 55vh;
-margin-top: 5vh;
-
+  position: fixed;
+  top: 25%;
+  left: 50%;
+  margin-top:4vh;
+  margin-left: -100px;
 }
+
 .quickaddtitle {
   margin-top: -30px;
   
