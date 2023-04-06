@@ -54,34 +54,36 @@
   
   <div class="homepagetable2">  
     <table id = "displayCalorieBurntTable">
-      <tr>
-        <th>Calories Burnt</th>
-      </tr>
-      <tr>
-        <td>{{ this.caloriesBurnt }} CAL</td>
-      </tr>
+      <div class = calorieBurntIcon>
+        <img src="@/assets/images/HomePageElements/Calories.png" style="width: 100px; height: auto">
+        <h2 style="font-weight: bold; font-size: 35px;"> Calories Burnt </h2>
+      </div>
+      <br><br><br><br><br>
+      <h2>{{ this.caloriesBurnt }} CAL</h2>
   </table>
   </div>
   
   <div class="homepagetable3">
     <table id = "displayNetCalorieTable">
-      <tr>
-        <th>Net Calorie intake</th>
-      </tr>
-      <tr>
-        <td>{{ this.caloriesNet }} CAL</td>
-      </tr>
+      <div class = netCalorieIcon>
+        <img src="@/assets/images/HomePageElements/Streaks.png" style="width: 100px; height: auto">
+        <h2 style="color:#FF5712;font-weight: bold; font-size: 35px;"> Net Calorie Intake </h2>
+      </div>
+      <br><br><br><br><br>
+      <h2>{{ this.caloriesNet }} CAL</h2>
   </table>
   </div>
   
   <div class="homepagetable4">
     <table id = "displayGoalTable">
-      <tr>
-        <th>GOAL</th>
-      </tr>
+      <br>
+      <div class = "goalIcon">
+        <img src="@/assets/images/HomePageElements/Target.png" style="width: 100px; height: auto">
+        <h2 style="color:#FF5712;font-weight: bold; font-size: 35px;"> Goal </h2>
+      </div>
       <tr>
         <td>
-          <ProgressBar />
+          <ProgressBar v-bind:prog-val="myProgress" v-bind:col-flag="flag" :key="keyValue"/>
         </td>
       </tr>
   </table>
@@ -98,19 +100,47 @@ import fireBaseApp from "../firebase";
 import { getAuth, onAuthStateChanged } from "@firebase/auth";
 import { getFirestore, collection, getDoc, getDocs, query, where, doc} from 'firebase/firestore';
 
-
 export default {
-mounted() {
-},
-created() {
-  if (this.$route.query.updatedDate) {
-    this.date = this.$route.query.updatedDate;
-    console.log(this.date)
-  }
-  this.updateMealCal('Breakfast',this.date);
-  this.updateMealCal('Lunch',this.date);
-  this.updateMealCal('Dinner',this.date);
-  this.updateMealCal('Snacks',this.date);
+  mounted() {
+
+  },
+  created() {
+    if (this.$route.query.updatedDate) {
+      this.date = this.$route.query.updatedDate;
+      console.log(this.date)
+    }
+  const breakfastCalPromise = this.updateMealCal('Breakfast');
+  const lunchCalPromise = this.updateMealCal('Lunch');
+  const dinnerCalPromise = this.updateMealCal('Dinner');
+  const snacksCalPromise = this.updateMealCal('Snacks');
+  const calBurntPromise = this.updateCalBurnt();
+  const calorieGoal = this.calorieGoal();
+  Promise.all([breakfastCalPromise, lunchCalPromise, dinnerCalPromise, snacksCalPromise, calBurntPromise, calorieGoal])
+    .then((values) => {
+      const netCalorie = values[0] + values[1] + values[2] + values[3] - values[4];
+      this.caloriesNet = netCalorie;
+      console.log("Total calories for Breakfast:", values[0]);
+      console.log("Total calories for Lunch:", values[1]);
+      console.log("Total calories for Dinner:", values[2]);
+      console.log("Total calories for Snacks:", values[3]);
+      console.log("Total calories burnt:", values[4]);
+      console.log("Net calories intake:", netCalorie);
+      console.log("Target Goal Calorie:", values[5]);
+      const targetGoal = values[5]
+      const progressValue = Math.ceil(netCalorie/targetGoal * 100)
+      if (progressValue >= 0){
+        this.myProgress = progressValue;
+        console.log("Progress %:", progressValue)
+      }
+      if (new Date().toLocaleDateString().replaceAll("/","-") != this.date) {
+        console.log("PAST DATE")
+        this.flag = false
+      }
+      this.keyValue += 1
+    })
+    .catch((error) => {
+      console.error("Error updating calories:", error);
+    });
   },
   data() {
     return {
@@ -123,50 +153,140 @@ created() {
       snacksCal: 0,
       caloriesBurnt: 0,
       caloriesNet: 0,
+      myProgress: 0,
+      flag : true,
+      keyValue: 1
       }; 
   }
   ,
   methods: {
-    async updateMealCal(mealType,date) {
-      console.log("UPDATED")
-      console.log(date)
-      const auth = getAuth();
-      onAuthStateChanged(auth, async (user) => {
-        if (user) {
-          this.useremail = user.email;
-          let x = this.date.split("/");
-          if (x.length == 1) {
-            x = x[0].split("-")
+    async calorieGoal() {
+      return new Promise(async (resole, reject) => {
+        const auth = getAuth();
+        onAuthStateChanged(auth, async (user) => {
+          if (user) {
+            // steps to retrieve from questionnaire
+            const userCollection = collection(getFirestore(), "Users");
+            const goalQuery = query(
+              userCollection,
+              where("email", "==", this.useremail),
+            );
+            const querySnapshot = await getDocs(goalQuery);
+            const userDocument = (querySnapshot.docs)[0]
+            const goalIntake = userDocument.data().dailyIntakeGoal
+            resole(goalIntake);
+          } else {
+            reject("User not authenticated.");
           }
-          const queryDate = x[0] + "-" + x[1] + "-" + x[2];
-          const mealsCollection = collection(getFirestore(), "Meals");
-          const mealQuery = query(
-            mealsCollection,
-            where("email", "==", this.useremail),
-            where("date", "==", queryDate),
-            where("mealType", "==", mealType)
-          );
-          const querySnapshot = await getDocs(mealQuery);
-          var totalMealCalorie = 0;
-          querySnapshot.forEach((doc) => {
-            const docdata = doc.data();
-            const nCal = docdata.numCalories;
-            const nSer = docdata.numServings;
-            var totalCal = nCal * nSer;
-            totalMealCalorie += totalCal;
-          });
-          if (mealType === 'Breakfast') {
-            this.breakfastCal = totalMealCalorie;
-          } else if (mealType === 'Lunch') {
-            this.lunchCal = totalMealCalorie;
-          } else if (mealType === 'Dinner') {
-            this.dinnerCal = totalMealCalorie;
-          } else if (mealType === 'Snacks') {
-            this.snacksCal = totalMealCalorie;
+        }
+        )
+      })
+    },
+
+    async updateCalBurnt() {
+      return new Promise(async (resolve, reject) => {
+        var totalCalorieBurnt = 0;
+        const auth = getAuth();
+        onAuthStateChanged(auth, async (user) => {
+          if (user) {
+            this.useremail = user.email;
+            const queryDate = this.date
+            const exercisesCollection = collection(getFirestore(), "Exercises");
+            const exerciseQuery = query(
+              exercisesCollection,
+              where("email", "==", this.useremail),
+              where("date", "==", queryDate)
+            );
+            const querySnapshot = await getDocs(exerciseQuery);
+            querySnapshot.forEach((doc) => {
+              const docdata = doc.data();
+              const dur = docdata.duration;
+              const calorie = docdata.numCalories;
+              const caloriesBurnt = calorie * dur
+              totalCalorieBurnt += caloriesBurnt
+              this.caloriesBurnt = totalCalorieBurnt;
+            })
+            resolve(totalCalorieBurnt);
+          } else {
+            reject("User not authenticated.");
           }
-          }
+        })
       });
-    }
+    },
+    async updateMealCal(mealType) {
+      return new Promise(async (resolve, reject) => {
+        const auth = getAuth();
+        onAuthStateChanged(auth, async (user) => {
+          if (user) {
+            this.useremail = user.email;
+            const queryDate = this.date;
+            const mealsCollection = collection(getFirestore(), "Meals");
+            const mealQuery = query(
+              mealsCollection,
+              where("email", "==", this.useremail),
+              where("date", "==", queryDate),
+              where("mealType", "==", mealType)
+            );
+            const querySnapshot = await getDocs(mealQuery);
+            var totalMealCalorie = 0;
+            querySnapshot.forEach((doc) => {
+              const docdata = doc.data();
+              const nCal = docdata.numCalories;
+              const nSer = docdata.numServings;
+              var totalCal = nCal * nSer;
+              totalMealCalorie += totalCal;
+            });
+            if (mealType === 'Breakfast') {
+              this.breakfastCal = totalMealCalorie;
+            } else if (mealType === 'Lunch') {
+              this.lunchCal = totalMealCalorie;
+            } else if (mealType === 'Dinner') {
+              this.dinnerCal = totalMealCalorie;
+            } else if (mealType === 'Snacks') {
+              this.snacksCal = totalMealCalorie;
+            }
+            resolve(totalMealCalorie);
+          } else {
+            reject("User not authenticated.");
+          }
+        });
+      });
+    },
+    // async updateMealCal(mealType) {
+    //   const auth = getAuth();
+    //   onAuthStateChanged(auth, async (user) => {
+    //     if (user) {
+    //       this.useremail = user.email;
+    //       const queryDate = this.date
+    //       const mealsCollection = collection(getFirestore(), "Meals");
+    //       const mealQuery = query(
+    //         mealsCollection,
+    //         where("email", "==", this.useremail),
+    //         where("date", "==", queryDate),
+    //         where("mealType", "==", mealType)
+    //       );
+    //       const querySnapshot = await getDocs(mealQuery);
+    //       var totalMealCalorie = 0;
+    //       querySnapshot.forEach((doc) => {
+    //         const docdata = doc.data();
+    //         const nCal = docdata.numCalories;
+    //         const nSer = docdata.numServings;
+    //         var totalCal = nCal * nSer;
+    //         totalMealCalorie += totalCal;
+    //       });
+    //       if (mealType === 'Breakfast') {
+    //         this.breakfastCal = totalMealCalorie;
+    //         return totalMealCalorie
+    //       } else if (mealType === 'Lunch') {
+    //         this.lunchCal = totalMealCalorie;
+    //       } else if (mealType === 'Dinner') {
+    //         this.dinnerCal = totalMealCalorie;
+    //       } else if (mealType === 'Snacks') {
+    //         this.snacksCal = totalMealCalorie;
+    //       }
+    //       }
+    //   });
+    // }
   },
   name:"HomePage" ,
   components : {
@@ -176,8 +296,13 @@ created() {
 }
 </script>
 
-<style>
-
+<style scoped>
+.goalIcon {
+ display: grid;
+ align-items: center; 
+ justify-content: center;
+ grid-template-columns: 0fr 0fr 0fr;
+}
 
 .homePageDate h1 {
   font-size: 50px;
@@ -213,6 +338,7 @@ height: 100%;
 .homepagetable1 table {
 height: 100%; /* Set the height of the table to 100% */
 width: 100%; /* Set the width of the table to 100% */
+font-size: 20px;
 }
 .homepagetable2 table {
 height: 100%; /* Set the height of the table to 100% */
@@ -225,30 +351,6 @@ width: 100%; /* Set the width of the table to 100% */
 .homepagetable4 table {
 height: 100%; /* Set the height of the table to 100% */
 width: 100%; /* Set the width of the table to 100% */
-}
-
-
-.circular-progress {
-position: relative;
-height: 150px;
-width: 150px;
-border-radius: 50%;
-display: grid;
-place-items: center;
-}
-.circular-progress:before {
-content: "";
-position: absolute;
-height: 84%;
-width: 84%;
-background-color: #000000;
-border-radius: 50%;
-}
-.value-container {
-position: relative;
-font-family: "Poppins", sans-serif;
-font-size: 50px;
-color: #231c3d;
 }
 
 </style>
