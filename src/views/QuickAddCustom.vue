@@ -245,7 +245,7 @@
     background-color: green;
     transition-duration: 0.42s;
     justify-content: center;
-    margin-left:50px ;
+    margin-left: 8vh;
   }
   
   #addCustomFood {
