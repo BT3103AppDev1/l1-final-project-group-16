@@ -12,7 +12,7 @@
   <h1 class="quickaddtitle">Quick Add</h1>
   </div>
   <div class="centered">
-      <form @submit.prevent="saveFood" class="newFood"> 
+    <form @submit.prevent="saveFood" class="newFood"> 
         <!-- Quick Add Form -->
         <br>
         <br>
@@ -47,7 +47,8 @@
         </select>
        
         <!-- Save Button -->
-        <button @click="toFoodLog" class="button" id="saveFood" type="submit" >Save</button><br><br>
+        <button class="button" id="saveFood" type="submit" >Save</button><br><br>
+
   
       </form>
     </div>
