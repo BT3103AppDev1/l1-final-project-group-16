@@ -105,6 +105,7 @@ export default {
 
   },
   created() {
+    
     if (this.$route.query.updatedDate) {
       this.date = this.$route.query.updatedDate;
       console.log(this.date)
@@ -155,7 +156,8 @@ export default {
       caloriesNet: 0,
       myProgress: 0,
       flag : true,
-      keyValue: 1
+      keyValue: 1,
+      weight:0
       }; 
   }
   ,

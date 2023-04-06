@@ -43,7 +43,6 @@ export default {
       numCalories: null, 
       duration: 0,
       cal: 0,
-      weight: 0,
       };
     },
   
@@ -54,7 +53,6 @@ export default {
 
     created() {
       this.exerciseData = [];
-      this.getUserWeight();
       this.retrieveExer();
     },
 
@@ -109,7 +107,7 @@ export default {
           let total = 0;
           length = this.exerciseData.length;
           for (let i = 0; i < length; i++) {
-            let cal = this.exerciseData[i].numCalories * this.weight;
+            let cal = this.exerciseData[i].numCalories ;
             let dur = this.exerciseData[i].duration;
             total += cal * dur;
           }
@@ -118,27 +116,7 @@ export default {
 
         });
       },
-      async getUserWeight() {
-        const auth = getAuth();
-        let userEmail;
-        onAuthStateChanged(auth, async (user) => {
-          console.log("Auth state changed:", user);
-          if (user) {
-            userEmail = user.email;
-            console.log("Current user email:", userEmail);
-            // console.log(today);
-            const userRef = collection(getFirestore(), "Users");
-            const q = query(userRef, where("email", "==", userEmail));
-            const querySnapshot = await getDocs(q);
-            querySnapshot.forEach((doc) => {
-              this.weight = doc.data().weight;
-              console.log(this.weight);
-            });
-  
-          }
-    
-        });
-      }
+
 
 
   }

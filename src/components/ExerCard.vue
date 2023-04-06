@@ -7,7 +7,7 @@
             <span>Duration: {{ exercise.duration }} hrs</span>
         </div>
         <div class="class-right">
-            <span >{{ (exercise.numCalories * this.weight).toFixed(2)  }} Calories / hr </span>
+            <span >{{ exercise.numCalories }} Calories / hr </span>
         </div>
 </div>
 
@@ -21,41 +21,9 @@ export default {
   
     name: "ExerCard",
     props: ["exercise"],
-    data() {
-      return {
-        weight:0,
-      }
-    },
 
-    created() {
-      this.getUserWeight();
-    },
+   
 
-    methods: {
-
-      async getUserWeight() {
-        const auth = getAuth();
-        let userEmail;
-        onAuthStateChanged(auth, async (user) => {
-          console.log("Auth state changed:", user);
-          if (user) {
-            userEmail = user.email;
-            console.log("Current user email:", userEmail);
-            // console.log(today);
-            const userRef = collection(getFirestore(), "Users");
-            const q = query(userRef, where("email", "==", userEmail));
-            const querySnapshot = await getDocs(q);
-            querySnapshot.forEach((doc) => {
-              this.weight = doc.data().weight;
-              console.log(this.weight);
-            });
-  
-          }
-    
-        });
-      }
-
-    },
 };
 
 

@@ -78,7 +78,8 @@ export default {
         showForm: false,
         haveCustomExer: false,
         customExerData: [],
-        exerNames: []
+        exerNames: [], 
+        weight: 0,
       };
     },
     components : {
@@ -138,7 +139,7 @@ export default {
               date: date,
               exerName: this.exerName.exerName, 
               duration: this.duration,
-              numCalories: this.exerName.numCalories
+              numCalories: (this.exerName.numCalories * this.weight).toFixed(1),
             
         });
       alert("Added Exercise Successfully")
@@ -146,6 +147,28 @@ export default {
       console.log(date);
     
     },
+
+    async getUserWeight() {
+        const auth = getAuth();
+        let userEmail;
+        onAuthStateChanged(auth, async (user) => {
+          console.log("Auth state changed:", user);
+          if (user) {
+            userEmail = user.email;
+            console.log("Current user email:", userEmail);
+            // console.log(today);
+            const userRef = collection(getFirestore(), "Users");
+            const q = query(userRef, where("email", "==", userEmail));
+            const querySnapshot = await getDocs(q);
+            querySnapshot.forEach((doc) => {
+              this.weight = doc.data().weight;
+              console.log(this.weight);
+            });
+  
+          }
+    
+        });
+      }
 
     // async retrieveCustomExercise() {
     //     const auth = getAuth();
@@ -184,6 +207,7 @@ export default {
     },
   created() {
       this.exerData = [];
+      this.getUserWeight();
       // this.retrieveCustomExercise();
       axios.get('/src/inputData/exer.csv').then(response => {
         let parsedData = Papa.parse(response.data, {
