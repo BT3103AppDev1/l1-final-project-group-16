@@ -7,7 +7,7 @@
             <span>{{ food.numServings }} Servings</span>
         </div>
         <div class="card-right">
-            <span >{{ food.numCalories }} Calories </span>
+            <span >{{ food.numCalories }} Calories / Serving </span>
         </div>
 </div>
 
