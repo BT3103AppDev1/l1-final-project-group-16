@@ -127,17 +127,6 @@ export default {
         } 
       });
 
-      // get the foodnames 
-      // const foodRef = collection(getFirestore(), "Food");
-      // const q = query(foodRef);
-      // const querySnapshot = await getDocs(q);
-
-      // querySnapshot.forEach((doc) => {
-      //   this.foodNames.push(doc.data().Food);
-      // });
-      
-
-
     },
 
 

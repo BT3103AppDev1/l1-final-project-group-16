@@ -12,21 +12,34 @@
 <div class="centered">
     <form @submit.prevent="saveExer" class="newExer"> 
       <!-- Quick Add Form -->
-      <label class="labels" for="exerName">EXERCISE NAME</label>
-      <input  class="formfields"  id="exerName" placeholder="What did you do?" v-model="exerName" />
 
-      <label class="labels" for="duration">DURATION (in hrs): {{ duration }}</label>
+      <!-- <label class="labels" for="foodName">FOOD NAME: {{ foodName.foodName }}</label>
+      <select class="formfields" for="foodName" id="foodName" v-model="foodName" >
+      <option v-for="food in foodNames" :value="food">{{ food.foodName }}</option>
+      </select> -->
+      <label class="labels" for="exerName">EXERCISE NAME: {{ exerName.exerName }}   </label>
+
+      <select class="formfields" for="exerName" id="exerName" v-model="exerName" >
+        <option v-for="exer in exerNames" :value="exer">{{ exer.exerName }}</option>
+      </select>
+      <br>
+
+      <div v-if="exerName">
+        <p> NUMBER OF CALORIES / KG: {{ exerName.numCalories.toFixed(3) }}</p>
+      </div>
+      <div v-else>
+        NUMBER OF CALORIES / KG: 0
+      </div>
+
+      <label class="durationLabel" for="duration">DURATION (in hrs): {{ duration }}</label>
       <select class="formfields"  v-model="duration">
         <option>0.5</option>
         <option>1</option>
         <option>1.5</option>
         <option>2</option>
+        <option>2.5</option>
+        <option>3</option>
       </select>
-
-      <div>
-      <label class="labels" for="exerName">NUMBER OF CALORIES</label>
-      <input class="formfields" id="numCalories" placeholder="How many calories per hour?" v-model="numCalories" />
-    </div>
       
       <!-- Save Button -->
       <button class="button" id="saveExer" type="submit" >Save</button><br><br>
@@ -48,7 +61,8 @@ import { onMounted } from 'vue';
 import Tab from "@/components/Tab.vue";
 import TabNav from "@/components/TabNav.vue";
 import MealHeader from '@/components/MealHeader.vue';
-
+import axios from 'axios';
+import Papa from 'papaparse';
 
 let currEmail=  "";
 
@@ -63,7 +77,8 @@ export default {
         numCalories: null, 
         showForm: false,
         haveCustomExer: false,
-        customExerData: []
+        customExerData: [],
+        exerNames: []
       };
     },
     components : {
@@ -100,9 +115,9 @@ export default {
 
 
       let exerData = {
-        exerName: this.exerName.value,
+        exerName: this.exerName.exerName,
         duration: this.duration.value,
-        numCalories: this.numCalories.value
+        numCalories: this.exerName.numCalories
 
       };
       const current = new Date();
@@ -121,9 +136,9 @@ export default {
             await setDoc(newDocRef, {
               email: currEmail,
               date: date,
-              exerName: this.exerName, 
+              exerName: this.exerName.exerName, 
               duration: this.duration,
-              numCalories: this.numCalories
+              numCalories: this.exerName.numCalories
             
         });
       alert("Added Exercise Successfully")
@@ -132,45 +147,64 @@ export default {
     
     },
 
-    async retrieveCustomExercise() {
-        const auth = getAuth();
-        let userEmail;
-        onAuthStateChanged(auth, async (user) => {
-          console.log("Auth state changed:", user);
-          if (user) {
-            userEmail = user.email;
-            console.log("Current user email:", userEmail);
-            const current = new Date();
-            const yyyy = current.getFullYear();
-            let mm = current.getMonth() + 1; // Months start at 0!
-            let dd = current.getDate();
-            if (dd < 10) dd = '0' + dd;
-            if (mm < 10) mm = '0' + mm;
-            const today = dd + '-' + mm + '-' + yyyy;
-            // console.log(today);
-            const mealsRef = collection(getFirestore(), "CustomExercise");
-            console.log(mealsRef);
-            const q = query(mealsRef, where("email", "==", userEmail), where("date","==", today));
-            const querySnapshot = await getDocs(q);
-            querySnapshot.forEach((doc) => {
-              this.customExerData.push(doc.data());
-            });
+    // async retrieveCustomExercise() {
+    //     const auth = getAuth();
+    //     let userEmail;
+    //     onAuthStateChanged(auth, async (user) => {
+    //       console.log("Auth state changed:", user);
+    //       if (user) {
+    //         userEmail = user.email;
+    //         console.log("Current user email:", userEmail);
+    //         const current = new Date();
+    //         const yyyy = current.getFullYear();
+    //         let mm = current.getMonth() + 1; // Months start at 0!
+    //         let dd = current.getDate();
+    //         if (dd < 10) dd = '0' + dd;
+    //         if (mm < 10) mm = '0' + mm;
+    //         const today = dd + '-' + mm + '-' + yyyy;
+    //         // console.log(today);
+    //         const mealsRef = collection(getFirestore(), "CustomExercise");
+    //         console.log(mealsRef);
+    //         const q = query(mealsRef, where("email", "==", userEmail), where("date","==", today));
+    //         const querySnapshot = await getDocs(q);
+    //         querySnapshot.forEach((doc) => {
+    //           this.customExerData.push(doc.data());
+    //         });
 
-            // if more than 0, the change this to true 
-            if (this.customExerData.length > 0) {
-              this.haveCustomExer = true;
-            }
+    //         // if more than 0, the change this to true 
+    //         if (this.customExerData.length > 0) {
+    //           this.haveCustomExer = true;
+    //         }
   
-          }
-        });
+    //       }
+    //     });
 
-      }
+    //   }
 
     },
   created() {
       this.exerData = [];
-      this.retrieveCustomExercise();
-    }
+      // this.retrieveCustomExercise();
+      axios.get('/src/inputData/exer.csv').then(response => {
+        let parsedData = Papa.parse(response.data, {
+          header: true, 
+          dynamicTyping: true, 
+          skipEmptyLines: true,
+        });
+
+        let exerNames = parsedData.data.map(exer => {
+          return {
+            exerName: exer.Exercise,
+            numCalories: exer.Calories,
+          };
+        });
+        this.exerNames = exerNames;
+      }).catch(error => {
+        console.log(error);
+      });
+
+
+  }
   }
 
 
@@ -189,6 +223,10 @@ export default {
   background-color: green;
   transition-duration: 0.42s;
   justify-content: center;
+  display: flex;
+  text-align: center;   
+  margin-left: 10vh;
+
 }
 
 #addCustomExer {
@@ -208,20 +246,15 @@ export default {
 text-align: center;
 font-size: 15px;
 margin-top: 20px;
-display: block;
+display: flex;
+justify-content: center;
 
-
-}
-
-.centeredCustom {
-  justify-content: center;
-  display: flex;
 }
 
 .formfields {
 text-align: center;
 border-radius: 10px;
-width: 225px;
+width:30vh;
 height: 30px;
 }
 
@@ -236,8 +269,6 @@ padding-top: 70px;
 }
 
 
-
-
 #saveExer:hover {
 background-color: red;
 }
@@ -246,13 +277,13 @@ background-color: red;
 .centered {
 position: fixed;
 top: 25%;
-left: 50%;
-margin-top: 10px;
-margin-left: -100px;
+left: 55vh;
+margin-top: 5vh;
 
 }
 .quickaddtitle {
   margin-top: -30px;
+  
 }
 
 .customexertitle {
@@ -302,6 +333,12 @@ padding-top: 30px;
 
   
 
+}
+
+.durationLabel{
+  display: flex;
+  justify-content: center;
+  margin-right: 6vh;
 }
 
 .meal-header {
