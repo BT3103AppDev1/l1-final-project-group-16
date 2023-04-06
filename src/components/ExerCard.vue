@@ -15,25 +15,16 @@
 </template> 
 
 <script>
-import {getAuth, onAuthStateChanged} from "firebase/auth";
-import { getFirestore, collection, getDoc, getDocs, query, where, doc} from 'firebase/firestore';
 export default {
   
     name: "ExerCard",
     props: ["exercise"],
-
-   
-
 };
-
-
 
 </script>
 
 
 <style scoped > 
-
-
 .card-wrapper {
   display: flex;
   justify-content: space-between;

@@ -25,10 +25,10 @@
       <br>
 
       <div v-if="exerName">
-        <p> NUMBER OF CALORIES / KG: {{ exerName.numCalories.toFixed(3) }}</p>
+        <p> NUMBER OF CALORIES / HR: {{ (exerName.numCalories * this.weight).toFixed(1) }} Calories</p>
       </div>
       <div v-else>
-        NUMBER OF CALORIES / KG: 0
+        NUMBER OF CALORIES / HR: 0
       </div>
 
       <label class="durationLabel" for="duration">DURATION (in hrs): {{ duration }}</label>
