@@ -145,8 +145,10 @@ export default {
   data() {
     return {
       user: null, 
-      date: new Date().toLocaleDateString().replaceAll("/","-"),
-      todayDate: new Date().toLocaleDateString().replaceAll("/","-"), 
+      // date: new Date().toLocaleDateString().replaceAll("/","-"),
+      // todayDate: new Date().toLocaleDateString().replaceAll("/","-"), 
+      date: new Date().getDate().toString().padStart(2, '0') + '-' + (new Date().getMonth() + 1).toString().padStart(2, '0') + '-' + new Date().getFullYear(),
+      todayDate: new Date().getDate().toString().padStart(2, '0') + '-' + (new Date().getMonth() + 1).toString().padStart(2, '0') + '-' + new Date().getFullYear(),
       breakfastCal: 0,
       lunchCal: 0,
       dinnerCal: 0,
