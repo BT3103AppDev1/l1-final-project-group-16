@@ -10,7 +10,11 @@
     </div>
   
     <div class="details">
-      <span class="username" style="font-size: 28px; font-weight: 500;">{{ this.username }}</span>
+      <div class="usernamegender">
+        <span class="username" style="font-size: 28px; font-weight: 500;">{{ this.username }}</span>
+        <img v-if="this.gender === 'Female'" class="gender" src="@/assets/images/Gender/Female.png" alt="Female" style="width: 30px; height: 40px">
+        <img v-else class="gender" src="@/assets/images/Gender/Male.png" alt="Male" style="width: 30px; height: 40px">
+      </div>
         <div class="heightweight">
           <div class="hwdeets">
             <span class="height">
@@ -52,6 +56,7 @@ export default {
     data() {
       return {
         username: "",
+        gender: "",
         height:0,
         weight:0,
         calories: 0,
@@ -79,6 +84,7 @@ export default {
             const querySnapshot = await getDocs(profileQuery);
             const userDocument = (querySnapshot.docs)[0]
             this.username = userDocument.data().userName;
+            this.gender = userDocument.data().gender;
             this.height = userDocument.data().height;
             this.weight = userDocument.data().weight;
             this.calories = userDocument.data().dailyIntakeGoal;
@@ -135,6 +141,15 @@ export default {
   display: inline-block;
   flex-direction: column;
   /* margin-top: 200px; */
+}
+
+.usernamegender {
+  display: flex;
+}
+
+.gender {
+  flex-grow: 0;
+  margin-left: 2vw;
 }
 
 .username {
