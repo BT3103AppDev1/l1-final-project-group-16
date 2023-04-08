@@ -8,8 +8,9 @@
     <TabNav :tabs="['Quick Add', 'Custom Food']" :selected="selected" @selected="setSelected">
       <Tab :isSelected="selected === 'Quick Add'">
         <div class="QuickAdd">
-  <img class="images" src="src/assets/images/forkspoon.png" width="130" height="120">
-  <h1 class="quickaddtitle">Quick Add</h1>
+          <img class="forkspoon" src="src/assets/images/forkspoon.png" width="130" height="120">
+
+          <h1 class="quickaddtitle">Quick Add</h1>
   </div>
   <div class="centered">
     <form @submit.prevent="saveFood" class="newFood"> 
@@ -19,7 +20,7 @@
 
 
         <div>
-        <p class="foodTitleCals">{{ $route.query.foodName }} - {{ $route.query.numCalories }} Calories</p>
+        <p class="labels">{{ $route.query.foodName }} - {{ $route.query.numCalories }} Calories</p>
     </div>
 
         
@@ -277,7 +278,7 @@
     background-color: green;
     transition-duration: 0.42s;
     justify-content: center;
-    margin-left: 8vh;
+    margin-left: 10vh;
   }
   
   #addCustomFood {
@@ -294,17 +295,17 @@
   }
   
   .labels {
-  text-align: center;
-  font-size: 15px;
-  margin-top: 20px;
-  display: block;
-  
-  
-  }
+      text-align: center;
+      font-size: 15px;
+      margin-top: 20px;
+      display: block;
 
+
+}
   .foodTitleCals{
     font-size: 20px;
     font-weight: 500;
+    margin-top: 5vh;
   }
   
   .centeredCustom {
@@ -338,15 +339,15 @@
   
   
   .centered {
-  position: fixed;
-  top: 25%;
-  left: 50%;
-  margin-top: -5vh;
-  margin-left: -100px;
-  
-  }
+    position: fixed;
+    top: 25%;
+    left: 50%;
+    margin-left: -15vh;
+
+}
   .quickaddtitle {
     margin-top: -30px;
+    margin-right: -10vh;
   }
   
   .customfoodtitle {
@@ -361,13 +362,14 @@
   justify-content: center;
   margin-top: 0px;
   }
-  
-  .images {
-  padding-top: 20px;
-  justify-content: center;
-  margin-bottom: 30px;
-  
-  }
+  .forkspoon {
+    padding-top: 20px;
+    justify-content: center;
+    margin-bottom: 30px;
+    margin-left: -20vh;
+
+}
+
   
   
   
