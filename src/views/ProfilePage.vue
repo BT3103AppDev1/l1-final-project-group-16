@@ -4,7 +4,7 @@
     <div class="picandbutton">
       <div class="profilepic">
       <!-- rng some pic later -->
-        <span class="pic" style="font-size: 20px; font-weight: 800;">pic here</span>
+        <img class="pic" src="@/assets/images/Profile/tempDP.png" alt="profile picture" style="width: 100px; height: 120px">
       </div>
       <button v-on:click="goToEditProfilePage" class="editprofile">Edit Profile</button>
     </div>
@@ -12,8 +12,8 @@
     <div class="details">
       <div class="usernamegender">
         <span class="username" style="font-size: 28px; font-weight: 500;">{{ this.username }}</span>
-        <img v-if="this.gender === 'Female'" class="gender" src="@/assets/images/Gender/Female.png" alt="Female" style="width: 30px; height: 40px">
-        <img v-else class="gender" src="@/assets/images/Gender/Male.png" alt="Male" style="width: 30px; height: 40px">
+        <img v-if="this.gender === 'Female'" class="gender" src="@/assets/images/Profile/Female.png" alt="Female" style="width: 30px; height: 40px">
+        <img v-else class="gender" src="@/assets/images/Profile/Male.png" alt="Male" style="width: 30px; height: 40px">
       </div>
         <div class="heightweight">
           <div class="hwdeets">
