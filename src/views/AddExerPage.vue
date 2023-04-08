@@ -161,6 +161,8 @@ export default {
       alert("Added Exercise Successfully")
 
       console.log(date);
+      this.$router.push('/ExerciseLogPage');
+
     
     },
 

@@ -80,7 +80,7 @@
   <script>
 
   import NavigationBar from "@/components/NavigationBar.vue"
-  import { doc, setDoc, addDoc, getFirestore, collection, query, where, getDocs} from "firebase/firestore"; 
+  import { doc, setDoc, addDoc, getFirestore, collection, query, where, getDocs, updateDoc} from "firebase/firestore"; 
   import { getAuth, onAuthStateChanged} from "firebase/auth";
   import { onMounted } from 'vue';
   import Tab from "@/components/Tab.vue";
@@ -168,12 +168,30 @@
         if (dd < 10) dd = '0' + dd;
         if (mm < 10) mm = '0' + mm;
         const date = `${dd}-${mm}-${current.getFullYear()}`;
-        
-        // add the document to the current date based on bf/lunch/dinner
-        // add new date document 
+
+        const mealsRef = collection(getFirestore(), "Meals");
+
+        const q = query(mealsRef, where("email", "==", user), where("date","==", date), where("foodName", "==", this.foodName),
+          where("mealType", "==", this.mealType));
+        const querySnapshot = await getDocs(q);
+        console.log(querySnapshot);
+        if (querySnapshot.size === 1) {
+          // get the mealId
+          const docId = querySnapshot.docs[0].id;
+          const mealData = querySnapshot.docs[0].data();
+          const updatedNumServings = parseInt(mealData.numServings) + parseInt(this.numServings);
+          console.log(updatedNumServings)
+          const mealsCollection = doc(collection(getFirestore(), "Meals"), docId);
+          await updateDoc(mealsCollection, {
+            numServings: updatedNumServings
+          })
+          alert("Added Food Successfully")
   
-        // add to meal collections
-        const newDocRef = doc(collection(getFirestore(), "Meals"));
+          console.log(date);
+          this.$router.push('/FoodLogPage');
+
+        } else {
+          const newDocRef = doc(collection(getFirestore(), "Meals"));
               await setDoc(newDocRef, {
                 email: currEmail,
                 date: date,
@@ -182,15 +200,20 @@
                 numServings: this.numServings,
                 numCalories: this.numCalories
           });
-        alert("Added Food Successfully")
+        // add the document to the current date based on bf/lunch/dinner
+        // add new date document 
   
-        console.log(date);
-        this.$router.push('/FoodLogPage');
-
-
+        // add to meal collections
+            alert("Added Food Successfully")
       
+            console.log(date);
+            this.$router.push('/FoodLogPage');
+
+
+        }
       },
-  
+
+       
       async retrieveCustomFood() {
           const auth = getAuth();
           let userEmail;
