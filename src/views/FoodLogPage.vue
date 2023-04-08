@@ -187,6 +187,7 @@ button{
   margin-top: 20px;
   border: 2px solid black;
   border-radius: 50px;
+  height: 8.5vh;
 }
 .button-content { 
   margin-top: 8px;
