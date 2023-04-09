@@ -15,6 +15,10 @@ export default {
       type: Object,
       required: true,
     },
+    customFood: {
+      type: Object,
+      required: true,
+    }
   },
   mounted() {
     // Add a click event listener on the window object
@@ -33,14 +37,12 @@ export default {
       }
     },
     deleteFood() {
-      console.log("edit.vue delete emits");
-      console.log(this.food);
       this.$emit("deleteFood", this.food);
+      this.$emit("deleteCustom", this.customFood);
     },
     editFood() {
-      console.log("edit.vue edit emits, this.food");
-      console.log(this.food);
       this.$emit("editFood", this.food);
+      this.$emit("editCustom", this.customFood);
     },
   },
 };
