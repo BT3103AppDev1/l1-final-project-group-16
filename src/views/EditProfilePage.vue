@@ -77,7 +77,7 @@
 
 <script>
 import NavigationBar from "@/components/NavigationBar.vue"
-import { getAuth} from "firebase/auth";
+import { getAuth, updatePassword} from "firebase/auth";
 import { getFirestore, collection, getDoc, getDocs, query, where, doc,updateDoc} from 'firebase/firestore';
 
 const auth = getAuth();
@@ -155,10 +155,20 @@ export default {
       })
           .then(() => {
             console.log('User document updated successfully');
+
           })
           .catch((error) => {
             console.error('Error updating document: ', error);
           });
+
+      const newPassword = this.password
+      await updatePassword(currentUser, newPassword)
+          .then(() => {
+            console.log('User password updated successfully');
+          })
+          .catch((error) => {
+            console.error('Error updating user password: ', error)
+          })
 
       alert("Your profile has update successfully!")
       this.$router.push("/ProfilePage");
