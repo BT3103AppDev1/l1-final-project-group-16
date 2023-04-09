@@ -12,18 +12,8 @@
     <div class="card-right">
       <span>{{ food.numCalories }} Calories / Serving</span>
       <div class="icons">
-        <img
-          @click.stop="showEditButtons = true"
-          class="icon"
-          src="src/assets/images/threedots.png"
-          width="30"
-          height="30"
-        />
-        <Edit
-          class="editButtons"
-          v-if="showEditButtons == true"
-          @close="showEditButtons = false"
-        />
+        <img @click.stop="showEditButtons = true" class="icon" src="src/assets/images/threedots.png" width="30" height="30"/>
+        <Edit class="editButtons" v-if="showEditButtons == true" @close="showEditButtons = false" @deleteFood="deleteFoodHandler" @editFood="editFoodHandler" :food="food" />
       </div>
     </div>
   </div>
@@ -33,11 +23,25 @@
 import Edit from "@/components/Edit.vue";
 
 export default {
+
+  methods: {
+    deleteFoodHandler(food) {
+      console.log("foodcard.vue delete emits", food);
+      this.$emit("delete", food);
+    },
+
+    editFoodHandler(food) {
+      console.log("foodcard.vue edit emits", food);
+      this.$emit("edit", food);
+    },
+},
+
   name: "FoodCard",
   props: ["food"],
   components: {
     Edit,
   },
+
   data() {
     return {
       showEditButtons: false,
@@ -45,6 +49,8 @@ export default {
   },
 };
 </script>
+
+
 
 
 
