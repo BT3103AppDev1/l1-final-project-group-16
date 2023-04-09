@@ -14,8 +14,10 @@ import ProfilePage from '@/views/ProfilePage.vue'
 import AddFoodPage from '@/views/AddFoodPage.vue'
 import AddExerPage from '@/views/AddExerPage.vue'
 import CalendarPage from '@/views/CalendarPage.vue'
+import EditProfilePage from '@/views/EditProfilePage.vue'
 
 import { nextTick } from 'vue';
+
 
 
 const routes = [
@@ -63,6 +65,11 @@ const routes = [
     path: '/ProfilePage',
     name: 'ProfilePage',
     component: ProfilePage
+  },
+  {
+    path: '/EditProfilePage',
+    name: 'EditProfilePage',
+    component: EditProfilePage
   },
 
   {
