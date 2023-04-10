@@ -12,9 +12,20 @@
 <div class="centered">
     <form @submit.prevent="saveFood" class="newFood"> 
       <!-- Quick Add Form -->
-      <label class="labels" for="foodName">FOOD NAME</label>
-      <input  class="formfields"  id="foodName" placeholder="What did you eat" v-model="foodName" />
-      
+      <!-- <input  class="formfields"  id="foodName" placeholder="What did you eat" v-model="foodName" /> -->
+       
+      <label class="labels" for="foodName">FOOD NAME: {{ foodName.foodName }}</label>
+      <select class="formfields" for="foodName" id="foodName" v-model="foodName" >
+      <option v-for="food in foodNames" :value="food">{{ food.foodName }}</option>
+      </select>
+      <br>
+      <div v-if="foodName" >
+        <p> NUMBER OF CALORIES: {{ foodName.numCalories }} </p>
+      </div>
+      <div v-else>
+        <p>NUMBER OF CALORIES: 0 </p>
+      </div>
+
       <label class="labels" for="foodName">MEAL TYPE: {{ mealType }}</label>
       <select class="formfields"  v-model="mealType">
         <option>Breakfast</option>
@@ -37,10 +48,7 @@
         <option>9</option>
         <option>10</option>
       </select>
-      <div>
-      <label class="labels" for="foodName">NUMBER OF CALORIES</label>
-      <input class="formfields" id="numCalories" placeholder="How many calories?" v-model="numCalories" />
-    </div>
+
       
       <!-- Save Button -->
       <button class="button" id="saveFood" type="submit" >Save</button><br><br>
@@ -74,7 +82,7 @@
 
 <script>
 import NavigationBar from "@/components/NavigationBar.vue"
-import { doc, setDoc, addDoc, getFirestore, collection, query, where, getDocs} from "firebase/firestore"; 
+import { doc, setDoc, addDoc, getFirestore, collection, query, where, getDocs, updateDoc} from "firebase/firestore"; 
 import { getAuth, onAuthStateChanged} from "firebase/auth";
 import { onMounted } from 'vue';
 import Tab from "@/components/Tab.vue";
@@ -82,6 +90,8 @@ import TabNav from "@/components/TabNav.vue";
 import CustomFoodForm from "@/components/CustomFoodForm.vue";
 import CustomFoodCard from "@/components/CustomFoodCard.vue";
 import MealHeader from '@/components/MealHeader.vue';
+import axios from 'axios';
+import Papa from 'papaparse';
 
 
 let currEmail=  "";
@@ -94,10 +104,11 @@ export default {
         foodName: "", 
         mealType: null,
         numServings: null,
-        numCalories: null, 
+        numCalories: 0, 
         showForm: false,
         haveCustomFood: false,
-        customFoodData: []
+        customFoodData: [],
+        foodNames: [],
       };
     },
     components : {
@@ -108,7 +119,6 @@ export default {
         CustomFoodCard, 
         MealHeader
     },
-
     async mounted () {
       const auth = getAuth();
       onAuthStateChanged(auth, (user) => {
@@ -116,9 +126,13 @@ export default {
           currEmail = user.email;
         } 
       });
+
     },
 
+
+
   methods: {
+    
     setSelected(tab)  {
       this.selected = tab;
     },
@@ -136,10 +150,10 @@ export default {
 
 
       let foodData = {
-        foodName: this.foodName.value,
+        foodName: this.foodName.foodName,
         mealType: this.mealType.value,
         numServings: this.numServings.value,
-        numCalories: this.numCalories.value
+        numCalories: this.foodName.numCalories
 
       };
       const current = new Date();
@@ -152,22 +166,42 @@ export default {
       
       // add the document to the current date based on bf/lunch/dinner
       // add new date document 
+      // first check if this current mealType and name is aleady added 
+      const mealsRef = collection(getFirestore(), "Meals");
 
-      // add to meal collections
-      const newDocRef = doc(collection(getFirestore(), "Meals"));
+      const q = query(mealsRef, where("email", "==", user), where("date","==", date), where("foodName", "==", this.foodName.foodName),
+        where("mealType", "==", this.mealType));
+      const querySnapshot = await getDocs(q);
+      console.log(querySnapshot);
+      if (querySnapshot.size === 1) {
+        // get the mealId
+        const docId = querySnapshot.docs[0].id;
+        const mealData = querySnapshot.docs[0].data();
+        const updatedNumServings = parseInt(mealData.numServings) + parseInt(this.numServings);
+        console.log(updatedNumServings)
+        const mealsCollection = doc(collection(getFirestore(), "Meals"), docId);
+        await updateDoc(mealsCollection, {
+          numServings: updatedNumServings
+        })
+      } else {
+        const newDocRef = doc(collection(getFirestore(), "Meals"));
             await setDoc(newDocRef, {
               email: currEmail,
               date: date,
-              foodName: this.foodName, 
+              foodName: this.foodName.foodName, 
               mealType: this.mealType, 
               numServings: this.numServings,
-              numCalories: this.numCalories
-              
-              
+              numCalories: this.foodName.numCalories
         });
+
+      }
+      // add to meal collections
+
       alert("Added Food Successfully")
 
       console.log(date);
+      this.$router.push('/FoodLogPage');
+
     
     },
 
@@ -209,6 +243,27 @@ export default {
   created() {
       this.foodData = [];
       this.retrieveCustomFood();
+      console.log("paparse");
+      axios.get('/src/inputData/food.csv').then(response => {
+        let parsedData = Papa.parse(response.data, {
+          header: true, 
+          dynamicTyping: true, 
+          skipEmptyLines: true,
+        });
+
+        let foodNames = parsedData.data.map(food => {
+          return {
+            foodName: food.Food,
+            numCalories: food.Calories,
+          };
+        });
+        this.foodNames = foodNames;
+      }).catch(error => {
+        console.log(error);
+      });
+
+
+
     }
   }
 
@@ -235,7 +290,6 @@ button {
   background-color: green;
   transition-duration: 0.42s;
   justify-content: center;
-  margin-left:50px ;
 }
 
 #addCustomFood {
@@ -294,7 +348,7 @@ background-color: red;
 position: fixed;
 top: 25%;
 left: 50%;
-margin-top: 10px;
+margin-top:4vh;
 margin-left: -100px;
 
 }

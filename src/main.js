@@ -5,5 +5,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './custom.css';
-
-createApp(App).use(router).mount('#app')
+import VueChartkick from 'vue-chartkick'
+import 'chartkick/chart.js'
+createApp(App).use(router).use(VueChartkick).mount('#app')

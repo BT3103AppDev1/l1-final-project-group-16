@@ -3,7 +3,7 @@
     <NavigationBar/>
   </div>
   <div id="exer">
-  <TabNav :tabs="['Add Exercise', 'Custom Exercise']" :selected="selected" @selected="setSelected">
+  <TabNav :tabs="['Add Exercise']" :selected="selected" @selected="setSelected">
     <Tab :isSelected="selected === 'Add Exercise'">
   <div class="QuickAdd">
   <img class="images" src="src/assets/images/exer.png" width="100" height="120">
@@ -12,21 +12,34 @@
 <div class="centered">
     <form @submit.prevent="saveExer" class="newExer"> 
       <!-- Quick Add Form -->
-      <label class="labels" for="exerName">EXERCISE NAME</label>
-      <input  class="formfields"  id="exerName" placeholder="What did you do?" v-model="exerName" />
 
-      <label class="labels" for="duration">DURATION (in hrs): {{ duration }}</label>
+      <!-- <label class="labels" for="foodName">FOOD NAME: {{ foodName.foodName }}</label>
+      <select class="formfields" for="foodName" id="foodName" v-model="foodName" >
+      <option v-for="food in foodNames" :value="food">{{ food.foodName }}</option>
+      </select> -->
+      <label class="exerNameLabels" for="exerName">EXERCISE NAME: {{ exerName.exerName }}   </label>
+
+      <select class="formfields" for="exerName" id="exerName" v-model="exerName" >
+        <option v-for="exer in exerNames" :value="exer">{{ exer.exerName }}</option>
+      </select>
+      <br>
+
+      <div class="numCaloriesDiv" v-if="exerName">
+        <p> NUMBER OF CALORIES / HR: {{ (exerName.numCalories * this.weight).toFixed(1) }} Calories</p>
+      </div>
+      <div v-else>
+        NUMBER OF CALORIES / HR: 0
+      </div>
+      <br>
+      <label class="durationLabel" for="duration">DURATION (in hrs): {{ duration }}</label>
       <select class="formfields"  v-model="duration">
         <option>0.5</option>
         <option>1</option>
         <option>1.5</option>
         <option>2</option>
+        <option>2.5</option>
+        <option>3</option>
       </select>
-
-      <div>
-      <label class="labels" for="exerName">NUMBER OF CALORIES</label>
-      <input class="formfields" id="numCalories" placeholder="How many calories per hour?" v-model="numCalories" />
-    </div>
       
       <!-- Save Button -->
       <button class="button" id="saveExer" type="submit" >Save</button><br><br>
@@ -35,40 +48,21 @@
   </div>
     </Tab>
 
-    <Tab :isSelected="selected === 'Custom Exercise'">
-      <div class="AddExer">
-  <img class="imagescustom" src="src/assets/images/customfood.png" width="70" height="70">
-  <h1 class="customexertitle"> Custom Exercise</h1>
-</div>
-<div class="centeredCustom">
 
-  <button class="addCustomExer" id="addCustomExer" type="submit" v-if="!showForm" v-on:click="addCustomExerButton">Add Custom Exercise</button><br><br>
-  <!-- <CustomFoodForm v-if="showForm"></CustomFoodForm> -->
-  <CustomExerForm v-if="showForm"/>
-  </div>
-  <p class="noCustomExer" v-if="haveCustomExer==false && showForm==false"> You currently do not have any custom exercises :( </p>
-  <div class="meal-header" v-if="haveCustomExer==true && showForm==false">
-    <p> Your Custom Exercises</p>
-  </div>
-
-  <CustomExerCard  v-if="showForm == false" :customExer="exer" v-for="(exer, index) in customExerData" :key="index"/>
-
-    </Tab>
   </TabNav>
   </div>
 </template>
 
 <script>
 import NavigationBar from "@/components/NavigationBar.vue"
-import { doc, setDoc, addDoc, getFirestore, collection, query, where, getDocs} from "firebase/firestore"; 
+import { doc, setDoc, addDoc, getFirestore, collection, query, where, getDocs, updateDoc} from "firebase/firestore"; 
 import { getAuth, onAuthStateChanged} from "firebase/auth";
 import { onMounted } from 'vue';
 import Tab from "@/components/Tab.vue";
 import TabNav from "@/components/TabNav.vue";
-import CustomExerForm from "@/components/CustomExerForm.vue";
-import CustomExerCard from "@/components/CustomExerCard.vue";
 import MealHeader from '@/components/MealHeader.vue';
-
+import axios from 'axios';
+import Papa from 'papaparse';
 
 let currEmail=  "";
 
@@ -83,15 +77,15 @@ export default {
         numCalories: null, 
         showForm: false,
         haveCustomExer: false,
-        customExerData: []
+        customExerData: [],
+        exerNames: [], 
+        weight: 0,
       };
     },
     components : {
         NavigationBar,
         Tab,
         TabNav,
-        CustomExerForm,
-        CustomExerCard, 
         MealHeader
     },
 
@@ -122,9 +116,9 @@ export default {
 
 
       let exerData = {
-        exerName: this.exerName.value,
+        exerName: this.exerName.exerName,
         duration: this.duration.value,
-        numCalories: this.numCalories.value
+        numCalories: this.exerName.numCalories
 
       };
       const current = new Date();
@@ -138,23 +132,41 @@ export default {
       // add the document to the current date based on bf/lunch/dinner
       // add new date document 
 
-      // add to meal collections
-      const newDocRef = doc(collection(getFirestore(), "Exercises"));
+      const exerRef = collection(getFirestore(), "Exercises");
+
+      const q = query(exerRef, where("email", "==", user), where("date","==", date), where("exerName", "==", this.exerName.exerName));
+      const querySnapshot = await getDocs(q);
+      console.log(querySnapshot);
+      if (querySnapshot.size === 1) {
+        // get the mealId
+        const docId = querySnapshot.docs[0].id;
+        const exerData = querySnapshot.docs[0].data();
+        const updatedDuration = parseInt(exerData.duration) + parseInt(this.duration);
+        console.log(updatedDuration)
+        const exerCollection = doc(collection(getFirestore(), "Exercises"), docId);
+        await updateDoc(exerCollection, {
+          duration: updatedDuration
+        })
+      } else {
+        const newDocRef = doc(collection(getFirestore(), "Exercises"));
             await setDoc(newDocRef, {
               email: currEmail,
               date: date,
-              exerName: this.exerName, 
+              exerName: this.exerName.exerName, 
               duration: this.duration,
-              numCalories: this.numCalories
-            
+              numCalories: (this.exerName.numCalories * this.weight).toFixed(1),
         });
+
+      }
       alert("Added Exercise Successfully")
 
       console.log(date);
+      this.$router.push('/ExerciseLogPage');
+
     
     },
 
-    async retrieveCustomExercise() {
+    async getUserWeight() {
         const auth = getAuth();
         let userEmail;
         onAuthStateChanged(auth, async (user) => {
@@ -162,38 +174,80 @@ export default {
           if (user) {
             userEmail = user.email;
             console.log("Current user email:", userEmail);
-            const current = new Date();
-            const yyyy = current.getFullYear();
-            let mm = current.getMonth() + 1; // Months start at 0!
-            let dd = current.getDate();
-            if (dd < 10) dd = '0' + dd;
-            if (mm < 10) mm = '0' + mm;
-            const today = dd + '-' + mm + '-' + yyyy;
             // console.log(today);
-            const mealsRef = collection(getFirestore(), "CustomExercise");
-            console.log(mealsRef);
-            const q = query(mealsRef, where("email", "==", userEmail), where("date","==", today));
+            const userRef = collection(getFirestore(), "Users");
+            const q = query(userRef, where("email", "==", userEmail));
             const querySnapshot = await getDocs(q);
             querySnapshot.forEach((doc) => {
-              this.customExerData.push(doc.data());
+              this.weight = doc.data().weight;
+              console.log(this.weight);
             });
-
-            // if more than 0, the change this to true 
-            if (this.customExerData.length > 0) {
-              this.haveCustomExer = true;
-            }
   
           }
+    
         });
-
       }
+
+    // async retrieveCustomExercise() {
+    //     const auth = getAuth();
+    //     let userEmail;
+    //     onAuthStateChanged(auth, async (user) => {
+    //       console.log("Auth state changed:", user);
+    //       if (user) {
+    //         userEmail = user.email;
+    //         console.log("Current user email:", userEmail);
+    //         const current = new Date();
+    //         const yyyy = current.getFullYear();
+    //         let mm = current.getMonth() + 1; // Months start at 0!
+    //         let dd = current.getDate();
+    //         if (dd < 10) dd = '0' + dd;
+    //         if (mm < 10) mm = '0' + mm;
+    //         const today = dd + '-' + mm + '-' + yyyy;
+    //         // console.log(today);
+    //         const mealsRef = collection(getFirestore(), "CustomExercise");
+    //         console.log(mealsRef);
+    //         const q = query(mealsRef, where("email", "==", userEmail), where("date","==", today));
+    //         const querySnapshot = await getDocs(q);
+    //         querySnapshot.forEach((doc) => {
+    //           this.customExerData.push(doc.data());
+    //         });
+
+    //         // if more than 0, the change this to true 
+    //         if (this.customExerData.length > 0) {
+    //           this.haveCustomExer = true;
+    //         }
+  
+    //       }
+    //     });
+
+    //   }
 
     },
   created() {
       this.exerData = [];
-      this.retrieveCustomExercise();
-    }
+      this.getUserWeight();
+      // this.retrieveCustomExercise();
+      axios.get('/src/inputData/exer.csv').then(response => {
+        let parsedData = Papa.parse(response.data, {
+          header: true, 
+          dynamicTyping: true, 
+          skipEmptyLines: true,
+        });
+
+        let exerNames = parsedData.data.map(exer => {
+          return {
+            exerName: exer.Exercise,
+            numCalories: exer.Calories,
+          };
+        });
+        this.exerNames = exerNames;
+      }).catch(error => {
+        console.log(error);
+      });
+
+
   }
+}
 
 
 </script>
@@ -211,7 +265,10 @@ export default {
   background-color: green;
   transition-duration: 0.42s;
   justify-content: center;
-  margin-left:50px ;
+  display: flex;
+  text-align: center;   
+  margin-left: 10vh;
+
 }
 
 #addCustomExer {
@@ -231,20 +288,15 @@ export default {
 text-align: center;
 font-size: 15px;
 margin-top: 20px;
-display: block;
+display: flex;
+justify-content: center;
 
-
-}
-
-.centeredCustom {
-  justify-content: center;
-  display: flex;
 }
 
 .formfields {
 text-align: center;
 border-radius: 10px;
-width: 225px;
+width:30vh;
 height: 30px;
 }
 
@@ -259,29 +311,34 @@ padding-top: 70px;
 }
 
 
-
-
 #saveExer:hover {
 background-color: red;
 }
 
 
 .centered {
-position: fixed;
-top: 25%;
-left: 50%;
-margin-top: 10px;
-margin-left: -100px;
-
+  position: fixed;
+  top: 25%;
+  left: 50%;
+  margin-top:10vh;
+  margin-left: -100px;
 }
+
 .quickaddtitle {
   margin-top: -30px;
+  
 }
 
 .customexertitle {
   margin-top: -30px;
 }
 
+.exerNameLabels, .numCaloriesDiv, .durationLabel {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  padding-right: 20vh;
+}
 
 
 .QuickAdd{
@@ -326,7 +383,6 @@ padding-top: 30px;
   
 
 }
-
 .meal-header {
   background-color: rgb(135, 187, 255);
   font-size: 25px;
@@ -340,7 +396,6 @@ padding-top: 30px;
   margin-top: 10px;
 
 }
-
 .images {
   margin: 0 5px;
 }

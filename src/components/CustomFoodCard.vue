@@ -8,7 +8,7 @@
         <div class="icons">
             <img  @click="showEditButtons=true" class="icon" src="src/assets/images/threedots.png" width="30" height="30">
             <Edit class="editButtons" v-if="showEditButtons == true"/>
-            <img class="icon" src="src/assets/images/greenadd.png" width="30" height="30">
+            <img @click="goToQuickAddCustom" class="icon" src="src/assets/images/greenadd.png" width="30" height="30">
      
         </div>
 
@@ -32,6 +32,17 @@ export default {
     data() {
         return {
             showEditButtons: false
+        }
+    },
+    methods: {
+        goToQuickAddCustom() {
+            this.$router.push({
+                name: "QuickAddCustom",
+                query: {
+                    foodName: this.customFood.foodName,
+                    numCalories: this.customFood.numCalories
+                }
+            })
         }
     }
 };
@@ -71,12 +82,11 @@ export default {
 }
 
 .icons{
-    position: fixed;
     display: flex;
     justify-items: flex-end;
     margin-top: -45px;
-    margin-right: -15px;
     margin-bottom: 20px;
+    margin-right: -15vh;
 
 }
 
@@ -86,10 +96,9 @@ export default {
 }
 
 .editButtons {
-    position: fixed;
     margin-top: -150px;
     margin-left:-70px;
+    position: absolute;
 }
-
 
 </style>

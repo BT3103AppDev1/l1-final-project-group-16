@@ -1,26 +1,58 @@
 <template>
-    <div class="card-wrapper">
-        <div class="FoodName">
-            <span>{{ food.foodName }}</span>
-        </div>
-        <div class="NumServings">
-            <span>{{ food.numServings }} Servings</span>
-        </div>
-        <div class="card-right">
-            <span >{{ food.numCalories }} Calories </span>
-        </div>
-</div>
-
-
-</template> 
+  <div class="card-wrapper">
+    <div class="FoodName">
+      <span>{{ food.foodName }}</span>
+    </div>
+    <div class="NumServings" v-if="food.numServings > 1">
+      <span>{{ food.numServings }} Servings</span>
+    </div>
+    <div class="NumServings" v-else>
+      <span>{{ food.numServings }} Serving</span>
+    </div>
+    <div class="card-right">
+      <span>{{ food.numCalories }} Calories / Serving</span>
+      <div class="icons">
+        <img @click.stop="showEditButtons = true" class="icon" src="src/assets/images/threedots.png" width="30" height="30"/>
+        <Edit class="editButtons" v-if="showEditButtons == true" @close="showEditButtons = false" @deleteFood="deleteFoodHandler" @editFood="editFoodHandler" :food="food" />
+      </div>
+    </div>
+  </div>
+</template>
 
 <script>
-export default {
-    name: "FoodCard",
-    props: ["food"],
-};
+import Edit from "@/components/Edit.vue";
 
+export default {
+
+  methods: {
+    deleteFoodHandler(food) {
+      console.log("foodcard.vue delete emits", food);
+      this.$emit("delete", food);
+    },
+
+    editFoodHandler(food) {
+      console.log("foodcard.vue edit emits", food);
+      this.$emit("edit", food);
+    },
+},
+
+  name: "FoodCard",
+  props: ["food"],
+  components: {
+    Edit,
+  },
+
+  data() {
+    return {
+      showEditButtons: false,
+    };
+  },
+};
 </script>
+
+
+
+
 
 <style scoped > 
 
@@ -60,6 +92,26 @@ export default {
   align-items: center;
   margin-left: auto;
   margin-right: 70px;
+}
+
+.icons{
+    display: flex;
+    justify-items: flex-end;
+    margin-top: -45px;
+    margin-right: -15px;
+    margin-bottom: 20px;
+
+}
+
+.editButtons {
+    margin-top: -150px;
+    margin-left:-70px;
+    position: absolute;
+}
+
+.icon{
+    margin-right: 10px;
+    margin-left: 10px;
 }
 
 

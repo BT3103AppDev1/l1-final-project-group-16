@@ -131,7 +131,6 @@ export default {
   background-color: green;
   transition-duration: 0.42s;
   justify-content: center;
-  margin-left:50px ;
 }
 
 #addCustomFood {

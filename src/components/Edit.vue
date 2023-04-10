@@ -1,51 +1,90 @@
 <template>
-    <div class="whitebox">
+  <div class="whitebox" ref="whitebox">
     <div class="buttons">
-        <button class="edit">Edit</button>
-        <button class="delete" >Delete</button>
+      <button class="edit" @click="editFood">Edit</button>
+      <button class="delete" @click="deleteFood">Delete</button>
     </div>
-</div>
-
-
+  </div>
 </template>
 
 <script>
 export default {
-    name: "Edit"
+  name: "Edit",
+  props: {
+    food: {
+      type: Object,
+      required: true,
+    },
+  },
+  mounted() {
+    // Add a click event listener on the window object
+    window.addEventListener("click", this.handleClickOutside);
+  },
+  beforeUnmount() {
+    // Remove the click event listener when the component is unmounted
+    window.removeEventListener("click", this.handleClickOutside);
+  },
+  methods: {
+    handleClickOutside(event) {
+      // Check if the click event target is outside the whitebox
+      if (!this.$refs.whitebox.contains(event.target)) {
+        // Emit an event to the parent component to close the whitebox
+        this.$emit("close");
+      }
+    },
+    deleteFood() {
+      console.log("edit.vue delete emits");
+      console.log(this.food);
+      this.$emit("deleteFood", this.food);
+    },
+    editFood() {
+      console.log("edit.vue edit emits, this.food");
+      console.log(this.food);
+      this.$emit("editFood", this.food);
+    },
+  },
 };
-
 </script>
 
+
 <style scoped>
-.whitebox{
-    background-color: white;
-    margin-bottom:150px;
-    border: 2px solid grey;
-    height: 15vh;
-    width: 15vh;
-    justify-content: center;
-    display: flex;
+.whitebox {
+  background-color: white;
+  border: 2px solid grey;
+  justify-content: center;
+  display: inline-flex;
 }
 
-button{
-    margin-top:10px;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    border-radius:40px;
-    width: 13vh;
-    border: 1px solid black;
-    
+.buttons {
+  padding: 5px;
+  border: 1px solid black;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.edit{
-    background-color: green;
+button {
+  margin-top: 10px;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  border-radius: 40px;
+  width: 15vh;
+  border: none;
 }
 
-
-.delete{
-    background-color: red;
+.edit {
+  background-color: green;
+  justify-content: center;
+  display: flex;
+  border: 1px solid black;
 }
 
-
+.delete {
+  background-color: red;
+  display: flex;
+  text-align: center;
+  border: 1px solid black;
+}
 </style>
