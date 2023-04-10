@@ -11,7 +11,7 @@
       </div>
         
         <!-- Save Button -->
-        <button class="button" id="saveFood" type="submit" >Save Food</button><br><br>
+        <button class="buttonSaveFood" id="saveFood" type="submit" >Save Food</button><br><br>
 
       </form>
 
@@ -119,7 +119,8 @@ export default {
 
 
 <style scoped>
-#saveFood {
+
+.buttonSaveFood{
   cursor: pointer;
   margin-top: 20px;
   padding-top: 20px;
@@ -131,6 +132,12 @@ export default {
   background-color: green;
   transition-duration: 0.42s;
   justify-content: center;
+}
+
+
+.buttonSaveFood:hover {
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+    border-radius: 2px;
 }
 
 #addCustomFood {
@@ -177,12 +184,6 @@ margin-top: 60px;
 padding-top: 70px;
 }
 
-
-
-
-#saveFood:hover {
-background-color: red;
-}
 
 
 

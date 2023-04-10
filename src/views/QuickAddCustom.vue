@@ -267,19 +267,26 @@
     justify-content: center;
   }
   #saveFood {
-    cursor: pointer;
-    margin-top: 20px;
-    padding-top: 20px;
-    padding: 16px 20px;
-    border-radius: 20px;
-    border:none;
-    font-size: 12px;
-    color: black;
-    background-color: green;
-    transition-duration: 0.42s;
-    justify-content: center;
-    margin-left: 10vh;
-  }
+  cursor: pointer;
+  margin-top: 20px;
+  padding-top: 20px;
+  padding: 16px 20px;
+  border-radius: 20px;
+  border:none;
+  font-size: 12px;
+  background-color: green;
+  transition-duration: 0.42s;
+  justify-content: center;
+    border-radius: 10px; /* make the edges of the button rounded */
+  padding: 10px 25px; /* add some padding to the button */
+  color: black; 
+
+}
+
+#saveFood:hover {
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+    border-radius: 2px;
+}
   
   #addCustomFood {
     cursor: pointer;
@@ -331,11 +338,6 @@
   }
   
   
-  
-  
-  #saveFood:hover {
-  background-color: red;
-  }
   
   
   .centered {

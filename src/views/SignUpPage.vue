@@ -26,7 +26,6 @@
                 <select id="gender" name="gender" v-model="gender" required>
                   <option value="Male">Male</option>
                   <option value="Female">Female</option>
-                  <option value="Other">Other</option>
                 </select>
 
                  <br>
@@ -122,19 +121,19 @@ export default {
   margin-left: 200px;
 }
 #registerButton{
-    display: block;
-    border: #dddddd;
-    color: #333333;
-    margin: 0 auto;
-    background-color: #9eff6a;
-    font-size: 17px;
-    padding: 12px;
-    height: 50px;
-    width: 200px;
-    text-align: center;
-    border-radius: 30px;
-    transition-duration: 0.3s;
+
+  background-color: rgb(126, 216, 87); /* change the background color of the button to lime green */
+  border-radius: 10px; /* make the edges of the button rounded */
+  border: 2px solid rgb(126, 216, 87); /* add a lime green border to the button */
+  padding: 10px 50px; /* add some padding to the button */
+  color: white;
+  display: block;
+  justify-content: center;
+  text-align: center;
+  margin-left: 7vh;
 }
+
+
 #registerButton:hover {
     box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
     border-radius: 2px;
