@@ -1,46 +1,51 @@
 <template>
-    <div class="card-wrapper">
-
- 
-        <div class="FoodName">
-            <span>{{ food.foodName }}</span>
-        </div>
-        <div class="NumServings" v-if="food.numServings > 1">
-            <span>{{ food.numServings }} Servings</span>
-        </div>
-        <div class="NumServings" v-else>
-          <span>{{ food.numServings }} Serving</span>
-        </div>
-        <div class="card-right">
-            <span >{{ food.numCalories }} Calories / Serving </span>
-            <div class="icons">
-            <img  @click="showEditButtons=true" class="icon" src="src/assets/images/threedots.png" width="30" height="30">
-            <Edit class="editButtons" v-if="showEditButtons == true"/>
-     
-        </div>
-        </div>
-</div>
-
-
-</template> 
+  <div class="card-wrapper">
+    <div class="FoodName">
+      <span>{{ food.foodName }}</span>
+    </div>
+    <div class="NumServings" v-if="food.numServings > 1">
+      <span>{{ food.numServings }} Servings</span>
+    </div>
+    <div class="NumServings" v-else>
+      <span>{{ food.numServings }} Serving</span>
+    </div>
+    <div class="card-right">
+      <span>{{ food.numCalories }} Calories / Serving</span>
+      <div class="icons">
+        <img
+          @click.stop="showEditButtons = true"
+          class="icon"
+          src="src/assets/images/threedots.png"
+          width="30"
+          height="30"
+        />
+        <Edit
+          class="editButtons"
+          v-if="showEditButtons == true"
+          @close="showEditButtons = false"
+        />
+      </div>
+    </div>
+  </div>
+</template>
 
 <script>
 import Edit from "@/components/Edit.vue";
 
 export default {
-    name: "FoodCard",
-    props: ["food"],
-    components: {
-        Edit
-    }, 
-    data() {
-        return {
-            showEditButtons: false
-        }
-    },
+  name: "FoodCard",
+  props: ["food"],
+  components: {
+    Edit,
+  },
+  data() {
+    return {
+      showEditButtons: false,
+    };
+  },
 };
-
 </script>
+
 
 
 <style scoped > 
