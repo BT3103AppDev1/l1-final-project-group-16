@@ -7,7 +7,7 @@
 
         <div class="icons">
             <img  @click="showEditButtons=true" class="icon" src="src/assets/images/threedots.png" width="30" height="30">
-            <Edit class="editButtons" v-if="showEditButtons == true"/>
+            <Edit class="editButtons" v-if="showEditButtons == true" @deleteCustom="deleteFoodHandler" @editCustom="editFoodHandler" :customFood="customFood" />
             <img @click="goToQuickAddCustom" class="icon" src="src/assets/images/greenadd.png" width="30" height="30">
      
         </div>
@@ -35,6 +35,15 @@ export default {
         }
     },
     methods: {
+        deleteFoodHandler(customFood) {
+      console.log("customfoodcard.vue delete emits", customFood);
+      this.$emit("delete", customFood);
+    },
+
+    editFoodHandler(customFood) {
+      console.log("customfoodcard.vue edit emits", customFood);
+      this.$emit("edit", customFood);
+    },
         goToQuickAddCustom() {
             this.$router.push({
                 name: "QuickAddCustom",

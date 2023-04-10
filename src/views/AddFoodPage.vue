@@ -66,14 +66,14 @@
 
   <button class="addCustomFood" id="addCustomFood" type="submit" v-if="!showForm" v-on:click="addCustomFoodButton">Add Custom Food</button><br><br>
   <!-- <CustomFoodForm v-if="showForm"></CustomFoodForm> -->
-  <CustomFoodForm v-if="showForm"/>
+  <CustomFoodForm v-if="showForm" @delete="deleteFoodHandler" @edit="editFoodHandler"/>
   </div>
   <p class="noCustomFood" v-if="haveCustomFood==false && showForm==false"> You currently do not have any custom food :( </p>
   <div class="meal-header" v-if="haveCustomFood==true && showForm==false">
     <p> Your Custom Foods</p>
   </div>
 
-  <CustomFoodCard  v-if="showForm == false" :customFood="food" v-for="(food, index) in customFoodData" :key="index"/>
+  <CustomFoodCard  v-if="showForm == false" :customFood="food" v-for="(food, index) in customFoodData" :key="index" @delete="deleteFoodHandler" @edit="editFoodHandler"/>
 
     </Tab>
   </TabNav>
@@ -82,7 +82,8 @@
 
 <script>
 import NavigationBar from "@/components/NavigationBar.vue"
-import { doc, setDoc, addDoc, getFirestore, collection, query, where, getDocs, updateDoc} from "firebase/firestore"; 
+import { doc, setDoc, addDoc, getFirestore, collection, query, where, getDocs, deleteDoc, updateDoc} from "firebase/firestore"; 
+
 import { getAuth, onAuthStateChanged} from "firebase/auth";
 import { onMounted } from 'vue';
 import Tab from "@/components/Tab.vue";
@@ -92,6 +93,7 @@ import CustomFoodCard from "@/components/CustomFoodCard.vue";
 import MealHeader from '@/components/MealHeader.vue';
 import axios from 'axios';
 import Papa from 'papaparse';
+import EditCustomFoodPage from './EditCustomFoodPage.vue';
 
 
 let currEmail=  "";
@@ -132,6 +134,41 @@ export default {
 
 
   methods: {
+    async editFoodHandler(customFood) {
+        console.log("hihi");
+        console.log(customFood);
+        if (confirm("Are you sure you want to edit this meal?")) {
+          console.log("foodlogpage edit emitted");
+          const customFoodOrder = ['date', 'email', 'foodName','numCalories'];
+          const customFoodList = customFoodOrder.map((key) => [customFood[key]]);
+          console.log(customFoodList);
+          this.$router.push({path: "/EditCustomFoodPage", query: { customFoodProp: customFoodList }});
+        }
+      },
+
+    async deleteFoodHandler(customFood) {
+        console.log("foodlogpage delete emitted");
+        if (confirm("Are you sure you want to delete this meal?")) {
+        console.log("emit received");
+          const auth = getAuth();
+          let userEmail;
+          onAuthStateChanged(auth, async (user) => {
+            if (user) {
+              userEmail = user.email;
+              const mealsRef = collection(getFirestore(), "CustomFood");
+              const q = query(mealsRef, where("email", "==", userEmail), where("foodName", "==", customFood.foodName), 
+              where("numCalories", "==", customFood.numCalories));
+              const querySnapshot = await getDocs(q);
+              querySnapshot.forEach((doc) => {
+                deleteDoc(doc.ref);
+              });
+              window.alert("Meal successfully deleted.");
+              location.reload();
+            }
+          });
+        }
+      },
+      
     
     setSelected(tab)  {
       this.selected = tab;
