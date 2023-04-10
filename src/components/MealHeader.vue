@@ -42,7 +42,7 @@ export default {
 
 <style scoped>
 .meal-header {
-  background-color: rgb(135, 187, 255);
+  background-color:  rgb(135, 187, 255);;
   font-size: 25px;
   max-width: 95%;
   margin: 0 auto;

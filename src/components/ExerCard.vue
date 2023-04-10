@@ -32,7 +32,7 @@ export default {
   margin-bottom: 20px;
   color: black;
   border-radius: 50px;
-  background-color: rgb(196, 247, 198);
+  background-color: #F0FFF0;
   margin-left: 5%;
   margin-right: 5%;
   box-shadow: 2px 2px 6px rgba(154, 244, 154, 0.3);

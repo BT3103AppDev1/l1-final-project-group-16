@@ -317,11 +317,11 @@ background-color: red;
 
 
 .centered {
-  position: fixed;
+  position: relative;
   top: 25%;
   left: 50%;
-  margin-top:10vh;
-  margin-left: -100px;
+  margin-top:5vh;
+  margin-left: -150px;
 }
 
 .quickaddtitle {
@@ -338,6 +338,8 @@ background-color: red;
   justify-content: center;
   text-align: center;
   padding-right: 20vh;
+  margin-left: -125vh;
+
 }
 
 
