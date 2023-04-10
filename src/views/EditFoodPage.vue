@@ -265,7 +265,7 @@ text-align: center;
 font-size: 15px;
 margin-top: 20px;
 display: block;
-margin-top: 0px;
+margin-top: 2vh;
 
 
 }
@@ -299,13 +299,14 @@ position: fixed;
 top: 25%;
 left: 50%;
 margin-top:4vh;
-margin-left: -100px;
-margin-top: 30px;
+margin-left: -8vh;
+margin-top: 8vh;
 
 }
 
 .quickaddtitle {
   margin-top: -30px;
+  margin-bottom: 20vh;
   
 }
 

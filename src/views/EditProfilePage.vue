@@ -211,6 +211,11 @@
   .labels{
     width: 200px;
     float: left;
+    display: block;
+    font-size: 16px;
+    margin-bottom: 5px;
+    text-align: left;
+    border-block-color: #e9e9e9;
   }
   .form-group input{
     width: 250px;
