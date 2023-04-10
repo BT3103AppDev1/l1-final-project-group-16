@@ -1,8 +1,8 @@
 <template>
   <div class="whitebox" ref="whitebox">
     <div class="buttons">
-      <button class="edit">Edit</button>
-      <button class="delete">Delete</button>
+      <button class="edit" @click="editFood">Edit</button>
+      <button class="delete" @click="deleteFood">Delete</button>
     </div>
   </div>
 </template>
@@ -10,6 +10,12 @@
 <script>
 export default {
   name: "Edit",
+  props: {
+    food: {
+      type: Object,
+      required: true,
+    },
+  },
   mounted() {
     // Add a click event listener on the window object
     window.addEventListener("click", this.handleClickOutside);
@@ -26,9 +32,21 @@ export default {
         this.$emit("close");
       }
     },
+    deleteFood() {
+      console.log("edit.vue delete emits");
+      console.log(this.food);
+      this.$emit("deleteFood", this.food);
+    },
+    editFood() {
+      console.log("edit.vue edit emits, this.food");
+      console.log(this.food);
+      this.$emit("editFood", this.food);
+    },
   },
 };
 </script>
+
+
 <style scoped>
 .whitebox {
   background-color: white;
