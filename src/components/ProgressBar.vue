@@ -82,7 +82,7 @@
   
   .value-container {
     position: relative;
-    font-family: "Poppins", sans-serif;
+    /* font-family: "Poppins", sans-serif; */
     font-size: 30px;
     color: #231c3d;
   }

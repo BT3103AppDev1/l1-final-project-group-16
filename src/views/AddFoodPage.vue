@@ -82,7 +82,8 @@
 
 <script>
 import NavigationBar from "@/components/NavigationBar.vue"
-import { doc, setDoc, addDoc, getFirestore, collection, query, where, getDocs, deleteDoc} from "firebase/firestore"; 
+import { doc, setDoc, addDoc, getFirestore, collection, query, where, getDocs, deleteDoc, updateDoc} from "firebase/firestore"; 
+
 import { getAuth, onAuthStateChanged} from "firebase/auth";
 import { onMounted } from 'vue';
 import Tab from "@/components/Tab.vue";
@@ -202,9 +203,25 @@ export default {
       
       // add the document to the current date based on bf/lunch/dinner
       // add new date document 
+      // first check if this current mealType and name is aleady added 
+      const mealsRef = collection(getFirestore(), "Meals");
 
-      // add to meal collections
-      const newDocRef = doc(collection(getFirestore(), "Meals"));
+      const q = query(mealsRef, where("email", "==", user), where("date","==", date), where("foodName", "==", this.foodName.foodName),
+        where("mealType", "==", this.mealType));
+      const querySnapshot = await getDocs(q);
+      console.log(querySnapshot);
+      if (querySnapshot.size === 1) {
+        // get the mealId
+        const docId = querySnapshot.docs[0].id;
+        const mealData = querySnapshot.docs[0].data();
+        const updatedNumServings = parseInt(mealData.numServings) + parseInt(this.numServings);
+        console.log(updatedNumServings)
+        const mealsCollection = doc(collection(getFirestore(), "Meals"), docId);
+        await updateDoc(mealsCollection, {
+          numServings: updatedNumServings
+        })
+      } else {
+        const newDocRef = doc(collection(getFirestore(), "Meals"));
             await setDoc(newDocRef, {
               email: currEmail,
               date: date,
@@ -212,9 +229,11 @@ export default {
               mealType: this.mealType, 
               numServings: this.numServings,
               numCalories: this.foodName.numCalories
-              
-              
         });
+
+      }
+      // add to meal collections
+
       alert("Added Food Successfully")
 
       console.log(date);

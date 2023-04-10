@@ -8,8 +8,9 @@
     <TabNav :tabs="['Quick Add', 'Custom Food']" :selected="selected" @selected="setSelected">
       <Tab :isSelected="selected === 'Quick Add'">
         <div class="QuickAdd">
-  <img class="images" src="src/assets/images/forkspoon.png" width="130" height="120">
-  <h1 class="quickaddtitle">Quick Add</h1>
+          <img class="forkspoon" src="src/assets/images/forkspoon.png" width="130" height="120">
+
+          <h1 class="quickaddtitle">Quick Add</h1>
   </div>
   <div class="centered">
     <form @submit.prevent="saveFood" class="newFood"> 
@@ -19,7 +20,7 @@
 
 
         <div>
-        <p class="foodTitleCals">{{ $route.query.foodName }} - {{ $route.query.numCalories }} Calories</p>
+        <p class="labels">{{ $route.query.foodName }} - {{ $route.query.numCalories }} Calories</p>
     </div>
 
         
@@ -80,7 +81,7 @@
   <script>
 
   import NavigationBar from "@/components/NavigationBar.vue"
-  import { doc, setDoc, addDoc, getFirestore, collection, query, where, getDocs} from "firebase/firestore"; 
+  import { doc, setDoc, addDoc, getFirestore, collection, query, where, getDocs, updateDoc} from "firebase/firestore"; 
   import { getAuth, onAuthStateChanged} from "firebase/auth";
   import { onMounted } from 'vue';
   import Tab from "@/components/Tab.vue";
@@ -168,12 +169,30 @@
         if (dd < 10) dd = '0' + dd;
         if (mm < 10) mm = '0' + mm;
         const date = `${dd}-${mm}-${current.getFullYear()}`;
-        
-        // add the document to the current date based on bf/lunch/dinner
-        // add new date document 
+
+        const mealsRef = collection(getFirestore(), "Meals");
+
+        const q = query(mealsRef, where("email", "==", user), where("date","==", date), where("foodName", "==", this.foodName),
+          where("mealType", "==", this.mealType));
+        const querySnapshot = await getDocs(q);
+        console.log(querySnapshot);
+        if (querySnapshot.size === 1) {
+          // get the mealId
+          const docId = querySnapshot.docs[0].id;
+          const mealData = querySnapshot.docs[0].data();
+          const updatedNumServings = parseInt(mealData.numServings) + parseInt(this.numServings);
+          console.log(updatedNumServings)
+          const mealsCollection = doc(collection(getFirestore(), "Meals"), docId);
+          await updateDoc(mealsCollection, {
+            numServings: updatedNumServings
+          })
+          alert("Added Food Successfully")
   
-        // add to meal collections
-        const newDocRef = doc(collection(getFirestore(), "Meals"));
+          console.log(date);
+          this.$router.push('/FoodLogPage');
+
+        } else {
+          const newDocRef = doc(collection(getFirestore(), "Meals"));
               await setDoc(newDocRef, {
                 email: currEmail,
                 date: date,
@@ -182,15 +201,20 @@
                 numServings: this.numServings,
                 numCalories: this.numCalories
           });
-        alert("Added Food Successfully")
+        // add the document to the current date based on bf/lunch/dinner
+        // add new date document 
   
-        console.log(date);
-        this.$router.push('/FoodLogPage');
-
-
+        // add to meal collections
+            alert("Added Food Successfully")
       
+            console.log(date);
+            this.$router.push('/FoodLogPage');
+
+
+        }
       },
-  
+
+       
       async retrieveCustomFood() {
           const auth = getAuth();
           let userEmail;
@@ -254,7 +278,7 @@
     background-color: green;
     transition-duration: 0.42s;
     justify-content: center;
-    margin-left: 8vh;
+    margin-left: 10vh;
   }
   
   #addCustomFood {
@@ -271,17 +295,17 @@
   }
   
   .labels {
-  text-align: center;
-  font-size: 15px;
-  margin-top: 20px;
-  display: block;
-  
-  
-  }
+      text-align: center;
+      font-size: 15px;
+      margin-top: 20px;
+      display: block;
 
+
+}
   .foodTitleCals{
     font-size: 20px;
     font-weight: 500;
+    margin-top: 5vh;
   }
   
   .centeredCustom {
@@ -315,15 +339,15 @@
   
   
   .centered {
-  position: fixed;
-  top: 25%;
-  left: 50%;
-  margin-top: -5vh;
-  margin-left: -100px;
-  
-  }
+    position: fixed;
+    top: 25%;
+    left: 50%;
+    margin-left: -15vh;
+
+}
   .quickaddtitle {
     margin-top: -30px;
+    margin-right: -10vh;
   }
   
   .customfoodtitle {
@@ -338,13 +362,14 @@
   justify-content: center;
   margin-top: 0px;
   }
-  
-  .images {
-  padding-top: 20px;
-  justify-content: center;
-  margin-bottom: 30px;
-  
-  }
+  .forkspoon {
+    padding-top: 20px;
+    justify-content: center;
+    margin-bottom: 30px;
+    margin-left: -20vh;
+
+}
+
   
   
   

@@ -135,6 +135,8 @@ button{
   margin-top: 20px;
   border: 2px solid black;
   border-radius: 50px;
+  height: 8.5vh;
+
 }
 .button-content { 
   margin-top: 8px;
@@ -183,6 +185,8 @@ button{
   margin-bottom: 25px;
   box-shadow: 2px px 6px rgba(121, 124, 126, 0.3);
   margin-top: 10px;
+  margin-top: 3vh;
+
 
 }
 

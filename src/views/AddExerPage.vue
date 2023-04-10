@@ -55,7 +55,7 @@
 
 <script>
 import NavigationBar from "@/components/NavigationBar.vue"
-import { doc, setDoc, addDoc, getFirestore, collection, query, where, getDocs} from "firebase/firestore"; 
+import { doc, setDoc, addDoc, getFirestore, collection, query, where, getDocs, updateDoc} from "firebase/firestore"; 
 import { getAuth, onAuthStateChanged} from "firebase/auth";
 import { onMounted } from 'vue';
 import Tab from "@/components/Tab.vue";
@@ -132,19 +132,37 @@ export default {
       // add the document to the current date based on bf/lunch/dinner
       // add new date document 
 
-      // add to meal collections
-      const newDocRef = doc(collection(getFirestore(), "Exercises"));
+      const exerRef = collection(getFirestore(), "Exercises");
+
+      const q = query(exerRef, where("email", "==", user), where("date","==", date), where("exerName", "==", this.exerName.exerName));
+      const querySnapshot = await getDocs(q);
+      console.log(querySnapshot);
+      if (querySnapshot.size === 1) {
+        // get the mealId
+        const docId = querySnapshot.docs[0].id;
+        const exerData = querySnapshot.docs[0].data();
+        const updatedDuration = parseInt(exerData.duration) + parseInt(this.duration);
+        console.log(updatedDuration)
+        const exerCollection = doc(collection(getFirestore(), "Exercises"), docId);
+        await updateDoc(exerCollection, {
+          duration: updatedDuration
+        })
+      } else {
+        const newDocRef = doc(collection(getFirestore(), "Exercises"));
             await setDoc(newDocRef, {
               email: currEmail,
               date: date,
               exerName: this.exerName.exerName, 
               duration: this.duration,
               numCalories: (this.exerName.numCalories * this.weight).toFixed(1),
-            
         });
+
+      }
       alert("Added Exercise Successfully")
 
       console.log(date);
+      this.$router.push('/ExerciseLogPage');
+
     
     },
 
