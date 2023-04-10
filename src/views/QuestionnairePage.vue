@@ -152,6 +152,8 @@
     margin: 10px 2px;
     border-radius: 30px;
     transition-duration: 0.3s;
+    justify-content: center;
+    margin-left: 11vh;
   }
   button:hover{
     box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);

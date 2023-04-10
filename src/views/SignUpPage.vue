@@ -95,6 +95,8 @@ export default {
           }).catch(error => {
               if (error.code === 'auth/email-already-in-use') {
                 this.error = 'Email already registered.'
+              } else if (error.code === 'auth/weak-password') {
+                this.error = "Password should be at least 6 characters"
               } else {
                 this.error = error.message
               }
