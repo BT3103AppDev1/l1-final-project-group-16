@@ -2,6 +2,10 @@
     <div>
     <NavigationBar/>
   </div>
+  <div>
+    <h1 class="quickaddtitle">Edit Custom Food</h1>
+
+  </div>
      <form @submit.prevent="editCustomFood" class="newFood"> 
         <!-- Quick Add Form -->
         <label class="labels" for="foodName">FOOD NAME</label>
@@ -212,12 +216,12 @@ background-color: red;
 position: fixed;
 top: 25%;
 left: 50%;
-margin-top:4vh;
+margin-top:2vh;
 margin-left: -100px;
 
 }
 .quickaddtitle {
-  margin-top: -30px;
+  margin-top: 5vh;
 }
 
 .customfoodtitle {
@@ -249,9 +253,9 @@ justify-content: center;
 
 }
 
-/* .newFood {
-margin-top: 100px;
-} */
+.newFood {
+  margin-top: 10vh;
+}
 
 #food {
 justify-content: center;

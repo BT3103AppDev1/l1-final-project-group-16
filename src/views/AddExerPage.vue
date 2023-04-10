@@ -27,7 +27,7 @@
       <div class="numCaloriesDiv" v-if="exerName">
         <p> NUMBER OF CALORIES / HR: {{ (exerName.numCalories * this.weight).toFixed(1) }} Calories</p>
       </div>
-      <div v-else>
+      <div v-else class="numCaloriesDiv">
         NUMBER OF CALORIES / HR: 0
       </div>
       <br>

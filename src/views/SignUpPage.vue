@@ -11,7 +11,7 @@
         <form @submit.prevent="register" id="myForm">
             <div class="register">
                 <label class="labels" for="userName">USERNAME <span style="color: red;">*</span></label>
-                <input type="userName" id = "userName" placeholder="Enter your username" v-model="username" required> <br>
+                <input autocomplete="off" type="userName" id = "userName" placeholder="Enter your username" v-model="username" required> <br>
 
                 <label class="labels" for="userEmail">EMAIL <span style="color: red;">*</span></label>
                 <input type="email" autocomplete="off" id = "userEmail"  placeholder="Enter your email" v-model="email" required> <br>

@@ -59,7 +59,7 @@
         <h2 style="font-weight: bold; font-size: 35px;"> Calories Burnt </h2>
       </div>
       <br><br><br><br><br>
-      <h2>{{ this.caloriesBurnt.toFixed(2) }} CAL</h2>
+      <h2>{{ this.caloriesBurnt.toFixed(0) }} CAL</h2>
   </table>
   </div>
   
