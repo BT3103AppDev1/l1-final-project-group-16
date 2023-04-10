@@ -13,7 +13,7 @@
           <label class="labels" for="password">Password: </label>
           <input v-if="showPassword" type="text" v-model="password" id="password" required/>
           <input v-else type="password" v-model="password" id="password" required>
-          <input type="checkbox" @click="showPasswordMethod()" style="width: 15px"> Show Password
+          <input class="showPassText" type="checkbox" @click="showPasswordMethod()" style="width: 15px"> Show Password
         </div>
   
         <h5 style="color: #084298"><b>My Details</b></h5>
@@ -185,10 +185,14 @@
   
   <style scoped>
   .userProfile{
-    margin-top: 40px;
+    margin-top: 15vh;
+    font-size: 1.2rem;
+    height: 60px;
     float: left;
-    margin-left: 150px;
-    width: fit-content;
+    margin-left: 75vh;
+    height:max-content;
+    justify-content: center;
+    text-align: center;
   }
   .userProfile h5{
     text-align: left;
@@ -224,6 +228,10 @@
     width: fit-content;
     height: 25px;
   }
+  .showPassText{
+    margin-left: 2vh;
+  }
+
   .btnGrp{
     float: left;
     display: block;
