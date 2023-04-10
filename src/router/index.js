@@ -16,6 +16,7 @@ import AddExerPage from '@/views/AddExerPage.vue'
 import CalendarPage from '@/views/CalendarPage.vue'
 import QuickAddCustom from '@/views/QuickAddCustom.vue'
 import EditFoodPage from '@/views/EditFoodPage.vue'
+import EditProfilePage from '@/views/EditProfilePage.vue'
 import { nextTick } from 'vue';
 
 
@@ -76,6 +77,12 @@ const routes = [
     path: '/QuestionnairePage',
     name: 'QuestionnairePage',
     component: QuestionnairePage
+  },
+
+  {
+    path: '/EditProfilePage',
+    name: 'EditProfilePage',
+    component: EditProfilePage
   },
 
   {
