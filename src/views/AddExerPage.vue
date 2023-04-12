@@ -301,6 +301,7 @@ text-align: center;
 border-radius: 10px;
 width:30vh;
 height: 30px;
+margin-left: -15vh;
 }
 
 input:hover {
@@ -320,7 +321,6 @@ padding-top: 70px;
   top: 25%;
   left: 50%;
   margin-top:5vh;
-  margin-left: -150px;
 }
 
 .quickaddtitle {
