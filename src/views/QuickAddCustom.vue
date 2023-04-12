@@ -292,6 +292,7 @@
   margin-bottom:20px;
   margin-left: 20px;
   border: 2px solid black;
+  color: black
 }
 .saveFoodButton{
   cursor: pointer;

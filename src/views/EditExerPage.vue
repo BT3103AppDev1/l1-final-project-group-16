@@ -5,6 +5,7 @@
       <img class="images" src="src/assets/images/exer.png" width="100" height="120">
       <h1 class="edittitle">Edit Exercise</h1>
     </div>
+    <div class="centered">
     <form @submit.prevent="editExer" class="newExer"> 
       <!-- Quick Add Form -->
       <label class="exerNameLabels" for="exerName">EXERCISE NAME: {{ exerName.exerName }}   </label>
@@ -31,7 +32,10 @@
       </select> 
       <!-- Save Button -->
       <button class="buttoneditExer" id="editExer" type="submit" >Edit</button><br><br>
+
     </form>
+  </div>
+
   </div>
 </template>
 
@@ -256,7 +260,7 @@ export default {
   background-color: green;
   transition-duration: 0.42s;
   justify-content: center;
-  margin-left: 0vh;
+  margin-left: 12vh;
 }
 
 
@@ -291,7 +295,7 @@ text-align: center;
 border-radius: 10px;
 width:30vh;
 height: 30px;
-margin-left: 82vh;
+margin-left: 90vh;
 }
 
 input:hover {
@@ -307,12 +311,12 @@ padding-top: 70px;
 
 
 .centered {
-  position: relative;
-  top: 25%;
-  left: 50%;
-  margin-top:5vh;
-  margin-left: -150px;
+  margin-top: 4vh;
+
+
 }
+
+
 
 .edittitle {
   margin-top: -30px;
@@ -328,16 +332,17 @@ padding-top: 70px;
   justify-content: center;
   text-align: center;
   padding-right: 20vh;
-  margin-left: 20vh;
+  margin-left: 35vh;
 
 }
 
 
 .QuickEdit{
-display: flex;
-font-size: 20;
-justify-content: center;
-margin-top: 0px;
+  display: flex;
+  font-size: 20;
+  justify-content: center;
+  margin-top: 5vh;
+  margin-left: 5vh;
 }
 
 .images {

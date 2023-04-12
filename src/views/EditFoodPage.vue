@@ -296,19 +296,13 @@ background-color: red;
 
 .centered {
 position: fixed;
-top: 25%;
 left: 50%;
-margin-top:4vh;
+margin-top:2vh;
 margin-left: -8vh;
-margin-top: 8vh;
 
 }
 
-.quickaddtitle {
-  margin-top: -30px;
-  margin-bottom: 20vh;
-  
-}
+
 
 
 
@@ -317,13 +311,14 @@ margin-top: 8vh;
 display: flex;
 font-size: 20;
 justify-content: center;
-margin-top: 120px;
+margin-top: -10vh;
+
 }
 
 .images {
 padding-top: 20px;
 justify-content: center;
-margin-bottom: 0px;
+margin-top: 10vh;
 
 }
 
@@ -341,7 +336,4 @@ padding-top: 30px;
 
 
 
-.images {
-  margin: 0 5px;
-}
 </style>

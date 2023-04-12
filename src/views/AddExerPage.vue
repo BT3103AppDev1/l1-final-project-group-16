@@ -266,7 +266,7 @@ export default {
   background-color: green;
   transition-duration: 0.42s;
   justify-content: center;
-  margin-left: -145vh;
+  margin-left: -160vh;
 }
 
 
@@ -301,7 +301,7 @@ text-align: center;
 border-radius: 10px;
 width:30vh;
 height: 30px;
-margin-left: -15vh;
+margin-left:-15vh;
 }
 
 input:hover {
@@ -320,7 +320,7 @@ padding-top: 70px;
   position: relative;
   top: 25%;
   left: 50%;
-  margin-top:5vh;
+  margin-top:2vh;
 }
 
 .quickaddtitle {
@@ -337,7 +337,7 @@ padding-top: 70px;
   justify-content: center;
   text-align: center;
   padding-right: 20vh;
-  margin-left: -125vh;
+  margin-left: -140vh;
 
 }
 
