@@ -13,8 +13,8 @@
       <br><br>
     </div>
 
-    <p class="exercise-header">Exercise - {{ cal.toFixed(1) }} calories</p>
-    <ExerCard :exercise="exercise" v-for="(exercise, index) in exerciseData" :key="index"/>
+    <p class="exercise-header">Exercise - {{ cal.toFixed(1) }} calories burnt</p>
+    <ExerCard :exercise="exercise" v-for="(exercise, index) in exerciseData" :key="index" @delete="deleteExerHandler" @edit="editExerHandler"/>
 
 
 
@@ -29,7 +29,7 @@ import ExerCard from "@/components/ExerCard.vue";
 import AddExerPage from "@/views/AddExerPage.vue";
 import {getAuth, onAuthStateChanged} from "firebase/auth";
 import firebaseApp from "@/firebase.js";
-import { getFirestore, collection, getDoc, getDocs, query, where, doc} from 'firebase/firestore';
+import { getFirestore, collection, getDoc, getDocs, query, where, doc, deleteDoc, onSnapshot} from 'firebase/firestore';
 import MealHeader from '@/components/MealHeader.vue';
 let currEmail=  "";
 
@@ -57,18 +57,90 @@ export default {
     },
 
     methods: {
+
+      async editExerHandler(exercise) {
+        console.log("hihi", exercise);
+        if (confirm("Are you sure you want to edit this exercise?")) {
+          const auth = getAuth();
+          let userEmail;
+          let weight;
+
+          const user = await new Promise((resolve, reject) => {
+            onAuthStateChanged(auth, (user) => {
+              if (user) {
+                resolve(user);
+              } else {
+                reject(new Error("User not found"));
+              }
+            });
+          });
+
+          userEmail = user.email;
+          const userRef = collection(getFirestore(), "Users");
+          const q = query(userRef, where("email", "==", userEmail));
+          const querySnapshot = await getDocs(q);
+          querySnapshot.forEach((doc) => {
+            weight = doc.data().weight;
+          });
+
+          const exerOrder = ['date', 'duration', 'email', 'exerName', 'numCalories'];
+          const exerList = exerOrder.map((key) => {
+            if (key === 'numCalories') {
+              return exercise[key] / weight;
+            } else {
+              return exercise[key];
+            }
+          });
+          this.$router.push({path: "/EditExerPage", query: { exerProp: exerList }});
+        }
+      },
+
+      
+      async deleteExerHandler(exercise) {
+        console.log("helohelo", exercise);
+        if (confirm("Are you sure you want to delete this exercise?")) {
+          const auth = getAuth();
+          let userEmail;
+          console.log(exercise.date);
+          console.log(exercise.email);
+          console.log(exercise.duration);
+          console.log(exercise.exerName);
+          console.log(exercise.numCalories);
+          onAuthStateChanged(auth, async (user) => {
+            if (user) {
+              userEmail = user.email;
+              const exersRef = collection(getFirestore(), "Exercises");
+              const q = query(exersRef, where("date", "==", exercise.date), where("email", "==", exercise.email), where("duration", "==", exercise.duration), 
+              where("exerName", "==", exercise.exerName) , where("numCalories", "==", exercise.numCalories));
+              const querySnapshot = await getDocs(q);
+              querySnapshot.forEach((doc) => {
+                console.log("deletedog");
+                deleteDoc(doc.ref);
+              });
+              const index = this.exerciseData.indexOf(exercise);
+              if (index !== -1) {
+                this.exerciseData.splice(index, 1);
+                this.totalCalories();
+              }
+            }
+          });
+        }
+      },
+      
       addNewExer() {
         this.$router.push('/AddExerPage');
       },
 
-    // totalCalories() {
-    //   let sum = 0;
-    //   for (let i = 0; i < this.exerciseData.length; i++) {
-    //     sum += this.exerciseData[i].numCalories * this.exerciseData[i].duration;
-    //   }
-    //   this.cal = sum;
-    //   console.log(this.exerciseData[0].date);
-    // },
+     totalCalories() {
+        let total = 0;
+          length = this.exerciseData.length;
+          for (let i = 0; i < length; i++) {
+            let cal = this.exerciseData[i].numCalories ;
+            let dur = this.exerciseData[i].duration;
+            total += cal * dur;
+          }
+          this.cal = total;
+     },
 
 
       async retrieveExer() {
@@ -104,14 +176,7 @@ export default {
   
           
           // get the total calories
-          let total = 0;
-          length = this.exerciseData.length;
-          for (let i = 0; i < length; i++) {
-            let cal = this.exerciseData[i].numCalories ;
-            let dur = this.exerciseData[i].duration;
-            total += cal * dur;
-          }
-          this.cal = total;
+          this.totalCalories();
         
 
         });

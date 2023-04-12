@@ -8,6 +8,10 @@
         </div>
         <div class="class-right">
             <span >{{ exercise.numCalories }} Calories / hr </span>
+            <div class="icons">
+              <img @click.stop="showEditButtons = true" class="icon" src="src/assets/images/threedots.png" width="30" height="30"/>
+              <Edit class="editButtons" v-if="showEditButtons == true" @close="showEditButtons = false" @deleteExer="deleteExerHandler" @editExer="editExerHandler" :exercise="exercise" />
+            </div>
         </div>
 </div>
 
@@ -15,10 +19,33 @@
 </template> 
 
 <script>
+import Edit from "@/components/Edit.vue";
 export default {
   
     name: "ExerCard",
     props: ["exercise"],
+
+    components: {
+    Edit,
+  },
+
+  methods: {
+    deleteExerHandler(exercise) {
+      console.log("exercard delete emits", exercise);
+      this.$emit("delete", exercise);
+    },
+
+    editExerHandler(exercise) {
+      console.log("exercard edit emits", exercise);
+      this.$emit("edit", exercise);
+    },
+},
+
+    data() {
+    return {
+      showEditButtons: false,
+    };
+  },
 };
 
 </script>
@@ -61,6 +88,26 @@ export default {
   align-items: center;
   margin-left: auto;
   margin-right: 60px;
+}
+
+.icons{
+    display: flex;
+    justify-items: flex-end;
+    margin-top: -45px;
+    margin-right: -15px;
+    margin-bottom: 20px;
+
+}
+
+.editButtons {
+    margin-top: -150px;
+    margin-left:-70px;
+    position: absolute;
+}
+
+.icon{
+    margin-right: 10px;
+    margin-left: 10px;
 }
 
 

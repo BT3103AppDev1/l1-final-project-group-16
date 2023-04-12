@@ -1,8 +1,8 @@
 <template>
   <div class="whitebox" ref="whitebox">
     <div class="buttons">
-      <button class="edit" @click="editFood">Edit</button>
-      <button class="delete" @click="deleteFood">Delete</button>
+      <button class="edit" @click="edit">Edit</button>
+      <button class="delete" @click="del">Delete</button>
     </div>
   </div>
 </template>
@@ -16,6 +16,10 @@ export default {
       required: true,
     },
     customFood: {
+      type: Object,
+      required: true,
+    },
+    exercise: {
       type: Object,
       required: true,
     }
@@ -36,13 +40,16 @@ export default {
         this.$emit("close");
       }
     },
-    deleteFood() {
+    del() {
       this.$emit("deleteFood", this.food);
       this.$emit("deleteCustom", this.customFood);
+      this.$emit("deleteExer", this.exercise);
     },
-    editFood() {
+    edit() {
       this.$emit("editFood", this.food);
+      console.log("edit.vue edit emits", this.exercise);
       this.$emit("editCustom", this.customFood);
+      this.$emit("editExer", this.exercise);
     },
   },
 };
