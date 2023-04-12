@@ -162,8 +162,8 @@ export default {
               querySnapshot.forEach((doc) => {
                 deleteDoc(doc.ref);
               });
+
               window.alert("Meal successfully deleted.");
-              location.reload();
             }
           });
         }
@@ -270,7 +270,9 @@ export default {
             if (this.customFoodData.length > 0) {
               this.haveCustomFood = true;
             }
-  
+
+
+            
           }
         });
 
@@ -279,7 +281,7 @@ export default {
     },
   created() {
       this.foodData = [];
-      this.retrieveCustomFood();
+
       console.log("paparse");
       axios.get('/src/inputData/food.csv').then(response => {
         let parsedData = Papa.parse(response.data, {
@@ -298,6 +300,10 @@ export default {
       }).catch(error => {
         console.log(error);
       });
+      this.retrieveCustomFood();
+
+
+
 
 
 
@@ -354,7 +360,7 @@ button {
 .labels {
 text-align: center;
 font-size: 15px;
-margin-top: 20px;
+margin-top: 30px;
 display: block;
 
 
@@ -388,7 +394,7 @@ padding-top: 70px;
 position: fixed;
 top: 25%;
 left: 50%;
-margin-top:4vh;
+margin-top:8vh;
 margin-left: -100px;
 
 }
@@ -406,7 +412,6 @@ margin-left: -100px;
 display: flex;
 font-size: 20;
 justify-content: center;
-margin-top: 0px;
 }
 
 .images {

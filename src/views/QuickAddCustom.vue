@@ -1,9 +1,9 @@
 <template>
-
-
     <div>
       <NavigationBar/>
     </div>
+    <br>
+<br>
     <div id="food">
     <TabNav :tabs="['Quick Add', 'Custom Food']" :selected="selected" @selected="setSelected">
       <Tab :isSelected="selected === 'Quick Add'">
@@ -48,7 +48,7 @@
         </select>
        
         <!-- Save Button -->
-        <button class="button" id="saveFood" type="submit" >Save</button><br><br>
+        <button class="saveFoodButton" id="saveFood" type="submit" >Save</button><br><br>
 
   
       </form>
@@ -258,14 +258,7 @@
   
   <style scoped>
   
-  button {
-    border: 2px solid black;
-    border-radius: 50px;
-    color: black;
-    font-weight: 400;
-    display: flex;
-    justify-content: center;
-  }
+
   #saveFood {
   cursor: pointer;
   margin-top: 20px;
@@ -288,20 +281,34 @@
     border-radius: 2px;
 }
   
-  #addCustomFood {
-    cursor: pointer;
-    margin-top: 20px;
-    padding-top: 20px;
-    padding: 16px 20px;
-    border-radius: 20px;
-    border:none;
-    background-color: rgb(86, 239, 86);
-    margin-bottom:20px;
-    margin-left: 20px;
-    border: 2px solid black;
-  }
+.addCustomFood {
+  cursor: pointer;
+  margin-top: 20px;
+  padding-top: 20px;
+  padding: 16px 20px;
+  border-radius: 20px;
+  border:none;
+  background-color: rgb(86, 239, 86);
+  margin-bottom:20px;
+  margin-left: 20px;
+  border: 2px solid black;
+}
+.saveFoodButton{
+  cursor: pointer;
+  margin-top: 20px;
+  padding-top: 20px;
+  padding: 16px 20px;
+  border-radius: 20px;
+  border:none;
+  background-color: rgb(86, 239, 86);
+  margin-bottom:20px;
+  margin-left: -2vh;
+  border: 10px solid black;
+
+}
   
   .labels {
+
       text-align: center;
       font-size: 15px;
       margin-top: 20px;
@@ -309,6 +316,8 @@
 
 
 }
+
+
   .foodTitleCals{
     font-size: 20px;
     font-weight: 500;
@@ -345,6 +354,7 @@
     top: 25%;
     left: 50%;
     margin-left: -15vh;
+    margin-top: 6vh;
 
 }
   .quickaddtitle {
@@ -393,6 +403,8 @@
   text-align: center;
   
   }
+
+
   
   .noCustomFood{
     display: flex;
