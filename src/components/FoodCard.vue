@@ -26,7 +26,6 @@ export default {
 
   methods: {
     deleteFoodHandler(food) {
-      console.log("foodcard.vue delete emits", food);
       this.$emit("delete", food);
     },
 
