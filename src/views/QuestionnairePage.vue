@@ -27,11 +27,16 @@
   
         <label for="goal">What is your goal? <span style="color: red;">*</span></label>
         <select id="goal" name="goal" v-model="goal" required>
-          <option value="Slow Weight Loss">Slow Weight Loss</option>
-          <option value="Gradually Weight Loss">Gradually Weight Loss</option>
-          <option value="Rapid Weight Loss">Rapid Weight Loss</option>
-        </select><br><br>
-  
+          <option value="Weight Loss">Weight Loss</option>
+          <option value="Maintain Weight">Maintain Weight</option>
+          <option value="Weight Gain">Weight Gain</option>
+        </select>
+        <div id = 'calculatedValueContainer'>
+          <label for="calculatedValue">Recommended Calorie Intake Calculator <span style="color: blue;">*</span></label>
+        <input type="number" id="calculatedValue" v-model="calculatedValue" readonly>
+        </div>
+        <br>
+
         <label for="dailyIntakeGoal">What is your daily calorie intake goal? </label>
         <input type="number" id="dailyIntakeGoal" v-model="dailyIntakeGoal" placeholder="Enter your calorie intake"><br><br>
   
@@ -65,7 +70,48 @@
     computed: {
       email() {
         return this.$route.query.email || ''
-      }
+      },
+      calculatedValue() {
+        if (this.weight && this.goal) {
+          var exerciseAdd = 0;
+          if (this.exercise) {
+            if (this.exercise == "Less than 2 hrs") {
+              exerciseAdd = 50
+            } else if (this.exercise == "2 - 5 hrs") {
+              exerciseAdd = 100
+            } else if (this.exercise == "5 - 10 hrs") {
+              exerciseAdd = 150
+            } else {
+              exerciseAdd = 200
+            }
+          }
+          var calGoal = 0;
+          if (this.goal === "Weight Loss") {
+            calGoal = (this.weight * 2.20 * 10)
+            if (this.exercise){
+              return (calGoal + exerciseAdd).toFixed(0);
+            }else{
+              return calGoal.toFixed(0);
+            }
+          } else if (this.goal === "Maintain Weight") {
+            calGoal = (this.weight * 2.20 * 14)
+            if (this.exercise){
+              return (calGoal + exerciseAdd).toFixed(0);
+            }else{
+              return calGoal.toFixed(0);
+            }
+          } else {
+            calGoal = (this.weight * 2.20 * 17)
+            if (this.exercise){
+              return (calGoal + exerciseAdd).toFixed(0);
+            }else{
+              return calGoal.toFixed(0);
+            }
+          }
+        } else {
+           return "";
+          }
+        }
     },
     methods:{
       async submitForm(){
@@ -79,7 +125,8 @@
           weight:this.weight,
           exercise:this.exercise,
           goal:this.goal,
-          dailyIntakeGoal:this.dailyIntakeGoal
+          dailyIntakeGoal:this.dailyIntakeGoal,
+          startDate: new Date().toJSON().slice(0,10)
         })
             .then(() => {
               console.log('Document updated successfully');
@@ -159,4 +206,18 @@
     box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
     border-radius: 2px;
   }
+  #calculatedValueContainer {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+  }
+  #calculatedValue {
+  background-color: transparent;
+  border: none;
+  box-shadow: none;
+  width: fit-content;
+  height: 25px;
+}
+
+
   </style>

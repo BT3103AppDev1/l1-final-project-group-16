@@ -81,7 +81,6 @@
   #signInBtn{
       display: block;
       margin: 0 auto;
-      background-color: black;
       color: white;
       padding: 10px;
       height: 50px;
@@ -89,9 +88,9 @@
       text-align: center;
   }
   #signInBtn:hover {
-      box-shadow: 3px 3px rgb(0, 0, 0);
-      border-radius: 2px;
-  }
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+    border-radius: 2px;
+}
   .formLi {
       display: inline-block;
       text-align: right;

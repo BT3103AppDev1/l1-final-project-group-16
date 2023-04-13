@@ -27,9 +27,6 @@
           <label for="male" class="radioLabels">Male</label>
           <input type="radio" name="gender" id="male" value="Male" v-model="gender">
   
-          <label for="other" class="radioLabels">Other</label>
-          <input type="radio" name="gender" id="other" value="Other" v-model="gender">
-  
         </div>
   
         <div class="form-group">
@@ -46,7 +43,18 @@
           <label class="labels" for="email">Email: </label>
           <input type="email" id = "email" placeholder="user email" v-model="email" disabled>
         </div>
-  
+
+        <div class="form-group">
+          <label class="labels" for="exerGoal">Exercise level: </label>
+          <select id="exerGoal" name="exerGoal" v-model="exerGoal" required>
+            <option value="Less than 2 hrs">Less than 2 hrs</option>
+            <option value="2-5 hrs">2 - 5 hrs</option>
+            <option value="5-10 hrs">5 - 10 hrs</option>
+            <option value="More than 10 hrs">More than 10 hrs</option>
+          </select>
+        </div>
+    
+
         <h5 style="color: #084298"><b>My Goal</b></h5>
   
         <div class="form-group">
@@ -57,16 +65,16 @@
         <div class="form-group">
           <label class="labels" for="dietGoal">Diet Goal: </label>
           <select id="dietGoal" name="dietGoal" v-model="dietGoal" required>
-            <option value="Slow Weight Loss">Slow Weight Loss</option>
-            <option value="Gradually Weight Loss">Gradually Weight Loss</option>
-            <option value="Rapid Weight Loss">Rapid Weight Loss</option>
+            <option value="Weight Loss">Weight Loss</option>
+            <option value="Maintain Weight">Maintain Weight</option>
+            <option value="Weight Gain">Weight Gain</option>
           </select>
         </div>
-  
-        <div class="form-group">
-          <label class="labels" for="goalWeight">Goal Weight (KG): </label>
-          <input type="number" id = "goalWeight" v-model="goalWeight">
+        <div id = 'calculatedValueContainer'>
+          <label for="calculatedValue">Recommended Calorie Intake Calculator <span style="color: blue;">*</span> </label>
+        <input type="number" id="calculatedValue" v-model="calculatedValue" readonly>
         </div>
+
   
       </form>
       <button class="btnGrp" type="button" style="background-color: floralwhite" v-on:click="cancelEdit">Cancel</button>
@@ -97,9 +105,55 @@
         weight:0,
         height:0,
         dailyCal:0,
-        dietGoal:'Gradually Weight Loss',
-        goalWeight:0
+        dietGoal:'Weight Loss',
+        goalWeight:0, 
+        exerGoal: ''
       }
+    },
+    computed: {
+      calculatedValue() {
+        if (this.weight && this.dietGoal) {
+          var exerciseAdd = 0;
+          if (this.exerGoal) {
+            console.log(this.exerGoal)
+            if (this.exerGoal == "Less than 2 hrs") {
+              exerciseAdd = 50
+            } else if (this.exerGoal == "2-5 hrs") {
+              exerciseAdd = 100
+            } else if (this.exerGoal == "5-10 hrs") {
+              exerciseAdd = 150
+            } else {
+              exerciseAdd = 200
+            }
+          }
+          console.log(exerciseAdd)
+          var calGoal = 0;
+          if (this.dietGoal === "Weight Loss") {
+            calGoal = (this.weight * 2.20 * 10)
+            if (this.exerGoal){
+              return (calGoal + exerciseAdd).toFixed(0);
+            }else{
+              return calGoal.toFixed(0);
+            }
+          } else if (this.dietGoal === "Maintain Weight") {
+            calGoal = (this.weight * 2.20 * 14)
+            if (this.exerGoal){
+              return (calGoal + exerciseAdd).toFixed(0);
+            }else{
+              return calGoal.toFixed(0);
+            }
+          } else {
+            calGoal = (this.weight * 2.20 * 17)
+            if (this.exerGoal){
+              return (calGoal + exerciseAdd).toFixed(0);
+            }else{
+              return calGoal.toFixed(0);
+            }
+          }
+        } else {
+           return "";
+          }
+        }
     },
     created() {
       this.renderProfile();
@@ -128,8 +182,9 @@
           this.height = userData?.height || 0;
           this.weight = userData?.weight || 0;
           this.dailyCal = userData?.dailyIntakeGoal || 0;
-          this.dietGoal = userData?.goal || 'Gradually Weight Loss';
+          this.dietGoal = userData?.goal || 'Weight Loss';
           this.goalWeight = userData?.goalWeight || 0;
+          this.exerGoal = userData?.exercise || 'Less than 2 hrs'
   
         }else{
           console.log('No user is signed in')
@@ -149,16 +204,15 @@
           height:this.height,
           weight:this.weight,
           dailyIntakeGoal:this.dailyCal,
-          goal:this.dietGoal,
-          goalWeight:this.goalWeight
-  
+          goal:this.dietGoal,  
+          exercise:this.exerGoal,
         })
             .then(() => {
-              console.log('User document updated successfully');
+              alert('User details updated successfully');
   
             })
             .catch((error) => {
-              console.error('Error updating document: ', error);
+              alert('Error updating document: ', error);
             });
   
         const newPassword = this.password
@@ -167,10 +221,9 @@
               console.log('User password updated successfully');
             })
             .catch((error) => {
-              console.error('Error updating user password: ', error)
+              alert('Error updating user password: ', error)
             })
   
-        alert("Your profile has update successfully!")
         this.$router.push("/ProfilePage");
       },
       cancelEdit(){
@@ -233,9 +286,25 @@
     width: fit-content;
     height: 25px;
   }
+  #exerGoal{
+    width: fit-content;
+    height: 25px;
+  }
   .showPassText{
     margin-left: 2vh;
   }
+
+  #calculatedValue {
+  background-color: transparent;
+  border: none;
+  box-shadow: none;
+  width: fit-content;
+  height: 25px;
+  display: inline-block;
+  text-align: left;
+  width: 300px; /* adjust this value as needed */
+  margin-right: 100px; /* adjust this value as needed */
+}
 
   .btnGrp{
     float: left;
@@ -252,4 +321,7 @@
     border-radius: 30px;
     width: 100px;
   }
-  </style>
+  label {
+    font-size: 16px; /* adjust this value as needed */
+  }
+</style>

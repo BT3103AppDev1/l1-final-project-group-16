@@ -70,7 +70,7 @@
         <h2 style="color:#FF5712;font-weight: bold; font-size: 35px;"> Net Calorie Intake </h2>
       </div>
       <br><br><br><br><br>
-      <h2>{{ this.caloriesNet }} CAL</h2>
+      <h2>{{ this.caloriesNet.toFixed(0) }} CAL</h2>
   </table>
   </div>
   

@@ -1,7 +1,7 @@
 <template>
+  <br>
   <div>
     <div id="header">
-
       <router-link to="/"> <img src="@/assets/images/HomePageElements/Home.png" alt="Home" style="width:42px;height:42px;"></router-link>
       <h1 id="title">CREATE AN ACCOUNT</h1>
       <img src="@/assets/images/CommonElements/HappyPlatesLogo.png" alt="Logo" style="width:250px; height: auto;float: right;">
