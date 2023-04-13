@@ -19,6 +19,7 @@ import EditFoodPage from '@/views/EditFoodPage.vue'
 import EditCustomFoodPage from '@/views/EditCustomFoodPage.vue'
 import EditProfilePage from '@/views/EditProfilePage.vue'
 import EditExerPage from '@/views/EditExerPage.vue'
+import NotFound from '@/components/NotFound.vue'
 import { nextTick } from 'vue';
 
 
@@ -116,6 +117,11 @@ const routes = [
     name: 'EditExerPage',
     component: EditExerPage
   },
+  {
+    path: '/:catchAll(.*)',
+    name: 'NotFound',
+    component: NotFound,
+  }
 
 ]
 

@@ -14,29 +14,11 @@
     </ul>
   </div>
 </template>
-<!-- 
-<script setup>
-import { onMounted, ref } from 'vue';
-import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 
-const loggedIn = ref(false);
-
-// Define Auth 
-let auth;
-onMounted(() => {
-  auth = getAuth();
-  onAuthStateChanged(auth, (user) => {
-    // if user is not null -> set to true 
-    if (user) {
-      loggedIn.value = true;
-    } else {
-      loggedIn.value = false;
-    }
-  });
-
-}); -->
 
 <script>
+import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
+
 export default {
   // created() {
   //       console.log("hihihi");
@@ -50,6 +32,9 @@ export default {
   //     }, 
   methods: {
       handleSignOut() {
+        const auth = getAuth();
+        const user = auth.currentUser;
+        signOut(auth,user)
       // navigate to landing page
       // history.go(-(history.length - 1));
       this.$router.push('/');
