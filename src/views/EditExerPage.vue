@@ -2,7 +2,7 @@
   <div>
     <NavigationBar/>
     <div class="QuickEdit">
-      <img class="images" src="src/assets/images/exer.png" width="100" height="120">
+      <img class="images" src="@/assets/images/exer.png" width="100" height="120">
       <h1 class="edittitle">Edit Exercise</h1>
     </div>
     <div class="centered">

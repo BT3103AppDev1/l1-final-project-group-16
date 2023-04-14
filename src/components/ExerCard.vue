@@ -9,7 +9,7 @@
         <div class="class-right">
             <span >{{ exercise.numCalories }} Calories / hr </span>
             <div class="icons">
-              <img @click.stop="showEditButtons = true" class="icon" src="src/assets/images/threedots.png" width="30" height="30"/>
+              <img @click.stop="showEditButtons = true" class="icon" src="@/assets/images/threedots.png" width="30" height="30"/>
               <Edit class="editButtons" v-if="showEditButtons == true" @close="showEditButtons = false" @deleteExer="deleteExerHandler" @editExer="editExerHandler" :exercise="exercise" />
             </div>
         </div>

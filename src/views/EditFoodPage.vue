@@ -6,7 +6,7 @@
   <div id="food">
     <Tab :isSelected="true">
       <div class="QuickAdd">
-        <img class="images" src="src/assets/images/forkspoon.png" width="130" height="120">
+        <img class="images" src="@/assets/images/forkspoon.png" width="130" height="120">
         <h1 class="quickaddtitle">Edit meal</h1>
       </div>
       <div class="centered">

@@ -6,7 +6,7 @@
     <div class="save">
       <button class="addButton"  v-on:click="addNewFood">
         <div class="button-content">
-        <img class="plusimage" src="src/assets/images/greenadd.png"  id="saveButton" >
+        <img class="plusimage" src="@/assets/images/greenadd.png"  id="saveButton" >
         <span class="button-text"> Add New Food</span>
         </div>
         </button>

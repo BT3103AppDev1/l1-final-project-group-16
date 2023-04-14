@@ -6,9 +6,9 @@
         <div class="card-right">
 
         <div class="icons">
-            <img  @click="showEditButtons=true" class="icon" src="src/assets/images/threedots.png" width="30" height="30">
+            <img  @click="showEditButtons=true" class="icon" src="@/assets/images/threedots.png" width="30" height="30">
             <Edit class="editButtons" v-if="showEditButtons == true" @deleteCustom="deleteFoodHandler" @editCustom="editFoodHandler" :customFood="customFood" />
-            <img @click="goToQuickAddCustom" class="icon" src="src/assets/images/greenadd.png" width="30" height="30">
+            <img @click="goToQuickAddCustom" class="icon" src="@/assets/images/greenadd.png" width="30" height="30">
      
         </div>
             <span >{{ customFood.numCalories }} Calories </span>

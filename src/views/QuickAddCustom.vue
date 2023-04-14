@@ -8,7 +8,7 @@
     <TabNav :tabs="['Quick Add', 'Custom Food']" :selected="selected" @selected="setSelected">
       <Tab :isSelected="selected === 'Quick Add'">
         <div class="QuickAdd">
-          <img class="forkspoon" src="src/assets/images/forkspoon.png" width="130" height="120">
+          <img class="forkspoon" src="@/assets/images/forkspoon.png" width="130" height="120">
 
           <h1 class="quickaddtitle">Quick Add</h1>
   </div>
@@ -57,7 +57,7 @@
   
       <Tab :isSelected="selected === 'Custom Food'">
         <div class="QuickAdd">
-    <img class="imagescustom" src="src/assets/images/customfood.png" width="70" height="70">
+    <img class="imagescustom" src="@/assets/images/customfood.png" width="70" height="70">
     <h1 class="customfoodtitle"> Custom Food</h1>
   </div>
   <div class="centeredCustom">

@@ -12,12 +12,6 @@ export default {
 </script>
 <style>
 
-@font-face {
-  font-family:'SF Pro';
-  src: url('SFPRODISPLAYREGULAR.OTF') format('opentype'),
-
-}
-
 #app {
 
 /* font-family: Avenir, Helvetica, Arial, sans-serif; */

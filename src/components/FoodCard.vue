@@ -12,7 +12,7 @@
     <div class="card-right">
       <span>{{ food.numCalories }} Calories / Serving</span>
       <div class="icons">
-        <img @click.stop="showEditButtons = true" class="icon" src="src/assets/images/threedots.png" width="30" height="30"/>
+        <img @click.stop="showEditButtons = true" class="icon" src="@/assets/images/threedots.png" width="30" height="30"/>
         <Edit class="editButtons" v-if="showEditButtons == true" @close="showEditButtons = false" @deleteFood="deleteFoodHandler" @editFood="editFoodHandler" :food="food" />
       </div>
     </div>

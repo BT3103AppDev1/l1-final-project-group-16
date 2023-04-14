@@ -6,7 +6,7 @@
   <TabNav :tabs="['Add Exercise']" :selected="selected" @selected="setSelected">
     <Tab :isSelected="selected === 'Add Exercise'">
   <div class="QuickAdd">
-  <img class="images" src="src/assets/images/exer.png" width="100" height="120">
+  <img class="images" src="@/assets/images/exer.png" width="100" height="120">
   <h1 class="quickaddtitle">Add Exercise</h1>
 </div>
 <div class="centered">
