@@ -70,7 +70,7 @@ export default {
     },
     methods : {
       async renderProfile() {
-      return new Promise(async (resole, reject) => {
+      return new Promise(async (resolve, reject) => {
         const auth = getAuth();
         onAuthStateChanged(auth, async (user) => {
           if (user) {

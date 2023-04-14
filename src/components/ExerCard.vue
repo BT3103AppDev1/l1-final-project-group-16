@@ -13,15 +13,13 @@
               <Edit class="editButtons" v-if="showEditButtons == true" @close="showEditButtons = false" @deleteExer="deleteExerHandler" @editExer="editExerHandler" :exercise="exercise" />
             </div>
         </div>
-</div>
-
-
+    </div>
 </template> 
 
 <script>
+
 import Edit from "@/components/Edit.vue";
 export default {
-  
     name: "ExerCard",
     props: ["exercise"],
 
@@ -47,7 +45,6 @@ export default {
     };
   },
 };
-
 </script>
 
 
@@ -73,7 +70,6 @@ export default {
   margin-left: 50px;
   font-weight: bold;
 }
-
 .duration {
   display: flex;
   align-items: center;
@@ -89,14 +85,12 @@ export default {
   margin-left: auto;
   margin-right: 60px;
 }
-
 .icons{
     display: flex;
     justify-items: flex-end;
     margin-top: -45px;
     margin-right: -15px;
     margin-bottom: 20px;
-
 }
 
 .editButtons {

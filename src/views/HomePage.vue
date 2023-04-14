@@ -98,7 +98,7 @@ import ProgressBar from "@/components/ProgressBar.vue"
 
 import fireBaseApp from "../firebase";
 import { getAuth, onAuthStateChanged } from "@firebase/auth";
-import { getFirestore, collection, getDoc, getDocs, query, where, doc} from 'firebase/firestore';
+import { getFirestore, collection, getDoc, getDocs, query, where, updateDoc, doc} from 'firebase/firestore';
 
 export default {
   mounted() {
@@ -110,12 +110,17 @@ export default {
       this.date = this.$route.query.updatedDate;
       console.log(this.date)
     }
+    
   const breakfastCalPromise = this.updateMealCal('Breakfast');
   const lunchCalPromise = this.updateMealCal('Lunch');
   const dinnerCalPromise = this.updateMealCal('Dinner');
   const snacksCalPromise = this.updateMealCal('Snacks');
   const calBurntPromise = this.updateCalBurnt();
   const calorieGoal = this.calorieGoal();
+  if (this.date == new Date().toLocaleDateString().replaceAll("/","-")) {
+      const streakPromise = this.updateStreaks();
+  }
+
   Promise.all([breakfastCalPromise, lunchCalPromise, dinnerCalPromise, snacksCalPromise, calBurntPromise, calorieGoal])
     .then((values) => {
       const netCalorie = values[0] + values[1] + values[2] + values[3] - values[4];
@@ -162,6 +167,55 @@ export default {
   }
   ,
   methods: {
+    async updateStreaks() {
+      return new Promise(async (resole, reject) => {
+        const auth = getAuth();
+        onAuthStateChanged(auth, async (user) => {
+          if (user) {
+            // steps to retrieve from questionnaire
+            const userCollection = collection(getFirestore(), "Users");
+            const streakQuery = query(
+              userCollection,
+              where("email", "==", this.useremail),
+            );
+            const querySnapshotU = await getDocs(streakQuery);
+            const userDocument = (querySnapshotU.docs)[0]
+            var streakNum = userDocument.data().streakNumber
+            var streaksDate = userDocument.data().streaksDate
+            var yesterday =new Date(Date.now() - 86400000).toLocaleDateString('en-GB').replace(/\//g, '-');
+            console.log(streakNum)
+            var newStreak = 0;
+            if (streaksDate == new Date().toLocaleDateString().replaceAll("/","-")) {
+              newStreak = streakNum;
+            }
+            const foodCollection = collection(getFirestore(), "Meals");
+            const foodQuery = query(
+              userCollection,
+              where("email", "==", this.useremail),
+              where("date", "==", yesterday)
+            );
+            const querySnapshotF = await getDocs(foodQuery);
+            if (querySnapshotU.docs){
+              console.log(streaksDate)
+              if (streaksDate == yesterday) {
+                newStreak = parseInt(streakNum) + 1
+                console.log(newStreak)
+              }             
+            }
+            streaksDate = new Date().toLocaleDateString().replaceAll("/","-")
+            const changeStreaksUserCollection = doc(collection(getFirestore(), "Users"), this.useremail);
+            await updateDoc(changeStreaksUserCollection, {
+              streakNumber:newStreak,
+              streaksDate:streaksDate,
+            }) 
+            resole(newStreak);
+          } else {
+            reject("User not authenticated.");
+          }
+        }
+        )
+      })
+    },
     async calorieGoal() {
       return new Promise(async (resole, reject) => {
         const auth = getAuth();
@@ -254,41 +308,6 @@ export default {
         });
       });
     },
-    // async updateMealCal(mealType) {
-    //   const auth = getAuth();
-    //   onAuthStateChanged(auth, async (user) => {
-    //     if (user) {
-    //       this.useremail = user.email;
-    //       const queryDate = this.date
-    //       const mealsCollection = collection(getFirestore(), "Meals");
-    //       const mealQuery = query(
-    //         mealsCollection,
-    //         where("email", "==", this.useremail),
-    //         where("date", "==", queryDate),
-    //         where("mealType", "==", mealType)
-    //       );
-    //       const querySnapshot = await getDocs(mealQuery);
-    //       var totalMealCalorie = 0;
-    //       querySnapshot.forEach((doc) => {
-    //         const docdata = doc.data();
-    //         const nCal = docdata.numCalories;
-    //         const nSer = docdata.numServings;
-    //         var totalCal = nCal * nSer;
-    //         totalMealCalorie += totalCal;
-    //       });
-    //       if (mealType === 'Breakfast') {
-    //         this.breakfastCal = totalMealCalorie;
-    //         return totalMealCalorie
-    //       } else if (mealType === 'Lunch') {
-    //         this.lunchCal = totalMealCalorie;
-    //       } else if (mealType === 'Dinner') {
-    //         this.dinnerCal = totalMealCalorie;
-    //       } else if (mealType === 'Snacks') {
-    //         this.snacksCal = totalMealCalorie;
-    //       }
-    //       }
-    //   });
-    // }
   },
   name:"HomePage" ,
   components : {

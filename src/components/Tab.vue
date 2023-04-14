@@ -2,7 +2,7 @@
     <div v-if="isSelected">
         <slot></slot>
     </div>
-</template>>
+</template>
 
 <script>
 
@@ -14,11 +14,7 @@ export default {
     }
 }
 
-
-
 </script>
 
 <style>
-
-
 </style>

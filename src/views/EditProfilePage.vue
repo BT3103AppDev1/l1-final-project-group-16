@@ -238,11 +238,11 @@
   
   <style scoped>
   .userProfile{
-    margin-top: 15vh;
+    margin-top: 5vh;
     font-size: 1.2rem;
     height: 60px;
     float: left;
-    margin-left: 75vh;
+    margin-left: 65vh;
     height:max-content;
     justify-content: center;
     text-align: center;

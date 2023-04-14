@@ -9,30 +9,21 @@
         <span class="button-text"> Add New Exercise</span>
         </div>
         </button>
-          
-      <br><br>
+        <br><br>
     </div>
-
     <p class="exercise-header">Exercise - {{ cal.toFixed(1) }} calories burnt</p>
     <ExerCard :exercise="exercise" v-for="(exercise, index) in exerciseData" :key="index" @delete="deleteExerHandler" @edit="editExerHandler"/>
-
-
-
   </div>
 
 </template>
 
-
 <script>
+
 import NavigationBar from "@/components/NavigationBar.vue";
 import ExerCard from "@/components/ExerCard.vue";
-import AddExerPage from "@/views/AddExerPage.vue";
 import {getAuth, onAuthStateChanged} from "firebase/auth";
-import firebaseApp from "@/firebase.js";
 import { getFirestore, collection, getDoc, getDocs, query, where, doc, deleteDoc, onSnapshot} from 'firebase/firestore';
-import MealHeader from '@/components/MealHeader.vue';
 let currEmail=  "";
-
 
 export default {
     name:"ExerciseLog" ,
@@ -168,32 +159,14 @@ export default {
             querySnapshot.forEach((doc) => {
               this.exerciseData.push(doc.data());
             });
-
-       
-
-
           }
-  
-          
           // get the total calories
           this.totalCalories();
-        
-
         });
       },
-
-
-
   }
-  }
-
-        
-      
-    
-    
-
+}
 </script>
-
 
 <style scoped>
 button{
@@ -238,7 +211,6 @@ button{
 
 }
 
-
 .exercise-header {
   background-color:  rgb(135, 187, 255);;
   font-size: 25px;
@@ -251,8 +223,6 @@ button{
   box-shadow: 2px px 6px rgba(121, 124, 126, 0.3);
   margin-top: 10px;
   margin-top: 3vh;
-
-
 }
 
 </style>

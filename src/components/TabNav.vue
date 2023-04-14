@@ -16,7 +16,6 @@
 </template>
 
 <script>
-// import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default {
     props: {
@@ -39,9 +38,7 @@ export default {
         }
     }
 }
-
 </script>
-
 <style scoped>
 
 

@@ -11,12 +11,6 @@ export default {
 }
 </script>
 <style>
-/* @font-face {
-  font-family:'Montserrat';
-  src: url('Montserrat-VariableFont_wght.ttf') format('opentype'),
-      url('Montserrat-VariableFont_wght.ttf') format('woff'),
-      url('Montserrat-VariableFont_wght.ttf') format('truetype');
-} */
 
 @font-face {
   font-family:'SF Pro';

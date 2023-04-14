@@ -115,7 +115,6 @@
     },
     methods:{
       async submitForm(){
-        //const userCollection = db.collection('Users');
         const email = this.email;
         console.log(email);
         const userCollection = doc(collection(getFirestore(), "Users"), email);
@@ -126,7 +125,9 @@
           exercise:this.exercise,
           goal:this.goal,
           dailyIntakeGoal:this.dailyIntakeGoal,
-          startDate: new Date().toJSON().slice(0,10)
+          startDate: new Date().toJSON().slice(0,10),
+          streaksDate: new Date().toLocaleDateString().replaceAll("/","-"),
+          streakNumber: 0
         })
             .then(() => {
               console.log('Document updated successfully');

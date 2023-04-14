@@ -1,29 +1,22 @@
 <template>
      <form @submit.prevent="addCustomFood" class="newFood"> 
-        <!-- Quick Add Form -->
-        <label class="labels" for="foodName">FOOD NAME</label>
-        <input  class="formfields"  id="foodName" placeholder="Enter Custom Food Name " v-model="foodName" />
-     
-        
-        <div>
+      <!-- Quick Add Form -->
+      <label class="labels" for="foodName">FOOD NAME</label>
+      <input  class="formfields"  id="foodName" placeholder="Enter Custom Food Name " v-model="foodName" />
+      <div>
         <label class="labels" for="foodName">NUMBER OF CALORIES</label>
         <input class="formfields" id="numCalories" placeholder="Enter Calories Per Serving" v-model="numCalories" />
       </div>
         
         <!-- Save Button -->
         <button class="buttonSaveFood" id="saveFood" type="submit" >Save Food</button><br><br>
-
       </form>
-
 </template> 
 
 <script>
 
 import NavigationBar from "@/components/NavigationBar.vue";
-import FoodCard from "@/components/FoodCard.vue";
-import AddFoodPage from "@/views/AddFoodPage.vue";
 import {getAuth, onAuthStateChanged} from "firebase/auth";
-import firebaseApp from "@/firebase.js";
 import { getFirestore, collection, getDoc, getDocs, query, where, doc, setDoc} from 'firebase/firestore';
 
 let currEmail=  "";
@@ -71,8 +64,8 @@ export default {
       let cutomFoodData = {
         foodName: this.foodName.value,
         numCalories: this.numCalories.value
-
       };
+      
       const current = new Date();
       const yyyy = current.getFullYear();
       let mm = current.getMonth() + 1; // Months start at 0!

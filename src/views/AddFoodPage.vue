@@ -49,7 +49,6 @@
         <option>10</option>
       </select>
 
-      
       <!-- Save Button -->
       <button class="button" id="saveFood" type="submit" >Save</button><br><br>
 
@@ -72,8 +71,7 @@
   <div class="meal-header" v-if="haveCustomFood==true && showForm==false">
     <p> Your Custom Foods</p>
   </div>
-
-  <CustomFoodCard  v-if="showForm == false" :customFood="food" v-for="(food, index) in customFoodData" :key="index" @delete="deleteFoodHandler" @edit="editFoodHandler"/>
+    <CustomFoodCard  v-if="showForm == false" :customFood="food" v-for="(food, index) in customFoodData" :key="index" @delete="deleteFoodHandler" @edit="editFoodHandler"/>
 
     </Tab>
   </TabNav>
@@ -233,12 +231,9 @@ export default {
 
       }
       // add to meal collections
-
       alert("Added Food Successfully")
-
       console.log(date);
       this.$router.push('/FoodLogPage');
-
     
     },
 
@@ -270,14 +265,9 @@ export default {
             if (this.customFoodData.length > 0) {
               this.haveCustomFood = true;
             }
-
-
-            
           }
         });
-
       }
-
     },
   created() {
       this.foodData = [];
@@ -301,14 +291,8 @@ export default {
         console.log(error);
       });
       this.retrieveCustomFood();
-
-
-
-
-
-
-    }
   }
+}
 
 
 </script>
@@ -451,7 +435,6 @@ padding-top: 30px;
   text-align: center;
   height: 50vh;
 
-  
 
 }
 

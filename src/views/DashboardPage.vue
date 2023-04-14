@@ -37,11 +37,39 @@ export default {
         streaks:0
       }
     },
+    created() {
+      this.streakUpdate()
+    },
+    
     async mounted() {
       
     },
     methods: {
-      async displayWeeklyCharts() {
+      async streakUpdate() {
+      return new Promise(async (resolve, reject) => {
+        const auth = getAuth();
+        onAuthStateChanged(auth, async (user) => {
+          if (user) {
+            this.useremail = user.email;
+            // steps to retrieve from questionnaire
+            const userCollection = collection(getFirestore(), "Users");
+            const profileQuery = query(
+              userCollection,
+              where("email", "==", this.useremail),
+            );
+            const querySnapshot = await getDocs(profileQuery);
+            const userDocument = (querySnapshot.docs)[0]
+            this.streaks = userDocument.data().streakNumber;
+
+            resolve(0);
+          } else {
+            reject("User not authenticated.");
+          }
+        }
+        )
+      })
+    },
+    async displayWeeklyCharts() {
         const auth = getAuth();
         onAuthStateChanged(auth, async (user) => {
           if (user) {

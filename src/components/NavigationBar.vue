@@ -20,38 +20,18 @@
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 
 export default {
-  // created() {
-  //       console.log("hihihi");
-  //       const auth = getAuth();
-  //       onAuthStateChanged(auth, (user) => {
-  //         if (user) {
-  //           this.user = user;
-  //           console.log(this.currentUser.email);
-  //         }
-  //       });
-  //     }, 
+
   methods: {
       handleSignOut() {
         const auth = getAuth();
         const user = auth.currentUser;
         signOut(auth,user)
       // navigate to landing page
-      // history.go(-(history.length - 1));
       this.$router.push('/');
     },
   }
 };
 </script>
-
-
-// const handleSignOut = () => {
-//   // signOut(auth).then(() => {
-//     this.$router.push('/');
-//   // });
-// };
-
-
-<!-- </script> -->
 
 <style>
 

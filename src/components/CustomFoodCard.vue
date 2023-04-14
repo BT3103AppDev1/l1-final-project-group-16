@@ -11,14 +11,9 @@
             <img @click="goToQuickAddCustom" class="icon" src="src/assets/images/greenadd.png" width="30" height="30">
      
         </div>
-
             <span >{{ customFood.numCalories }} Calories </span>
-
         </div>
-
     </div>
-
-
 </template> 
 
 <script>
@@ -89,7 +84,6 @@ export default {
   margin-left: auto;
   margin-right: 30px;
 }
-
 .icons{
     display: flex;
     justify-items: flex-end;
@@ -98,7 +92,6 @@ export default {
     margin-right: -15vh;
 
 }
-
 .icon{
     margin-right: 10px;
     margin-left: 10px;

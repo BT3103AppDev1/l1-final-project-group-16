@@ -256,10 +256,10 @@
   
   </script>
   
-  <style scoped>
+<style scoped>
   
 
-  #saveFood {
+#saveFood {
   cursor: pointer;
   margin-top: 20px;
   padding-top: 20px;
@@ -270,10 +270,9 @@
   background-color: green;
   transition-duration: 0.42s;
   justify-content: center;
-    border-radius: 10px; /* make the edges of the button rounded */
+  border-radius: 10px; /* make the edges of the button rounded */
   padding: 10px 25px; /* add some padding to the button */
   color: black; 
-
 }
 
 #saveFood:hover {
@@ -393,10 +392,6 @@
   
   }
   
-  /* .newFood {
-  margin-top: 100px;
-  } */
-  
   #food {
   justify-content: center;
   display: flex;
@@ -406,7 +401,6 @@
   }
 
 
-  
   .noCustomFood{
     display: flex;
     justify-content: center;
@@ -414,12 +408,8 @@
     font-style: italic;
     align-items: center;
     text-align: center;
-    height: 50vh;
-  
-    
-  
+    height: 50vh;    
   }
-  
   .meal-header {
     background-color: rgb(135, 187, 255);
     font-size: 25px;
@@ -433,7 +423,6 @@
     margin-top: 10px;
   
   }
-  
   .images {
     margin: 0 5px;
   }
