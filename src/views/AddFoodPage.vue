@@ -133,7 +133,6 @@ export default {
 
   methods: {
     async editFoodHandler(customFood) {
-        console.log("hihi");
         console.log(customFood);
         if (confirm("Are you sure you want to edit this meal?")) {
           console.log("foodlogpage edit emitted");
@@ -271,25 +270,51 @@ export default {
     },
   created() {
       this.foodData = [];
-
-      console.log("paparse");
-      axios.get('/src/inputData/food.csv').then(response => {
-        let parsedData = Papa.parse(response.data, {
-          header: true, 
-          dynamicTyping: true, 
-          skipEmptyLines: true,
-        });
-
-        let foodNames = parsedData.data.map(food => {
+      const url = 'https://raw.githubusercontent.com/Lu-Yi-Fan/Testing/main/food.csv';
+      fetch(url)
+      .then((response) => {
+        return response.text();
+      })
+      .then((csvText) => {
+        // Process the CSV data
+        // console.log(csvText);
+        // Here, you can parse the CSV data as needed
+        // For example, you can use a library like Papa Parse to parse the CSV data into an array
+        const csvData = Papa.parse(csvText);
+        // console.log(csvData);
+        let foodNames = csvData.data.map(food => {
           return {
-            foodName: food.Food,
-            numCalories: food.Calories,
+            foodName: food[0],
+            numCalories: food[2],
           };
         });
         this.foodNames = foodNames;
-      }).catch(error => {
-        console.log(error);
+
+      })
+      .catch((error) => {
+        // Handle any errors
       });
+
+
+
+
+      // axios.get('/src/inputData/food.csv').then(response => {
+      //   let parsedData = Papa.parse(response.data, {
+      //     header: true, 
+      //     dynamicTyping: true, 
+      //     skipEmptyLines: true,
+      //   });
+
+      //   let foodNames = parsedData.data.map(food => {
+      //     return {
+      //       foodName: food.Food,
+      //       numCalories: food.Calories,
+      //     };
+      //   });
+      //   this.foodNames = foodNames;
+      // }).catch(error => {
+      //   console.log(error);
+      // });
       this.retrieveCustomFood();
   }
 }

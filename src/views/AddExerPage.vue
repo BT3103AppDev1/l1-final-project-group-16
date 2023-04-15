@@ -64,6 +64,7 @@ import MealHeader from '@/components/MealHeader.vue';
 import axios from 'axios';
 import Papa from 'papaparse';
 
+
 let currEmail=  "";
 
 export default {
@@ -182,72 +183,64 @@ export default {
               this.weight = doc.data().weight;
               console.log(this.weight);
             });
-  
           }
-    
         });
       }
-
-    // async retrieveCustomExercise() {
-    //     const auth = getAuth();
-    //     let userEmail;
-    //     onAuthStateChanged(auth, async (user) => {
-    //       console.log("Auth state changed:", user);
-    //       if (user) {
-    //         userEmail = user.email;
-    //         console.log("Current user email:", userEmail);
-    //         const current = new Date();
-    //         const yyyy = current.getFullYear();
-    //         let mm = current.getMonth() + 1; // Months start at 0!
-    //         let dd = current.getDate();
-    //         if (dd < 10) dd = '0' + dd;
-    //         if (mm < 10) mm = '0' + mm;
-    //         const today = dd + '-' + mm + '-' + yyyy;
-    //         // console.log(today);
-    //         const mealsRef = collection(getFirestore(), "CustomExercise");
-    //         console.log(mealsRef);
-    //         const q = query(mealsRef, where("email", "==", userEmail), where("date","==", today));
-    //         const querySnapshot = await getDocs(q);
-    //         querySnapshot.forEach((doc) => {
-    //           this.customExerData.push(doc.data());
-    //         });
-
-    //         // if more than 0, the change this to true 
-    //         if (this.customExerData.length > 0) {
-    //           this.haveCustomExer = true;
-    //         }
-  
-    //       }
-    //     });
-
-    //   }
-
     },
   created() {
+      window.location.reload();
+
       this.exerData = [];
       this.getUserWeight();
-      // this.retrieveCustomExercise();
-      axios.get('/src/inputData/exer.csv').then(response => {
-        let parsedData = Papa.parse(response.data, {
-          header: true, 
-          dynamicTyping: true, 
-          skipEmptyLines: true,
-        });
-
-        let exerNames = parsedData.data.map(exer => {
+      const url = 'https://raw.githubusercontent.com/Lu-Yi-Fan/Testing/main/exer.csv';
+      fetch(url)
+      .then((response) => {
+        return response.text();
+      })
+      .then((csvText) => {
+        // Process the CSV data
+        // console.log(csvText);
+        // Here, you can parse the CSV data as needed
+        // For example, you can use a library like Papa Parse to parse the CSV data into an array
+        const csvData = Papa.parse(csvText)
+        // console.log(csvData);
+        let exerNames = csvData.data.map(exer => {
+          // console.log(exer[0])
+          // console.log(exer[5])
           return {
-            exerName: exer.Exercise,
-            numCalories: exer.Calories,
+            exerName: exer[0],
+            numCalories: exer[5],
           };
         });
         this.exerNames = exerNames;
-      }).catch(error => {
-        console.log(error);
+
+      })
+      .catch((error) => {
+        // Handle any errors
       });
-
-
-  }
+      // // use csvData from here onwards
+      // axios.get('/src/inputData/exer.csv').then(response => {
+      //   let parsedData = Papa.parse(response.data, {
+      //     header: true, 
+      //     dynamicTyping: true, 
+      //     skipEmptyLines: true,
+      //   });
+        // console.log(parsedData)
+        // let exerNames = parsedData.data.map(exer => {
+          // console.log(exer.Exercise)
+          // console.log(exer.Calories)
+          // return {
+          //   exerName: exer.Exercise,
+          //   numCalories: exer.Calories,
+          // };
+        // });
+        // this.exerNames = exerNames;
+      // }).catch(error => {
+      //   console.log(error);
+      // });
+    }
 }
+
 
 
 </script>

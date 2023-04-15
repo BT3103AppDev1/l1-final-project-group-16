@@ -77,9 +77,9 @@
           if (this.exercise) {
             if (this.exercise == "Less than 2 hrs") {
               exerciseAdd = 50
-            } else if (this.exercise == "2 - 5 hrs") {
+            } else if (this.exercise == "2-5 hrs") {
               exerciseAdd = 100
-            } else if (this.exercise == "5 - 10 hrs") {
+            } else if (this.exercise == "5-10 hrs") {
               exerciseAdd = 150
             } else {
               exerciseAdd = 200
