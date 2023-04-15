@@ -188,8 +188,6 @@ export default {
       }
     },
   created() {
-      window.location.reload();
-
       this.exerData = [];
       this.getUserWeight();
       const url = 'https://raw.githubusercontent.com/Lu-Yi-Fan/Testing/main/exer.csv';
