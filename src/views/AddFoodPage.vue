@@ -132,6 +132,32 @@ export default {
 
 
   methods: {
+    async displayFud() {
+      const url = 'https://raw.githubusercontent.com/Lu-Yi-Fan/Testing/main/food.csv';
+      await fetch(url)
+      .then((response) => {
+        return response.text();
+      })
+      .then((csvText) => {
+        // Process the CSV data
+        // console.log(csvText);
+        // Here, you can parse the CSV data as needed
+        // For example, you can use a library like Papa Parse to parse the CSV data into an array
+        const csvData = Papa.parse(csvText);
+        // console.log(csvData);
+        let foodNames = csvData.data.map(food => {
+          return {
+            foodName: food[0],
+            numCalories: food[2],
+          };
+        });
+        this.foodNames = foodNames;
+
+      })
+      .catch((error) => {
+        // Handle any errors
+      });
+    },
     async editFoodHandler(customFood) {
         console.log(customFood);
         if (confirm("Are you sure you want to edit this meal?")) {
@@ -270,31 +296,8 @@ export default {
     },
   created() {
       this.foodData = [];
-      const url = 'https://raw.githubusercontent.com/Lu-Yi-Fan/Testing/main/food.csv';
-      fetch(url)
-      .then((response) => {
-        return response.text();
-      })
-      .then((csvText) => {
-        // Process the CSV data
-        // console.log(csvText);
-        // Here, you can parse the CSV data as needed
-        // For example, you can use a library like Papa Parse to parse the CSV data into an array
-        const csvData = Papa.parse(csvText);
-        // console.log(csvData);
-        let foodNames = csvData.data.map(food => {
-          return {
-            foodName: food[0],
-            numCalories: food[2],
-          };
-        });
-        this.foodNames = foodNames;
-
-      })
-      .catch((error) => {
-        // Handle any errors
-      });
-
+      this.displayFud();
+      
 
 
 
