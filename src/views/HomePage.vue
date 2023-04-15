@@ -30,22 +30,22 @@
     </tr>
     
     <tr>
-      <td style="background-image: url('src/assets/images/MealIcons/Breakfast.png'); background-size: cover;"></td>
+      <img src="@/assets/images/MealIcons/Breakfast.png" style='width: 120px;'>
       <td>{{ this.breakfastCal }} CALS</td>
     </tr>
     
     <tr>
-      <td style="background-image: url('src/assets/images/MealIcons/Lunch.png'); background-size: cover;"></td>
+      <img src="@/assets/images/MealIcons/Lunch.png" style='width: 120px;'>
       <td>{{ this.lunchCal }} CALS</td>
     </tr>
     
     <tr>
-      <td style="background-image: url('src/assets/images/MealIcons/Dinner.png'); background-size: cover;"></td>
+      <img src="@/assets/images/MealIcons/Dinner.png" style='width: 120px;'>
       <td>{{ this.dinnerCal }} CALS</td>
     </tr>
     
     <tr>
-      <td style="background-image: url('src/assets/images/MealIcons/Snacks.png'); background-size: cover;"></td>
+      <img src="@/assets/images/MealIcons/Snacks.png" style='width: 120px;'>
       <td>{{ this.snacksCal }} CALS</td>
     </tr>
   
