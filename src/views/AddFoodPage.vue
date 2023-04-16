@@ -161,7 +161,7 @@ export default {
     async editFoodHandler(customFood) {
         console.log(customFood);
         if (confirm("Are you sure you want to edit this meal?")) {
-          console.log("foodlogpage edit emitted");
+          // console.log("foodlogpage edit emitted");
           const customFoodOrder = ['date', 'email', 'foodName','numCalories'];
           const customFoodList = customFoodOrder.map((key) => [customFood[key]]);
           console.log(customFoodList);
@@ -170,9 +170,8 @@ export default {
       },
 
     async deleteFoodHandler(customFood) {
-        console.log("foodlogpage delete emitted");
+        // console.log("foodlogpage delete emitted");
         if (confirm("Are you sure you want to delete this meal?")) {
-        console.log("emit received");
           const auth = getAuth();
           let userEmail;
           onAuthStateChanged(auth, async (user) => {
@@ -185,7 +184,6 @@ export default {
               querySnapshot.forEach((doc) => {
                 deleteDoc(doc.ref);
               });
-
               window.alert("Meal successfully deleted.");
             }
           });

@@ -88,15 +88,14 @@ export default {
 
       
       async deleteExerHandler(exercise) {
-        console.log("helohelo", exercise);
         if (confirm("Are you sure you want to delete this exercise?")) {
           const auth = getAuth();
           let userEmail;
-          console.log(exercise.date);
-          console.log(exercise.email);
-          console.log(exercise.duration);
-          console.log(exercise.exerName);
-          console.log(exercise.numCalories);
+          // console.log(exercise.date);
+          // console.log(exercise.email);
+          // console.log(exercise.duration);
+          // console.log(exercise.exerName);
+          // console.log(exercise.numCalories);
           onAuthStateChanged(auth, async (user) => {
             if (user) {
               userEmail = user.email;
@@ -105,9 +104,9 @@ export default {
               where("exerName", "==", exercise.exerName) , where("numCalories", "==", exercise.numCalories));
               const querySnapshot = await getDocs(q);
               querySnapshot.forEach((doc) => {
-                console.log("deletedog");
                 deleteDoc(doc.ref);
               });
+              alert("Exercise Successfully Deleted")
               const index = this.exerciseData.indexOf(exercise);
               if (index !== -1) {
                 this.exerciseData.splice(index, 1);

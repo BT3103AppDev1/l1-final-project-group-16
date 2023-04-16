@@ -1,10 +1,12 @@
 <template>
   <NavigationBar/>
   <div class="homePageContainer1">
+      <!-- Container containing calendar and the text of the date displayed  -->
       <div class="childContainer1">
           <div class="calendar">
-              <ul>
+              <ul> 
                   <router-link to="/CalendarPage">
+                    <!-- Calendar Button for users to access past dates  -->
                   <img src="@/assets/images/HomePageElements/Calender.png" class="calendar">
                   </router-link>
               </ul>    
@@ -12,6 +14,7 @@
       </div>
       <div class="childContainer1">
            <div class="homePageDate">
+              <!-- Conditional rendering to display the text  -->
               <h1 v-if="this.todayDate === this.date">TODAY'S SUMMARY</h1>
               <h1 v-else>{{ this.date }} SUMMARY</h1>
           </div> 
@@ -23,12 +26,12 @@
   <div class="homePageContainer3">
       <!-- 4 tables side by side -->
   <div class="homepagetable1">
+     <!-- First Table shows all the meals (Breakfast Lunch Dinner Snacks)  -->
     <table id = "displayCalorieTable">
       <tr>
       <th>Meal</th>
       <th>Calories</th>
     </tr>
-    
     <tr>
       <img src="@/assets/images/MealIcons/Breakfast.png" style='width: 120px;'>
       <td>{{ this.breakfastCal }} CALS</td>
@@ -138,7 +141,7 @@ export default {
         this.myProgress = progressValue;
         console.log("Progress %:", progressValue)
       }
-      if (new Date().toLocaleDateString().replaceAll("/","-") != this.date) {
+      if (new Date().toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }).replace(/\//g, '-') != this.date) {
         console.log("PAST DATE")
         this.flag = false
       }
@@ -151,8 +154,8 @@ export default {
   data() {
     return {
       user: null, 
-      date: new Date().toLocaleDateString().replaceAll("/","-"),
-      todayDate: new Date().toLocaleDateString().replaceAll("/","-"), 
+      date: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }).replace(/\//g, '-'),
+      todayDate: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }).replace(/\//g, '-'), 
       breakfastCal: 0,
       lunchCal: 0,
       dinnerCal: 0,

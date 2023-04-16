@@ -1,5 +1,5 @@
 <!-- Navigation Component -->
-<!-- Home, Dashboard, Food, Exercise, Profile, Log out-->
+<!-- Home, Dashboard, Food, Exercise, Profile, Sign out -->
 
 <template>
   <div class="navigation-bar">
@@ -10,7 +10,11 @@
         <li><router-link to="/FoodLogPage">Food Log</router-link></li>
         <li><router-link to="/ExerciseLogPage">Exercise Log</router-link></li>
         <li><router-link to="/ProfilePage">Profile</router-link></li>
-        <li @click="handleSignOut"><a>Sign Out</a></li>
+        <li @click="handleSignOut"><a>Sign Out</a></li>  
+        <!-- the handleSignOut function when clicked. 
+        The @click directive is a shorthand for the v-on:click directive in Vue.js,
+         which allows us to bind a function to an event on the element -->
+
     </ul>
   </div>
 </template>

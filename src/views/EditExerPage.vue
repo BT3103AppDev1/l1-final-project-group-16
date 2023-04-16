@@ -88,6 +88,34 @@ export default {
     },
 
   methods: {
+    async displayExer(){
+      const url = 'https://raw.githubusercontent.com/Lu-Yi-Fan/Testing/main/exer.csv';
+      await fetch(url)
+      .then((response) => {
+        return response.text();
+      })
+      .then((csvText) => {
+        // Process the CSV data
+        // console.log(csvText);
+        // Here, you can parse the CSV data as needed
+        // For example, you can use a library like Papa Parse to parse the CSV data into an array
+        const csvData = Papa.parse(csvText)
+        // console.log(csvData);
+        let exerNames = csvData.data.map(exer => {
+          // console.log(exer[0])
+          // console.log(exer[5])
+          return {
+            exerName: exer[0],
+            numCalories: exer[5],
+          };
+        });
+        this.exerNames = exerNames;
+
+      })
+      .catch((error) => {
+        // Handle any errors
+      });
+    },
     setSelected(tab)  {
       this.selected = tab;
     },
@@ -220,26 +248,7 @@ export default {
   created() {
       this.exerData = [];
       this.getUserWeight();
-      // this.retrieveCustomExercise();
-      axios.get('/src/inputData/exer.csv').then(response => {
-        let parsedData = Papa.parse(response.data, {
-          header: true, 
-          dynamicTyping: true, 
-          skipEmptyLines: true,
-        });
-
-        let exerNames = parsedData.data.map(exer => {
-          return {
-            exerName: exer.Exercise,
-            numCalories: exer.Calories,
-          };
-        });
-        this.exerNames = exerNames;
-      }).catch(error => {
-        console.log(error);
-      });
-
-
+      this.displayExer();
   }
 }
 

@@ -170,6 +170,7 @@ export default {
               querySnapshot.forEach((doc) => {
                 deleteDoc(doc.ref);
               });
+              alert("Food Successfully Deleted")
             }
           });
         }

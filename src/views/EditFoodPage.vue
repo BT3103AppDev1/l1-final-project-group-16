@@ -109,6 +109,33 @@ export default {
 
 
   methods: {
+    async displayFud() {
+      const url = 'https://raw.githubusercontent.com/Lu-Yi-Fan/Testing/main/food.csv';
+      await fetch(url)
+      .then((response) => {
+        return response.text();
+      })
+      .then((csvText) => {
+        // Process the CSV data
+        // console.log(csvText);
+        // Here, you can parse the CSV data as needed
+        // For example, you can use a library like Papa Parse to parse the CSV data into an array
+        const csvData = Papa.parse(csvText);
+        // console.log(csvData);
+        let foodNames = csvData.data.map(food => {
+          return {
+            foodName: food[0],
+            numCalories: food[2],
+          };
+        });
+        this.foodNames = foodNames;
+
+      })
+      .catch((error) => {
+        // Handle any errors
+      });
+    },
+
     setSelected(tab)  {
       this.selected = tab;
     },
@@ -216,26 +243,7 @@ export default {
   created() {
       this.foodData = [];
       this.retrieveCustomFood();
-      axios.get('/src/inputData/food.csv').then(response => {
-        let parsedData = Papa.parse(response.data, {
-          header: true, 
-          dynamicTyping: true, 
-          skipEmptyLines: true,
-        });
-
-        let foodNames = parsedData.data.map(food => {
-          return {
-            foodName: food.Food,
-            numCalories: food.Calories,
-          };
-        });
-        this.foodNames = foodNames;
-      }).catch(error => {
-        console.log(error);
-      });
-
-
-
+      this.displayFud();
     }
   }
 

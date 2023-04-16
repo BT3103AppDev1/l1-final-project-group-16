@@ -11,12 +11,6 @@
 </div>
 <div class="centered">
     <form @submit.prevent="saveExer" class="newExer"> 
-      <!-- Quick Add Form -->
-
-      <!-- <label class="labels" for="foodName">FOOD NAME: {{ foodName.foodName }}</label>
-      <select class="formfields" for="foodName" id="foodName" v-model="foodName" >
-      <option v-for="food in foodNames" :value="food">{{ food.foodName }}</option>
-      </select> -->
       <label class="exerNameLabels" for="exerName">EXERCISE NAME: {{ exerName.exerName }}   </label>
 
       <select class="formfields" for="exerName" id="exerName" v-model="exerName" >
@@ -114,8 +108,6 @@ export default {
         const csvData = Papa.parse(csvText)
         // console.log(csvData);
         let exerNames = csvData.data.map(exer => {
-          // console.log(exer[0])
-          // console.log(exer[5])
           return {
             exerName: exer[0],
             numCalories: exer[5],

@@ -1,17 +1,13 @@
 <template>
     <div style="width: 80%" >
         <ul class="nav nav-tabs">
-            <!-- <img class="images" src="src/assets/images/back.png" width="35" height="35" @click="goBack">
-            <i class="fas fa-arrow-left"></i> -->
             <li v-for="tab in tabs" :key="tab" class="nav-item">
                 <a class="nav-link" :class="{ active: tab === selected }" @click="setTab(tab)">
                     {{ tab }}
                 </a>
             </li>
         </ul>
-    
         <slot></slot>
-    
     </div>
 </template>
 
