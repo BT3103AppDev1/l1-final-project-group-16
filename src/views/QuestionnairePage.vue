@@ -51,7 +51,6 @@
   import { doc, updateDoc, getFirestore} from "firebase/firestore";
   import { collection } from 'firebase/firestore'
 
-  //const auth = getAuth();
   
   export default {
     name: "QuestionnairePage.vue",
@@ -71,6 +70,7 @@
       email() {
         return this.$route.query.email || ''
       },
+      // function to return the value of the recommended target calorie intake 
       calculatedValue() {
         if (this.weight && this.goal) {
           var exerciseAdd = 0;
@@ -116,17 +116,17 @@
     methods:{
       async submitForm(){
         const email = this.email;
-        console.log(email);
         const userCollection = doc(collection(getFirestore(), "Users"), email);
-
+        
+        // update more details collected from the user 
         await updateDoc(userCollection, {
           height:this.height,
           weight:this.weight,
           exercise:this.exercise,
           goal:this.goal,
           dailyIntakeGoal:this.dailyIntakeGoal,
-          startDate: new Date().toJSON().slice(0,10),
-          streaksDate: new Date().toLocaleDateString().replaceAll("/","-"),
+          startDate: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }).replace(/\//g, '-'),
+          streaksDate: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }).replace(/\//g, '-'),
           streakNumber: 0
         })
             .then(() => {

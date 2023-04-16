@@ -140,8 +140,6 @@
       setSelected(tab)  {
         this.selected = tab;
       },
-
-
   
       addCustomFoodButton() {
         this.showForm = true;

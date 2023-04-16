@@ -51,7 +51,6 @@ import { doc, setDoc, addDoc, getFirestore} from "firebase/firestore";
 import { collection } from 'firebase/firestore'
 
 const auth = getAuth();
-//   const errorMessage = ref();
 
 export default {
   name: "SignUp",
@@ -69,12 +68,12 @@ export default {
     }
   },
   methods: {
+    // send document to firebase database with user details 
       async register(){
       createUserWithEmailAndPassword(auth, this.email, this.password)
           .then(async (userCred) => {
             const user = userCred.user;
-            console.log(user);
-            //const userId = user.uid;
+            // console.log(user);
             const newDocRef = doc(collection(getFirestore(), "Users"), user.email);
             await setDoc(newDocRef, {
               email: this.email,
@@ -91,7 +90,6 @@ export default {
                 email: this.email
               }
             })
-            //this.$router.push('/QuestionnairePage');
           }).catch(error => {
               if (error.code === 'auth/email-already-in-use') {
                 this.error = 'Email already registered.'

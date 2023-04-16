@@ -109,7 +109,9 @@ export default {
 
 
   methods: {
-    async displayFud() {
+
+    // function that retrieves the foods from the food database (csv)
+    async displayFood() {
       const url = 'https://raw.githubusercontent.com/Lu-Yi-Fan/Testing/main/food.csv';
       await fetch(url)
       .then((response) => {
@@ -144,12 +146,14 @@ export default {
       this.showForm = true;
     },
 
+    // function to edit the foods through using the details keyed in from the user that edits the current foods' 
+    // details to the updated one. updated one will then be shown on the food log page 
     async editFood(){
 
       const auth = getAuth();
       const user =  auth.currentUser.email;
-      console.log("email", user);
-      console.log(currEmail);
+      // console.log("email", user);
+      // console.log(currEmail);
 
 
       let foodData = {
@@ -199,20 +203,21 @@ export default {
         });
       alert("Food Successfully Edited")
 
-      console.log(date);
+      // console.log(date);
       this.$router.push('/FoodLogPage');
 
     
     },
 
+    // function that retreives the custom food that updates the custom foods that the user has 
     async retrieveCustomFood() {
         const auth = getAuth();
         let userEmail;
         onAuthStateChanged(auth, async (user) => {
-          console.log("Auth state changed:", user);
+          // console.log("Auth state changed:", user);
           if (user) {
             userEmail = user.email;
-            console.log("Current user email:", userEmail);
+            // console.log("Current user email:", userEmail);
             const current = new Date();
             const yyyy = current.getFullYear();
             let mm = current.getMonth() + 1; // Months start at 0!
@@ -222,7 +227,7 @@ export default {
             const today = dd + '-' + mm + '-' + yyyy;
             // console.log(today);
             const mealsRef = collection(getFirestore(), "CustomFood");
-            console.log(mealsRef);
+            // console.log(mealsRef);
             const q = query(mealsRef, where("email", "==", userEmail));
             const querySnapshot = await getDocs(q);
             querySnapshot.forEach((doc) => {
@@ -243,7 +248,7 @@ export default {
   created() {
       this.foodData = [];
       this.retrieveCustomFood();
-      this.displayFud();
+      this.displayFood();
     }
   }
 

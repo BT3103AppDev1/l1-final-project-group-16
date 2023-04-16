@@ -11,9 +11,6 @@
 </div>
 <div class="centered">
     <form @submit.prevent="saveFood" class="newFood"> 
-      <!-- Quick Add Form -->
-      <!-- <input  class="formfields"  id="foodName" placeholder="What did you eat" v-model="foodName" /> -->
-       
       <label class="labels" for="foodName">FOOD NAME: {{ foodName.foodName }}</label>
       <select class="formfields" for="foodName" id="foodName" v-model="foodName" >
       <option v-for="food in foodNames" :value="food">{{ food.foodName }}</option>
@@ -64,7 +61,6 @@
 <div class="centeredCustom">
 
   <button class="addCustomFood" id="addCustomFood" type="submit" v-if="!showForm" v-on:click="addCustomFoodButton">Add Custom Food</button><br><br>
-  <!-- <CustomFoodForm v-if="showForm"></CustomFoodForm> -->
   <CustomFoodForm v-if="showForm" @delete="deleteFoodHandler" @edit="editFoodHandler"/>
   </div>
   <p class="noCustomFood" v-if="haveCustomFood==false && showForm==false"> You currently do not have any custom food :( </p>
@@ -89,7 +85,6 @@ import TabNav from "@/components/TabNav.vue";
 import CustomFoodForm from "@/components/CustomFoodForm.vue";
 import CustomFoodCard from "@/components/CustomFoodCard.vue";
 import MealHeader from '@/components/MealHeader.vue';
-import axios from 'axios';
 import Papa from 'papaparse';
 import EditCustomFoodPage from './EditCustomFoodPage.vue';
 
@@ -132,7 +127,9 @@ export default {
 
 
   methods: {
-    async displayFud() {
+
+    // function that retrieves the foods from the food database (csv)
+    async displayFood() {
       const url = 'https://raw.githubusercontent.com/Lu-Yi-Fan/Testing/main/food.csv';
       await fetch(url)
       .then((response) => {
@@ -158,19 +155,21 @@ export default {
         // Handle any errors
       });
     },
+
+    // function that edits the selected food from the food log page and brings the user to the edit food page 
     async editFoodHandler(customFood) {
-        console.log(customFood);
+
         if (confirm("Are you sure you want to edit this meal?")) {
-          // console.log("foodlogpage edit emitted");
           const customFoodOrder = ['date', 'email', 'foodName','numCalories'];
           const customFoodList = customFoodOrder.map((key) => [customFood[key]]);
-          console.log(customFoodList);
+          // console.log(customFoodList);
           this.$router.push({path: "/EditCustomFoodPage", query: { customFoodProp: customFoodList }});
         }
       },
 
+
+    // function that deletes the selected food from the food log page 
     async deleteFoodHandler(customFood) {
-        // console.log("foodlogpage delete emitted");
         if (confirm("Are you sure you want to delete this meal?")) {
           const auth = getAuth();
           let userEmail;
@@ -190,7 +189,6 @@ export default {
         }
       },
       
-    
     setSelected(tab)  {
       this.selected = tab;
     },
@@ -199,12 +197,14 @@ export default {
       this.showForm = true;
     },
 
-    async saveFood(){
+    // function that saves the food using the details keyed in from the user 
+    // this food will then be added to the meals collection in firebase and will be reflected on the foodlog page
 
+    async saveFood(){
       const auth = getAuth();
       const user =  auth.currentUser.email;
-      console.log("email", user);
-      console.log(currEmail);
+      // console.log("email", user);
+      // console.log(currEmail);
 
 
       let foodData = {
@@ -230,13 +230,13 @@ export default {
       const q = query(mealsRef, where("email", "==", user), where("date","==", date), where("foodName", "==", this.foodName.foodName),
         where("mealType", "==", this.mealType));
       const querySnapshot = await getDocs(q);
-      console.log(querySnapshot);
+      // console.log(querySnapshot);
       if (querySnapshot.size === 1) {
         // get the mealId
         const docId = querySnapshot.docs[0].id;
         const mealData = querySnapshot.docs[0].data();
         const updatedNumServings = parseInt(mealData.numServings) + parseInt(this.numServings);
-        console.log(updatedNumServings)
+        // console.log(updatedNumServings)
         const mealsCollection = doc(collection(getFirestore(), "Meals"), docId);
         await updateDoc(mealsCollection, {
           numServings: updatedNumServings
@@ -255,19 +255,19 @@ export default {
       }
       // add to meal collections
       alert("Added Food Successfully")
-      console.log(date);
+      // console.log(date);
       this.$router.push('/FoodLogPage');
     
     },
-
+    // function that retreives the custom food that updates the custom foods that the user has 
     async retrieveCustomFood() {
         const auth = getAuth();
         let userEmail;
         onAuthStateChanged(auth, async (user) => {
-          console.log("Auth state changed:", user);
+          // console.log("Auth state changed:", user);
           if (user) {
             userEmail = user.email;
-            console.log("Current user email:", userEmail);
+            // console.log("Current user email:", userEmail);
             const current = new Date();
             const yyyy = current.getFullYear();
             let mm = current.getMonth() + 1; // Months start at 0!
@@ -277,7 +277,7 @@ export default {
             const today = dd + '-' + mm + '-' + yyyy;
             // console.log(today);
             const mealsRef = collection(getFirestore(), "CustomFood");
-            console.log(mealsRef);
+            // console.log(mealsRef);
             const q = query(mealsRef, where("email", "==", userEmail));
             const querySnapshot = await getDocs(q);
             querySnapshot.forEach((doc) => {
@@ -294,28 +294,7 @@ export default {
     },
   created() {
       this.foodData = [];
-      this.displayFud();
-      
-
-
-
-      // axios.get('/src/inputData/food.csv').then(response => {
-      //   let parsedData = Papa.parse(response.data, {
-      //     header: true, 
-      //     dynamicTyping: true, 
-      //     skipEmptyLines: true,
-      //   });
-
-      //   let foodNames = parsedData.data.map(food => {
-      //     return {
-      //       foodName: food.Food,
-      //       numCalories: food.Calories,
-      //     };
-      //   });
-      //   this.foodNames = foodNames;
-      // }).catch(error => {
-      //   console.log(error);
-      // });
+      this.displayFood();
       this.retrieveCustomFood();
   }
 }

@@ -56,6 +56,7 @@
   </div>
   
   <div class="homepagetable2">  
+    <!-- Second Table Calories burnt  -->
     <table id = "displayCalorieBurntTable">
       <div class = calorieBurntIcon>
         <img src="@/assets/images/HomePageElements/Calories.png" style="width: 100px; height: auto">
@@ -67,6 +68,7 @@
   </div>
   
   <div class="homepagetable3">
+    <!-- Third Table show net calorie intake  -->
     <table id = "displayNetCalorieTable">
       <div class = netCalorieIcon>
         <img src="@/assets/images/HomePageElements/Streaks.png" style="width: 100px; height: auto">
@@ -78,6 +80,7 @@
   </div>
   
   <div class="homepagetable4">
+    <!-- Fourth Table show progress bar  -->
     <table id = "displayGoalTable">
       <br>
       <div class = "goalIcon">
@@ -110,10 +113,11 @@ export default {
   created() {
     
     if (this.$route.query.updatedDate) {
+      // if this is a past date, update the this.date with the selected past date 
       this.date = this.$route.query.updatedDate;
-      console.log(this.date)
+      // console.log(this.date)
     }
-    
+  //update the meal calories and progress bar 
   const breakfastCalPromise = this.updateMealCal('Breakfast');
   const lunchCalPromise = this.updateMealCal('Lunch');
   const dinnerCalPromise = this.updateMealCal('Dinner');
@@ -121,6 +125,7 @@ export default {
   const calBurntPromise = this.updateCalBurnt();
   const calorieGoal = this.calorieGoal();
   if (this.date == new Date().toLocaleDateString().replaceAll("/","-")) {
+      // only update streaks if user is on todays homepage
       const streakPromise = this.updateStreaks();
   }
 
@@ -128,21 +133,19 @@ export default {
     .then((values) => {
       const netCalorie = values[0] + values[1] + values[2] + values[3] - values[4];
       this.caloriesNet = netCalorie;
-      console.log("Total calories for Breakfast:", values[0]);
-      console.log("Total calories for Lunch:", values[1]);
-      console.log("Total calories for Dinner:", values[2]);
-      console.log("Total calories for Snacks:", values[3]);
-      console.log("Total calories burnt:", values[4]);
-      console.log("Net calories intake:", netCalorie);
-      console.log("Target Goal Calorie:", values[5]);
+      // console.log("Total calories for Breakfast:", values[0]);
+      // console.log("Total calories for Lunch:", values[1]);
+      // console.log("Total calories for Dinner:", values[2]);
+      // console.log("Total calories for Snacks:", values[3]);
+      // console.log("Total calories burnt:", values[4]);
+      // console.log("Net calories intake:", netCalorie);
+      // console.log("Target Goal Calorie:", values[5]);
       const targetGoal = values[5]
       const progressValue = Math.ceil(netCalorie/targetGoal * 100)
       if (progressValue >= 0){
         this.myProgress = progressValue;
-        console.log("Progress %:", progressValue)
       }
       if (new Date().toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }).replace(/\//g, '-') != this.date) {
-        console.log("PAST DATE")
         this.flag = false
       }
       this.keyValue += 1
@@ -163,7 +166,7 @@ export default {
       caloriesBurnt: 0,
       caloriesNet: 0,
       myProgress: 0,
-      flag : true,
+      flag : true, // true is to highlight that it is todays date and false highlight a past date
       keyValue: 1,
       weight:0
       }; 
@@ -198,9 +201,12 @@ export default {
               where("date", "==", yesterday)
             );
             const querySnapshotF = await getDocs(foodQuery);
+            //check the streak date and update by 1 or replace with 0 
+
             if (querySnapshotU.docs){
-              console.log(streaksDate)
+              // console.log(streaksDate)
               if (streaksDate == yesterday) {
+                //if the streak date is yesterday, means the user ate yesterday
                 newStreak = parseInt(streakNum) + 1
                 console.log(newStreak)
               }             

@@ -34,7 +34,6 @@
         <option>2.5</option>
         <option>3</option>
       </select>
-      
       <!-- Save Button -->
       <button class="buttonSaveExer" id="saveExer" type="submit" >Save</button><br><br>
 
@@ -94,6 +93,7 @@ export default {
     },
 
   methods: {
+    // function to retrieve the exercises from the exercise database (csv)
     async displayExer(){
       const url = 'https://raw.githubusercontent.com/Lu-Yi-Fan/Testing/main/exer.csv';
       await fetch(url)
@@ -127,13 +127,14 @@ export default {
     addCustomExerButton() {
       this.showForm = true;
     },
-
+    // function to save the exercises using the detailed keyed in from the user 
+    // this exercise will then be added to the exercise collection in firebase and will be reflected on the exercise log page 
     async saveExer(){
 
       const auth = getAuth();
       const user =  auth.currentUser.email;
-      console.log("email", user);
-      console.log(currEmail);
+      // console.log("email", user);
+      // console.log(currEmail);
 
 
       let exerData = {
@@ -157,13 +158,13 @@ export default {
 
       const q = query(exerRef, where("email", "==", user), where("date","==", date), where("exerName", "==", this.exerName.exerName));
       const querySnapshot = await getDocs(q);
-      console.log(querySnapshot);
+      // console.log(querySnapshot);
       if (querySnapshot.size === 1) {
         // get the mealId
         const docId = querySnapshot.docs[0].id;
         const exerData = querySnapshot.docs[0].data();
         const updatedDuration = parseInt(exerData.duration) + parseInt(this.duration);
-        console.log(updatedDuration)
+        // console.log(updatedDuration)
         const exerCollection = doc(collection(getFirestore(), "Exercises"), docId);
         await updateDoc(exerCollection, {
           duration: updatedDuration
@@ -181,27 +182,28 @@ export default {
       }
       alert("Added Exercise Successfully")
 
-      console.log(date);
+      // console.log(date);
       this.$router.push('/ExerciseLogPage');
 
     
     },
 
+    // function to get the current user's weight 
     async getUserWeight() {
         const auth = getAuth();
         let userEmail;
         onAuthStateChanged(auth, async (user) => {
-          console.log("Auth state changed:", user);
+          // console.log("Auth state changed:", user);
           if (user) {
             userEmail = user.email;
-            console.log("Current user email:", userEmail);
+            // console.log("Current user email:", userEmail);
             // console.log(today);
             const userRef = collection(getFirestore(), "Users");
             const q = query(userRef, where("email", "==", userEmail));
             const querySnapshot = await getDocs(q);
             querySnapshot.forEach((doc) => {
               this.weight = doc.data().weight;
-              console.log(this.weight);
+              // console.log(this.weight);
             });
           }
         });
@@ -211,27 +213,6 @@ export default {
       this.exerData = [];
       this.getUserWeight();
       this.displayExer();
-
-      // // use csvData from here onwards
-      // axios.get('/src/inputData/exer.csv').then(response => {
-      //   let parsedData = Papa.parse(response.data, {
-      //     header: true, 
-      //     dynamicTyping: true, 
-      //     skipEmptyLines: true,
-      //   });
-        // console.log(parsedData)
-        // let exerNames = parsedData.data.map(exer => {
-          // console.log(exer.Exercise)
-          // console.log(exer.Calories)
-          // return {
-          //   exerName: exer.Exercise,
-          //   numCalories: exer.Calories,
-          // };
-        // });
-        // this.exerNames = exerNames;
-      // }).catch(error => {
-      //   console.log(error);
-      // });
     }
 }
 

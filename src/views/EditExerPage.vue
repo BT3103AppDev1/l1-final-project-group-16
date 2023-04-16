@@ -88,6 +88,8 @@ export default {
     },
 
   methods: {
+
+    // function that retrieves the exercises from the exercises database (csv)
     async displayExer(){
       const url = 'https://raw.githubusercontent.com/Lu-Yi-Fan/Testing/main/exer.csv';
       await fetch(url)
@@ -124,6 +126,8 @@ export default {
       this.showForm = true;
     },
 
+    // function to edit the exercise through using the details keyed in from the user that edits the current exercises' 
+    // details to the updated one. updated one will then be shown on the exercise log page 
     async editExer(){
 
       const auth = getAuth();
@@ -188,6 +192,7 @@ export default {
     
     },
 
+    // function to retrieve the user's current weight 
     async getUserWeight() {
         const auth = getAuth();
         let userEmail;
@@ -209,40 +214,6 @@ export default {
     
         });
       }
-
-    // async retrieveCustomExercise() {
-    //     const auth = getAuth();
-    //     let userEmail;
-    //     onAuthStateChanged(auth, async (user) => {
-    //       console.log("Auth state changed:", user);
-    //       if (user) {
-    //         userEmail = user.email;
-    //         console.log("Current user email:", userEmail);
-    //         const current = new Date();
-    //         const yyyy = current.getFullYear();
-    //         let mm = current.getMonth() + 1; // Months start at 0!
-    //         let dd = current.getDate();
-    //         if (dd < 10) dd = '0' + dd;
-    //         if (mm < 10) mm = '0' + mm;
-    //         const today = dd + '-' + mm + '-' + yyyy;
-    //         // console.log(today);
-    //         const mealsRef = collection(getFirestore(), "CustomExercise");
-    //         console.log(mealsRef);
-    //         const q = query(mealsRef, where("email", "==", userEmail), where("date","==", today));
-    //         const querySnapshot = await getDocs(q);
-    //         querySnapshot.forEach((doc) => {
-    //           this.customExerData.push(doc.data());
-    //         });
-
-    //         // if more than 0, the change this to true 
-    //         if (this.customExerData.length > 0) {
-    //           this.haveCustomExer = true;
-    //         }
-  
-    //       }
-    //     });
-
-    //   }
 
     },
   created() {

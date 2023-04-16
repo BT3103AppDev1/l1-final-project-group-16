@@ -68,8 +68,8 @@ export default {
       this.showForm = true;
     },
 
+    // check if user authenticated and then allows the edit of food servings which will be sent to the database
     async editCustomFood() {
-
       const auth = getAuth();
       const user =  auth.currentUser.email;
       console.log("email", user);

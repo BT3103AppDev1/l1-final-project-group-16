@@ -10,7 +10,9 @@
     </div>
   </div>
   <div class = "dashBoardButtons">
-    <button class="weekly-button" @click="displayWeeklyCharts()">Weekly Charts</button>
+    <!-- display weekly chart of user once button pressed -->
+    <button class="weekly-button" @click="displayWeeklyCharts()">Weekly Charts</button> 
+    <!-- display popular meals of user once button pressed -->
     <button class="popular-meals-button" @click="displayPopularFoods()"> Popular Meals </button>
   </div>
   <br>

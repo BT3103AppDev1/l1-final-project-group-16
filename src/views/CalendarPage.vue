@@ -32,7 +32,6 @@ width: 100%;
 width: 60%;
 height: 50%;
 background-color: white;
-/* font-family: Avenir, Helvetica, Arial, sans-serif; */
 }
 
 .fc-daygrid-day-number, .fc-col-header-cell-cushion {
